@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import CuratedCard from './CuratedCard';
+import CuratedCard from './cards/CuratedCard';
 import '../css/customSCroll.css'
 
 const CuratedShows = () => {
