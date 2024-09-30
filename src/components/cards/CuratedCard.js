@@ -3,7 +3,6 @@ import React from 'react'
 const CuratedCard = (props) => {
     const { show, selectedShow, handleShowClick } = props;
     const isSelected = selectedShow[0] === show.title;
-    console.log({ isSelected, selectedShow })
 
     return (
         <div
