@@ -20,3 +20,6 @@ const ArtworkCard = memo(function ArtworkCard(props) {
 });
 
 export default ArtworkCard
+
+
+
