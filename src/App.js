@@ -11,7 +11,7 @@ function App() {
   return (
     <div
       style={{ backgroundColor: 'rgba(0,0,0,0.8)' }}
-      className=" h-screen flex flex-col "
+      className=" h-screen flex flex-col gap-10"
     >
       <KaleidoscopeCrudContext>
         <TaskBar />
