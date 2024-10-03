@@ -1,9 +1,37 @@
-import React from 'react'
+import React, { useState } from 'react'
+import CuratedShows from './components/CuratedShows'
+import CuratedPlay from './components/CuratedPlay'
+import ArtWork from './components/ArtWork'
+import ArtWorkShows from './components/ArtWorkShows'
+import Home from './components/Home'
+import { constants } from './constants'
+import { useKaleidoCrud } from './context/kaleidoscopeCrudContext'
 
-const Kaleidoscope = (props) => {
+const Kaleidoscope = () => {
+  const { loadName } = useKaleidoCrud();
+
+  // Either one of Three bodies or cases will be loaded based on loadName state
+  const loadDocument = () => {
+    let view = [];
+    switch (loadName) {
+      case constants.loadScreen.default: view.push(
+        <Home key={"KaleidoscopeHome"} />
+      )
+        break;
+      case constants.loadScreen.curate: view.push(
+        <CuratedShows key={"KaleidoscopeCurate"} />
+      )
+        break;
+      case constants.loadScreen.art: view.push(
+        <ArtWork key={"KaleidoscopeArt"} />
+      )
+      default: break
+    }
+    return view;
+  }
 
   return (
-    <div className='px-10   flex-grow overflow-y-auto'>
+    <div className='px-10 flex-grow'>
       <div
         style={{
           backgroundColor: 'rgba(0,0,0,0.4)',
@@ -11,35 +39,17 @@ const Kaleidoscope = (props) => {
         }}
         className='rounded-lg p-4 text-white text-xl font-bold'>
 
-        <div className='flex flex-col gap-9 my-14'>
-          <div className='flex justify-center'>
-            <span
-              style={{ backgroundColor: 'rgba(0, 0, 0, 0.3)' }}
-              className='border-white border-opacity-30 border-2 rounded-full px-12 py-6'>
-              Experience a Curated Show
-            </span>
-          </div>
+        {/* <CuratedShows /> */}
+        {/* <CuratedPlay /> */}
+        {/* <ArtWork /> */}
+        {/* <ArtWorkShows /> */}
+        {/* <Home /> */}
 
-          <div className='flex justify-center  items-center gap-5'>
-            <hr className="w-2/12 border-t border-gray-300 mx-2" />
-            <p >OR</p>
-            <hr className="w-2/12 border-t border-gray-300 mx-2" />
-          </div>
-
-          <div className='flex justify-center'>
-            <span
-              style={{ backgroundColor: 'rgba(0, 0, 0, 0.3)' }}
-              className='border-white border-opacity-30 border-2 rounded-full px-16 py-6'>
-              Create your own Show
-            </span>
-          </div>
-        </div>
+        {/* dynamic application body */}
+        {loadDocument()}
       </div>
-
-
     </div>
   )
 }
-// background: rgba(0, 0, 0, 0.3);
 
 export default Kaleidoscope
