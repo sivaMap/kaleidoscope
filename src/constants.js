@@ -1,3 +1,5 @@
 exports.constants = {
-    loadScreen: { curate: "CuratedShow", show: "OwnShow" }
+    loadScreen: { curate: "CuratedShow", art: "ArtShow", default: "Home" },
+    loadCurate: { show: "CuratedShows", play: "CuratedPlay" },
+    loadArt: { show: "ArtShows", play: "ArtPlay" }
 }
