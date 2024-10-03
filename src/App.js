@@ -1,23 +1,23 @@
-import logo from './logo.svg';
-import './App.css';
+import Kaleidoscope from "./Kaleidoscope";
+import TaskBar from "./TaskBar";
+import VolumeBar from "./VolumeBar";
+import { constants } from "./constants";
+import { KaleidoscopeCrudContext } from "./context/kaleidoscopeCrudContext"
+import "./css/font.css"
+import "./css/index.css"
 
-function App() {
+function App() {  
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div
+      style={{ backgroundColor: 'rgba(0,0,0,0.8)' }}
+      className=" h-screen flex flex-col "
+    >
+      <KaleidoscopeCrudContext>
+        <TaskBar />
+        <Kaleidoscope />
+        <VolumeBar />
+      </KaleidoscopeCrudContext>
     </div>
   );
 }
