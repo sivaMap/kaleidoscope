@@ -2,14 +2,14 @@ import React from 'react'
 
 const CuratedCard = (props) => {
     const { show, selectedShow, handleShowClick } = props;
-    const isSelected = selectedShow === show.title;
+    const isSelected = selectedShow.title === show.title;
 
     return (
         <div key={crypto.randomUUID()}
             className={`flex gap-4 bg-black rounded-lg  shadow-md max-w-md p-4 ${isSelected ? "border-white border-2" : ""}`}
             onClick={() => handleShowClick({ showName: show })}
         >
-            {/* Image Section */}            
+            {/* Image Section */}
             <div >
                 <img
                     className="w-28 h-24 object-cover rounded-md"
