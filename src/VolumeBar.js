@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import VolumeSlider2 from './components/VolumeSlider2'
+import { useKaleidoCrud } from './context/kaleidoscopeCrudContext';
 
 const VolumeBar = ({ isShowRunning }) => {
   const [play, setPlay] = useState(isShowRunning);
+  const { navigateHomeScreen } = useKaleidoCrud();
   useEffect(() => setPlay(true), [isShowRunning]);
 
   return (
@@ -22,7 +24,7 @@ const VolumeBar = ({ isShowRunning }) => {
       </div>
 
       <div className='flex flex-col justify-center'>
-        <div className='flex gap-4 mr-2'>
+        <div className='flex gap-4 mr-2' onClick={navigateHomeScreen}>
           <img
             src={"/images/volumeBar/reset.png"} alt="r"
             className='h-[30px]' />

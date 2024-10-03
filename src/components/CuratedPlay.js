@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import CuratedCard from "./cards/CuratedCard";
+import { constants } from "../constants";
 
 const shows = [
     {
@@ -28,7 +29,7 @@ const shows = [
     },
 ];
 
-const CuratedPlay = () => {
+const CuratedPlay = ({ setLoadCurate }) => {
     const [currentShow, setCurrentShow] = useState(shows[0]);
     const handleShowClick = ({ showName }) => {
         if (showName.title === currentShow.title) {
@@ -36,7 +37,10 @@ const CuratedPlay = () => {
         }
         setCurrentShow(showName)
     }
-    
+    const handleEndShow = () => {
+        setLoadCurate(constants.loadCurate.show);
+    }
+
     return (
         <div
             className="flex gap-3 ">
@@ -58,7 +62,10 @@ const CuratedPlay = () => {
 
                 </div>
                 <div className="flex justify-center">
-                    <button className="mt-4 px-6 py-2 border border-white rounded-full">
+                    <button
+                        className="mt-4 px-6 py-2 border border-white rounded-full"
+                        onClick={handleEndShow}
+                    >
                         End Show
                     </button>
                 </div>

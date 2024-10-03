@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import ArtworkCard from './cards/ArtworkCard';
 import ArtShowCard from './cards/ArtShowCard';
+import { useKaleidoCrud } from '../context/kaleidoscopeCrudContext';
 
 const ArtWorkShows = () => {
     const artifacts = [
@@ -13,6 +14,8 @@ const ArtWorkShows = () => {
 
     //only five artifacts can be selected
     const [selectedArtificats, setSelectedArtifacts] = useState([]);
+    const { navigateHomeScreen } = useKaleidoCrud();
+
     const handleArtifactSelect = ({ artifact }) => {
         if (selectedArtificats.length < 5) {
             setSelectedArtifacts(prev => [...prev, artifact]);
@@ -43,8 +46,8 @@ const ArtWorkShows = () => {
                 ))}
             </div>
 
-            <div className="flex justify-end">
-                <button className="px-6 py-2 border border-white rounded-full">
+            <div className="flex justify-end" onClick={navigateHomeScreen}>
+                <button className="px-6 py-2 border border-white rounded-full" onClick={navigateHomeScreen}>
                     End Show
                 </button>
             </div>
