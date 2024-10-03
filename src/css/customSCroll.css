@@ -1,0 +1,16 @@
+/* Target a specific div's scrollbar */
+.custom-scroll::-webkit-scrollbar {
+    width: 3px;
+}
+
+/* Scrollbar track */
+.custom-scroll::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255,0.2);   
+    border-radius: 6px;     
+}
+
+/* Scrollbar thumb (the draggable part) */
+.custom-scroll::-webkit-scrollbar-thumb {
+    background: #ffffff;    
+    border-radius: 6px;    
+}

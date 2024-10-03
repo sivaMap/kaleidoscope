@@ -1,0 +1,52 @@
+.volume-slider {
+    display: flex;
+    align-items: center;
+    /* Center the image and slider vertically */
+}
+
+.volume-slider img {
+    width: 30px;
+    /* Set image width */
+    height: 30px;
+    /* Set image height */
+    margin-right: 10px;
+    /* Space between the image and the slider */
+}
+
+.slider {
+    -webkit-appearance: none;
+    /* Remove default appearance */
+    width: 105px;
+    /* Adjust the width of the slider */
+    height: 5px;
+    /* Adjust the height of the slider */
+    background: #ddd;
+    /* Background color of the slider */
+    border-radius: 5px;
+    /* Round the edges */
+    outline: none;
+    /* Remove outline */    
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    /* Remove default appearance of the thumb */
+    width: 15px;
+    /* Set the thumb width */
+    height: 15px;
+    /* Set the thumb height */
+    background: #ffffff;
+    /* Thumb color */
+    border-radius: 50%;
+    /* Make the thumb circular */
+    cursor: pointer;
+    /* Change cursor on hover */
+}
+
+.slider::-moz-range-thumb {
+    width: 15px;
+    height: 15px;
+    background: #007bff;
+    border-radius: 50%;
+    cursor: pointer;
+}
