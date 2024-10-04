@@ -1,8 +1,6 @@
-import React, { useState } from 'react'
+import React from 'react'
 import CuratedShows from './components/CuratedShows'
-import CuratedPlay from './components/CuratedPlay'
 import ArtWork from './components/ArtWork'
-import ArtWorkShows from './components/ArtWorkShows'
 import Home from './components/Home'
 import { constants } from './constants'
 import { useKaleidoCrud } from './context/kaleidoscopeCrudContext'
@@ -25,6 +23,7 @@ const Kaleidoscope = () => {
       case constants.loadScreen.art: view.push(
         <ArtWork key={"KaleidoscopeArt"} />
       )
+        break;
       default: break
     }
     return view;
@@ -38,13 +37,6 @@ const Kaleidoscope = () => {
           fontFamily: 'Geometria'
         }}
         className='rounded-lg p-4 text-white text-xl font-bold'>
-
-        {/* <CuratedShows /> */}
-        {/* <CuratedPlay /> */}
-        {/* <ArtWork /> */}
-        {/* <ArtWorkShows /> */}
-        {/* <Home /> */}
-
         {/* dynamic application body */}
         {loadDocument()}
       </div>
