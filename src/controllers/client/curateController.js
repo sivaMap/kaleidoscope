@@ -19,7 +19,7 @@ try {
     });
 
 
-    console.log("VLC instance created");
+    console.log("CURATE VLC instance created");
 } catch (error) {
     console.log("Failed to create VLC instance:", error.message);
 }
@@ -53,7 +53,7 @@ wss.on('connection', async (ws) => {
 });
 
 
-//@desc Get All videos from the given URL
+//@desc Get All curated videos in a curated folder
 //@route GET /curate/videos
 //access public
 const getClientVideos = asyncHandler(async (req, res) => {
@@ -80,7 +80,7 @@ const getClientVideos = asyncHandler(async (req, res) => {
     )
 });
 
-//@desc Get All videos from the given URL
+//@desc Start one video
 //@route POST /curate/start
 //access public
 const startCurate = asyncHandler(async (req, res) => {
@@ -93,36 +93,12 @@ const startCurate = asyncHandler(async (req, res) => {
         res.status(200).json({ "message": "Success" })
         return
     }
-
-    // const videoPath = "D:\\Workspace\\SampleData\\videos\\first.mp4";
+    
     const videoPath = filename;
     vlc.playFile(videoPath)
     vlc.setFullscreen(true)
 
     res.status(200).send({ "message": "Success" });
-});
-
-// ----------------
-//@desc Launch Application
-//@route POST /curate/launch
-//access public
-const launchApplication = asyncHandler(async (req, res) => {
-    const { applicationPath, parameter } = req.body;
-    // console.log(parameter, applicationPath.includes("chrome"))
-
-    // const command = `"${applicationPath}" "${parameter}"`;
-    const apath = path.resolve("C:/Program Files/VideoLAN/VLC/vlc.exe");
-    const videoPath = "D:\\Workspace\\SampleData\\videos\\first.mp4";
-    const command = `"${apath}" "${videoPath}"`;
-
-
-
-    exec(command, (error, stdout, stderr) => {
-        if (error) {
-            res.status(200).json({ error, stderr })
-        }
-        res.status(200).send('Application launched successfully');
-    });
 });
 
 //@desc Control Vlc
@@ -134,7 +110,7 @@ const controlApplication = asyncHandler(async (req, res) => {
         res.status(400);
         throw new Error("vlc not available")
     }
-    // console.log(control, req.body, vlc.isPlaying())
+    
     switch (control) {
         case "pause":
             const checkIsPlaying = await vlc.isPlaying();
@@ -149,7 +125,7 @@ const controlApplication = asyncHandler(async (req, res) => {
             vlc.previous();
             break;
         case "stop":
-            vlc.stop();
+            exec('taskkill /F /IM vlc.exe');
             break;
         default:
             break;
@@ -159,8 +135,7 @@ const controlApplication = asyncHandler(async (req, res) => {
 });
 
 
-module.exports = {
-    launchApplication,
+module.exports = {    
     startCurate,
     getClientVideos,
     controlApplication
