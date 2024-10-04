@@ -25,6 +25,7 @@ const initializeServer = async () => {
 
     app.use('/client/video', require('./routes/api/client/clientVideo'));
     app.use('/curate', require('./routes/api/client/curateRoute'));
+    app.use('/art', require('./routes/api/client/artRoute'));
 
     app.all('*', (req, res) => {
         res.status(404);
