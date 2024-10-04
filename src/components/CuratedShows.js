@@ -9,22 +9,22 @@ const CuratedShows = () => {
     const shows = [
         {
             title: "Intro",
-            time: "2 Minutes",
+            time: "2 : 10",
             image: "https://via.placeholder.com/150",
         },
         {
             title: "Kantha Work",
-            time: "2 Minutes",
+            time: "2 : 10",
             image: "https://via.placeholder.com/150",
         },
         {
             title: "Block Printing",
-            time: "2 Minutes",
+            time: "2 : 50",
             image: "https://via.placeholder.com/150",
         },
         {
             title: "Blockj Printing",
-            time: "4 Minutes",
+            time: "4 : 30",
             image: "https://via.placeholder.com/150",
         },
     ];
@@ -32,7 +32,7 @@ const CuratedShows = () => {
     //only single CURATEDSHOW show will be selected
     const [selectedShow, setSelectedShow] = useState('');
     const [loadCurate, setLoadCurate] = useState(constants.loadCurate.show);
-    const { navigateHomeScreen } = useKaleidoCrud();
+    const { navigateHomeScreen, toggleShowRun } = useKaleidoCrud();
 
     const handleShowClick = ({ showName }) => {
         if (showName === selectedShow) {
@@ -72,14 +72,23 @@ const CuratedShows = () => {
                         style={{ fontFamily: 'Geometria' }}>
                         <button
                             className='mt- border-white border-2 rounded-full px-4 py-2'
-                            onClick={() => setLoadCurate(constants.loadCurate.play)}>Start Show</button>
+                            onClick={() => {
+                                if (!selectedShow) return
+                                setLoadCurate(constants.loadCurate.play)
+                                toggleShowRun();
+                            }}>
+                            Start Show
+                        </button>
                     </div>
                 </div>
             )
                 break;
             case constants.loadCurate.play: view.push(
                 <CuratedPlay key={"CuratePlay"}
-                    setLoadCurate={setLoadCurate} />
+                    setLoadCurate={setLoadCurate}
+                    selectedShow={selectedShow} setSelectedShow={setSelectedShow}
+                    shows={shows}
+                />
             )
                 break;
             default: break
