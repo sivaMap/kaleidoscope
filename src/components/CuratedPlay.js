@@ -1,44 +1,21 @@
 import React, { useState } from "react";
 import CuratedCard from "./cards/CuratedCard";
 import { constants } from "../constants";
+import { useKaleidoCrud } from "../context/kaleidoscopeCrudContext";
 
-const shows = [
-    {
-        title: "Kantha",
-        time: "02:30",
-        image:
-            "https://via.placeholder.com/150",
-    },
-    {
-        title: "Brocade",
-        time: "02:30",
-        image:
-            "https://via.placeholder.com/150",
-    },
-    {
-        title: "Brocadef",
-        time: "02:30",
-        image:
-            "https://via.placeholder.com/150",
-    },
-    {
-        title: "Block Printed",
-        time: "02:30",
-        image:
-            "https://via.placeholder.com/150",
-    },
-];
-
-const CuratedPlay = ({ setLoadCurate }) => {
-    const [currentShow, setCurrentShow] = useState(shows[0]);
+const CuratedPlay = ({ setLoadCurate, selectedShow, setSelectedShow, shows }) => {
+    const [currentShow, setCurrentShow] = useState(selectedShow);
+    const { toggleShowRun } = useKaleidoCrud();
     const handleShowClick = ({ showName }) => {
         if (showName.title === currentShow.title) {
             return;
         }
+        setSelectedShow(showName)
         setCurrentShow(showName)
     }
     const handleEndShow = () => {
         setLoadCurate(constants.loadCurate.show);
+        toggleShowRun();
     }
 
     return (
@@ -49,14 +26,14 @@ const CuratedPlay = ({ setLoadCurate }) => {
                 style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
                 className="w-3/12 p-4 rounded-lg">
                 <h2 className="text-lg font-bold mb-4 text-center">Currently Showing</h2>
-                <div className="bg-black p-4 rounded-lg h-2/3">
+                <div className="bg-black p-4 rounded-lg h-2/3 max-h-60">
                     <img
                         src={currentShow.image}
                         alt={currentShow.title}
                         className="mb-4 rounded w-full"
                     />
                     <div className="flex justify-between">
-                        <h3 className="text-xl mb-2">{currentShow.title}</h3>
+                        <h2 className="font-semibold text-base mb-2">{currentShow.title}</h2>
                         <p className="text-sm text-gray-400">{currentShow.time}</p>
                     </div>
 
@@ -79,7 +56,7 @@ const CuratedPlay = ({ setLoadCurate }) => {
                 <h2 className="text-lg font-bold mb-4">Choose a different show</h2>
                 <div className="grid grid-cols-2 gap-4">
                     {shows.map((show, index) => {
-                        if (show.title === currentShow.title) return
+                        if (show.title === currentShow.title) return null;
                         return < CuratedCard key={index} show={show} selectedShow={currentShow} handleShowClick={handleShowClick} ></CuratedCard>
                     })}
                 </div>
