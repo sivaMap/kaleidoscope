@@ -15,6 +15,7 @@ export const KaleidoscopeCrudContext = ({ children }) => {
     // state is update for Home Page Navigation
     const navigateHomeScreen = () => {
         setLoadName(constants.loadScreen.default);
+        setisShowRunning(false);
     }
 
     const value = {
