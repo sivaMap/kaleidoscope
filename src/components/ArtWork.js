@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import ArtworkCard from './cards/ArtworkCard';
 import { useKaleidoCrud } from '../context/kaleidoscopeCrudContext';
 import { constants } from '../constants';
-import CuratedPlay from './CuratedPlay';
 import ArtWorkShows from './ArtWorkShows';
 
 const ArtWork = () => {
@@ -24,7 +23,7 @@ const ArtWork = () => {
     //only five artifacts can be selected
     const [selectedArtificats, setSelectedArtifacts] = useState([]);
     const [loadArt, setLoadArt] = useState(constants.loadArt.show);
-    const { navigateHomeScreen } = useKaleidoCrud();
+    const { navigateHomeScreen, toggleShowRun } = useKaleidoCrud();
     const handleArtifactSelect = ({ artifact }) => {
         if (selectedArtificats.length < 5) {
             setSelectedArtifacts(prev => [...prev, artifact]);
@@ -60,7 +59,11 @@ const ArtWork = () => {
                         </div>
                         <div className='flex justify-end'
                             style={{ fontFamily: 'Geometria' }}
-                            onClick={() => setLoadArt(constants.loadArt.play)}>
+                            onClick={() => {
+                                if (selectedArtificats.length < 1) return;
+                                setLoadArt(constants.loadArt.play);
+                                toggleShowRun();
+                            }}>
                             <button className='mt- border-white border-2 rounded-full px-4 py-2'>Start Show</button>
                         </div>
                     </div>
@@ -80,7 +83,7 @@ const ArtWork = () => {
             )
                 break;
             case constants.loadArt.play: view.push(
-                <ArtWorkShows key={"CuratePlay"} />
+                <ArtWorkShows key={"CuratePlay"} pSelectedArtificats={selectedArtificats} />
             )
                 break;
             default: break
@@ -89,42 +92,6 @@ const ArtWork = () => {
     }
 
     return (
-        // <div className='relative '>
-        //     <div className='flex justify-between'>
-        //         <div className='flex gap-4  items-center'>
-        //             <button className='bg-black p-3 rounded-full'
-        //                 onClick={navigateHomeScreen}>
-        //                 <img
-        //                     src={'./images/backButtonArrow.png'}
-        //                     alt='<'
-        //                     className='w-5 h-5'
-        //                 />
-        //             </button>
-
-        //             <h2 className="text-2xl"
-        //                 style={{ fontFamily: 'Geometria' }}>
-        //                 Select any 5 artworks
-        //             </h2>
-        //         </div>
-        //         <div className='flex justify-end'
-        //             style={{ fontFamily: 'Geometria' }}>
-        //             <button className='mt- border-white border-2 rounded-full px-4 py-2'>Start Show</button>
-        //         </div>
-        //     </div>
-
-
-        //     <div className="grid grid-cols-4 gap-x-5 -ml-2 mt-4 px-4 pb-4 h-[calc(19rem)] custom-scroll overflow-auto">
-        //         {artifacts.map((artifact) => (
-        //             <ArtworkCard key={artifact.id} artifact={artifact}
-        //                 selectedArtificats={selectedArtificats}
-        //                 handleArtifactSelect={handleArtifactSelect}
-        //                 handleArtificateUndoSelect={handleArtificateUndoSelect}
-        //             />
-        //         ))}
-        //     </div>
-
-        // </div>
-
         loadArtScene()
     )
 }
