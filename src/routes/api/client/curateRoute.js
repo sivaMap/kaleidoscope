@@ -7,7 +7,6 @@ router.route('/videos').get(curateController.getClientVideos);
 
 router.route('/start').post(curateController.startCurate);
 
-router.route('/controlshow').post(curateController.controlApplication);
-router.route('/launch').post(curateController.launchApplication);
+router.route('/control').post(curateController.controlApplication);
 
 module.exports = router;
