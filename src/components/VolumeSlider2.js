@@ -1,5 +1,5 @@
-import React, { useCallback, useState } from 'react';
-import '../css/VolumeSlider.css'; // Import CSS file for styling
+import React, { useCallback, useEffect, useState } from 'react';
+import '../css/VolumeSlider.css';
 import { useDebounce } from '../hooks/useDebounce';
 
 const VolumeSlider2 = ({ isShowRunning }) => {
@@ -17,6 +17,10 @@ const VolumeSlider2 = ({ isShowRunning }) => {
     useDebounce(debounceFunction,
         debounceTiming,
         [volume])
+
+    useEffect(() => {
+        setSliderEnable(false);
+    }, [isShowRunning])
 
     return (
         !isSliderEnabled || !isShowRunning ?
