@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react'
 import VolumeSlider2 from './components/VolumeSlider2'
 import { useKaleidoCrud } from './context/kaleidoscopeCrudContext';
 
-const VolumeBar = ({ isShowRunning }) => {
-  const [play, setPlay] = useState(isShowRunning);
+const VolumeBar = () => {
+  const { isShowRunning } = useKaleidoCrud();
+  const [play, setPlay] = useState(!isShowRunning);
   const { navigateHomeScreen } = useKaleidoCrud();
-  useEffect(() => setPlay(true), [isShowRunning]);
+  useEffect(() => setPlay(true), [isShowRunning]);  
 
   return (
     <div className='absolute bottom-0 bg-black bg-opacity-30 w-full h-[50px] p-1 text-center text-2xl flex-shrink-0 flex-none flex justify-between'>
