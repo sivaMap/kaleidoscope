@@ -29,6 +29,14 @@ const CuratedShows = () => {
         },
     ];
 
+    //Fetch all the shows from server
+    useEffect(() => {
+        // fetch(`${constants.backendUrl}/api/setting`)
+        //     .then(response => response.json())
+        //     .then(data => setApps(data.application))
+        //     .catch(error => console.error('Error fetching apps:', error));
+    }, []);
+
     //only single CURATEDSHOW show will be selected
     const [selectedShow, setSelectedShow] = useState('');
     const [loadCurate, setLoadCurate] = useState(constants.loadCurate.show);
