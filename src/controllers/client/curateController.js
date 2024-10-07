@@ -57,7 +57,7 @@ wss.on('connection', async (ws) => {
 //@route GET /curate/videos
 //access public
 const getClientVideos = asyncHandler(async (req, res) => {
-    const videoDir = path.join(curateVideoUrl, 'videos');
+    const videoDir = path.join(curateVideoUrl);
 
     if (!fs.existsSync(videoDir)) {
         res.status(400);

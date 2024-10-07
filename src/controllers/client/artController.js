@@ -57,7 +57,7 @@ wss.on('connection', async (ws) => {
 //@route GET /art/videos
 //access public
 const getClientVideos = asyncHandler(async (req, res) => {
-    const videoDir = path.join(artVideoUrl, 'videos');
+    const videoDir = path.join(artVideoUrl);
 
     if (!fs.existsSync(videoDir)) {
         res.status(400);
@@ -85,7 +85,7 @@ const getClientVideos = asyncHandler(async (req, res) => {
 //access public
 const startArtShow = asyncHandler(async (req, res) => {
 
-    const { filenames } = req.body;
+    const { selectedArtificats } = req.body;
     const isRunning = await isAppOpen();
 
     if (!isRunning) {
@@ -96,8 +96,9 @@ const startArtShow = asyncHandler(async (req, res) => {
         setTimeout(async () => {
             try {
                 vlc.emptyPlaylist()
-                filenames.forEach(artFileName => {
-                    vlc.addToPlaylist(artFileName);
+                selectedArtificats.forEach(selectedArtificat => {
+                    vlc.addToPlaylist(selectedArtificat?.filename
+                    );
                 })
 
                 const playList = await vlc.getPlaylist();
@@ -113,8 +114,8 @@ const startArtShow = asyncHandler(async (req, res) => {
     }
 
     vlc.emptyPlaylist()
-    filenames.forEach(artFileName => {
-        vlc.addToPlaylist(artFileName);
+    selectedArtificats.forEach(selectedArtificat => {
+        vlc.addToPlaylist(selectedArtificat?.filename);
     })
     const playList = await vlc.getPlaylist();
     vlc.playFromPlaylist(playList[0].id);
@@ -131,26 +132,31 @@ const controlApplication = asyncHandler(async (req, res) => {
         res.status(400);
         throw new Error("vlc not available")
     }
-
-    switch (control) {
-        case "pause":
-            const checkIsPlaying = await vlc.isPlaying();
-            checkIsPlaying
-                ? vlc.pause()
-                : vlc.play();
-            break;
-        case "next":
-            vlc.next();
-            break;
-        case "prev":
-            vlc.previous();
-            break;
-        case "stop":
-            exec('taskkill /F /IM vlc.exe');
-            break;
-        default:
-            break;
-    }
+    const isVlcOpen = await isAppOpen();
+    if (isVlcOpen)
+        switch (control) {
+            case "pause":
+                const checkIsPlaying = await vlc.isPlaying();
+                checkIsPlaying
+                    ? vlc.pause()
+                    : vlc.play();
+                break;
+            case "volume":
+                const { volume } = req.body;
+                vlc.setVolume(volume ?? 45);
+                break;
+            case "next":
+                vlc.next();
+                break;
+            case "prev":
+                vlc.previous();
+                break;
+            case "stop":
+                exec('taskkill /F /IM vlc.exe');
+                break;
+            default:
+                break;
+        }
 
     res.status(200).json({ "Message": "Control Success" });
 });

@@ -48,7 +48,7 @@ const getVideoInfo = (videoPath, file) => {
             }
 
             const { filename, start_time, duration } = metadata.format;
-            resolve({ filename, start_time, duration, displayName: file });
+            resolve({ filename, start_time, duration, displayName:  path.basename(file, path.extname(file)) });
         });
     });
 };
