@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import CuratedCard from './cards/CuratedCard';
 import '../css/customSCroll.css'
 import { useKaleidoCrud } from '../context/kaleidoscopeCrudContext';
@@ -57,12 +57,15 @@ const CuratedShows = () => {
             case constants.loadCurate.show: view.push(
                 <div className='relative flex flex-col' key={"CurateShowDefault"}>
                     <div className='flex gap-4  items-center'>
-                        <button className='bg-black p-3 rounded-full' onClick={navigateHomeScreen}>
-                            <img
+                        <button className='bg-black py-2 px-3 rounded-full' onClick={navigateHomeScreen}>
+                            {/* <img
                                 src={'./images/backButtonArrow.png'}
                                 alt='<'
                                 className='w-5 h-5'
-                            />
+                            /> */}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="20" viewBox="0 0 15 24" fill="none">
+                                <path d="M12.1337 23.4235L0.382256 11.8353L12.1337 0.24707L14.2196 2.30398L4.55402 11.8353L14.2196 21.3666L12.1337 23.4235Z" fill="white" />
+                            </svg>
                         </button>
 
                         <h2 className="text-3xl"
