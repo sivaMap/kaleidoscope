@@ -7,23 +7,28 @@ const cors = require('cors')
 const corsOptions = require('./config/corsOptions');
 const cookieParser = require('cookie-parser');
 const credentials = require("./util/middleware/credentials");
+const { artVideoUrl, curateVideoUrl, PORT } = require("./config");
 
 const initializeServer = async () => {
     const app = express();
 
-    port = process.env.PORT || 5000;
+    port = PORT || 5000;
 
     app.use(credentials);
-    app.use(cors(corsOptions));
+    // app.use(cors(corsOptions));
+    app.use(cors());
     app.use(express.json());
     app.use(express.urlencoded({ extended: false }));
     app.use(cookieParser());
 
     app.use(express.static(path.join(__dirname, '../public')));
 
+    app.use('/curateThumbnail', express.static(path.join(curateVideoUrl, "thumbnail")));
+    app.use('/artThumbnail', express.static(path.join(artVideoUrl, 'thumbnail')));
+
     app.use('/', require('./routes/root'));
 
-    app.use('/client/video', require('./routes/api/client/clientVideo'));
+    // app.use('/client/video', require('./routes/api/client/clientVideo'));
     app.use('/curate', require('./routes/api/client/curateRoute'));
     app.use('/art', require('./routes/api/client/artRoute'));
 
