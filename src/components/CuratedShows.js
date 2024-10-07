@@ -36,7 +36,7 @@ const CuratedShows = () => {
     const { navigateHomeScreen, toggleShowRun } = useKaleidoCrud();
 
     //Fetch all the shows from server
-    useEffect(() => {        
+    useEffect(() => {
         fetch(`${constants.backendUrl}/curate/videos`)
             .then(response => response.json())
             .then(data => setShows([...data]))
@@ -45,7 +45,7 @@ const CuratedShows = () => {
 
     const handleShowClick = ({ showName }) => {
         if (showName === selectedShow) {
-            setSelectedShow();
+            setSelectedShow({});
             return;
         }
         setSelectedShow(showName)
@@ -85,7 +85,8 @@ const CuratedShows = () => {
                         <button
                             className='mt- border-white border-2 rounded-full px-4 py-2'
                             onClick={() => {
-                                if (!selectedShow) return
+                                // if (!selectedShow) return
+                                if (Object.keys(selectedShow)?.length === 0) return
                                 setLoadCurate(constants.loadCurate.play)
                                 toggleShowRun();
                             }}>
