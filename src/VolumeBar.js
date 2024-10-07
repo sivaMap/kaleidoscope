@@ -1,12 +1,27 @@
 import React, { useEffect, useState } from 'react'
 import VolumeSlider2 from './components/VolumeSlider2'
 import { useKaleidoCrud } from './context/kaleidoscopeCrudContext';
+import { constants } from './constants';
 
 const VolumeBar = () => {
   const { isShowRunning } = useKaleidoCrud();
-  const [play, setPlay] = useState(!isShowRunning);
+  const [play, setPlay] = useState(isShowRunning);
   const { navigateHomeScreen } = useKaleidoCrud();
-  useEffect(() => setPlay(true), [isShowRunning]);
+  useEffect(() => setPlay(true)
+    , [isShowRunning]);
+
+  const handlePlay = () => {
+    fetch(`${constants.backendUrl}/art/control`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        "control": "pause"
+      }),
+    })
+      .catch(error => console.error('Error fetching apps:', error));
+  }
 
   const svgPlay = <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 56 56" fill="none">
     <mask id="mask0_1680_2134" style={{ maskType: "alpha" }} maskUnits="userSpaceOnUse" x="0" y="0" width="56" height="56">
@@ -34,9 +49,11 @@ const VolumeBar = () => {
       </div>
 
       <div className={`flex flex-col justify-center ${!isShowRunning ? "opacity-30" : ""}`}
-        onClick={() => isShowRunning ? setPlay(prev => !prev) : setPlay(true)}>
+        onClick={() => {
+          isShowRunning ? setPlay(prev => !prev) : setPlay(true)
+          handlePlay();
+        }}>
         {play ? svgPlay : svgPause}
-
       </div>
 
       <div className='flex flex-col justify-center'>
