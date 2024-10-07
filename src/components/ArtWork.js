@@ -1,26 +1,27 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ArtworkCard from './cards/ArtworkCard';
 import { useKaleidoCrud } from '../context/kaleidoscopeCrudContext';
 import { constants } from '../constants';
 import ArtWorkShows from './ArtWorkShows';
 
 const ArtWork = () => {
-    const artifacts = [
-        { id: 1, name: 'Artifact 1' },
-        { id: 2, name: 'Artifact 2' },
-        { id: 3, name: 'Artifact 3' },
-        { id: 4, name: 'Artifact 4' },
-        { id: 5, name: 'Artifact 5' },
-        { id: 6, name: 'Artifact 6' },
-        { id: 7, name: 'Artifact 7' },
-        { id: 8, name: 'Artifact 8' },
-        { id: 9, name: 'Artifact 9' },
-        { id: 10, name: 'Artifact 10' },
-        { id: 11, name: 'Artifact 11' },
-        { id: 12, name: 'Artifact 12' },
-    ];
+    // const artifacts1 = [
+    //     { id: 1, name: 'Artifact 1' },
+    //     { id: 2, name: 'Artifact 2' },
+    //     { id: 3, name: 'Artifact 3' },
+    //     { id: 4, name: 'Artifact 4' },
+    //     { id: 5, name: 'Artifact 5' },
+    //     { id: 6, name: 'Artifact 6' },
+    //     { id: 7, name: 'Artifact 7' },
+    //     { id: 8, name: 'Artifact 8' },
+    //     { id: 9, name: 'Artifact 9' },
+    //     { id: 10, name: 'Artifact 10' },
+    //     { id: 11, name: 'Artifact 11' },
+    //     { id: 12, name: 'Artifact 12' },
+    // ];
 
     //only five artifacts can be selected
+    const [artifacts, setArtifcats] = useState([]);
     const [selectedArtificats, setSelectedArtifacts] = useState([]);
     const [loadArt, setLoadArt] = useState(constants.loadArt.show);
     const { navigateHomeScreen, toggleShowRun } = useKaleidoCrud();
@@ -31,9 +32,17 @@ const ArtWork = () => {
     }
     //unselect the selected artifact
     const handleArtificateUndoSelect = ({ artifact }) => {
-        const filteredArtifacts = selectedArtificats.filter(selectedArtificat => selectedArtificat.id !== artifact.id);
+        const filteredArtifacts = selectedArtificats.filter(selectedArtificat => selectedArtificat?.displayName !== artifact?.displayName);
         setSelectedArtifacts([...filteredArtifacts]);
     }
+
+    //Fetch all the artworks from server
+    useEffect(() => {
+        fetch(`${constants.backendUrl}/art`)
+            .then(response => response.json())
+            .then(data => setArtifcats([...data]))
+            .catch(error => console.error('Error fetching apps:', error));
+    }, []);    
 
     // Either one of Three bodies or cases will be loaded based on loadName state
     const loadArtScene = () => {
@@ -68,8 +77,8 @@ const ArtWork = () => {
 
 
                     <div className="grid grid-cols-4 gap-x-5 -ml-2 mt-4 px-4 pb-4 h-[calc(19rem)] custom-scroll overflow-auto">
-                        {artifacts.map((artifact) => (
-                            <ArtworkCard key={artifact.id} artifact={artifact}
+                        {artifacts.map((artifact, index) => (
+                            <ArtworkCard key={index} artifact={artifact}
                                 selectedArtificats={selectedArtificats}
                                 handleArtifactSelect={handleArtifactSelect}
                                 handleArtificateUndoSelect={handleArtificateUndoSelect}
@@ -81,7 +90,10 @@ const ArtWork = () => {
             )
                 break;
             case constants.loadArt.play: view.push(
-                <ArtWorkShows key={"CuratePlay"} pSelectedArtificats={selectedArtificats} />
+                <ArtWorkShows key={"CuratePlay"}
+                    selectedArtificats={selectedArtificats}
+                    setSelectedArtifacts={setSelectedArtifacts}
+                    setLoadArt={setLoadArt} />
             )
                 break;
             default: break

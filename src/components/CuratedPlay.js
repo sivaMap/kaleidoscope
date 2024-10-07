@@ -6,8 +6,11 @@ import { useKaleidoCrud } from "../context/kaleidoscopeCrudContext";
 const CuratedPlay = ({ setLoadCurate, selectedShow, setSelectedShow, shows }) => {
     const [currentShow, setCurrentShow] = useState(selectedShow);
     const { toggleShowRun } = useKaleidoCrud();
+    const minutes = Math.floor(currentShow?.duration / 60);
+    const seconds = Math.floor(currentShow?.duration % 60);
+
     const handleShowClick = ({ showName }) => {
-        if (showName.title === currentShow.title) {
+        if (showName.displayName === currentShow.displayName) {
             return;
         }
         setSelectedShow(showName)
@@ -28,13 +31,13 @@ const CuratedPlay = ({ setLoadCurate, selectedShow, setSelectedShow, shows }) =>
                 <h2 className="text-lg font-bold mb-4 text-center">Currently Showing</h2>
                 <div className="bg-black p-4 rounded-lg h-2/3 max-h-60">
                     <img
-                        src={currentShow.image}
-                        alt={currentShow.title}
+                        src={`${constants.backendUrl}/curateThumbnail/${currentShow?.displayName}.png`}
+                        alt={currentShow.displayName}
                         className="mb-4 rounded w-full"
                     />
                     <div className="flex justify-between">
-                        <h2 className="font-semibold text-base mb-2">{currentShow.title}</h2>
-                        <p className="text-sm text-gray-400">{currentShow.time}</p>
+                        <h2 className="font-semibold text-base mb-2">{currentShow.displayName}</h2>
+                        <p className="text-sm text-gray-400">{minutes} : {seconds}</p>
                     </div>
 
                 </div>
@@ -56,7 +59,7 @@ const CuratedPlay = ({ setLoadCurate, selectedShow, setSelectedShow, shows }) =>
                 <h2 className="text-lg font-bold mb-4">Choose a different show</h2>
                 <div className="grid grid-cols-2 gap-4">
                     {shows.map((show, index) => {
-                        if (show.title === currentShow.title) return null;
+                        if (show.displayName === currentShow.displayName) return null;
                         return < CuratedCard key={index} show={show} selectedShow={currentShow} handleShowClick={handleShowClick} ></CuratedCard>
                     })}
                 </div>

@@ -6,41 +6,42 @@ import { constants } from '../constants';
 import CuratedPlay from './CuratedPlay';
 
 const CuratedShows = () => {
-    const shows = [
-        {
-            title: "Intro",
-            time: "2 : 10",
-            image: "https://via.placeholder.com/150",
-        },
-        {
-            title: "Kantha Work",
-            time: "2 : 10",
-            image: "https://via.placeholder.com/150",
-        },
-        {
-            title: "Block Printing",
-            time: "2 : 50",
-            image: "https://via.placeholder.com/150",
-        },
-        {
-            title: "Blockj Printing",
-            time: "4 : 30",
-            image: "https://via.placeholder.com/150",
-        },
-    ];
-
-    //Fetch all the shows from server
-    useEffect(() => {
-        // fetch(`${constants.backendUrl}/api/setting`)
-        //     .then(response => response.json())
-        //     .then(data => setApps(data.application))
-        //     .catch(error => console.error('Error fetching apps:', error));
-    }, []);
+    // const shows1 = [
+    //     {
+    //         title: "Intro",
+    //         time: "2 : 10",
+    //         image: "https://via.placeholder.com/150",
+    //     },
+    //     {
+    //         title: "Kantha Work",
+    //         time: "2 : 10",
+    //         image: "https://via.placeholder.com/150",
+    //     },
+    //     {
+    //         title: "Block Printing",
+    //         time: "2 : 50",
+    //         image: "https://via.placeholder.com/150",
+    //     },
+    //     {
+    //         title: "Blockj Printing",
+    //         time: "4 : 30",
+    //         image: "https://via.placeholder.com/150",
+    //     },
+    // ];
 
     //only single CURATEDSHOW show will be selected
-    const [selectedShow, setSelectedShow] = useState('');
+    const [selectedShow, setSelectedShow] = useState({});
+    const [shows, setShows] = useState([]);
     const [loadCurate, setLoadCurate] = useState(constants.loadCurate.show);
     const { navigateHomeScreen, toggleShowRun } = useKaleidoCrud();
+
+    //Fetch all the shows from server
+    useEffect(() => {        
+        fetch(`${constants.backendUrl}/curate/videos`)
+            .then(response => response.json())
+            .then(data => setShows([...data]))
+            .catch(error => console.error('Error fetching apps:', error));
+    }, []);
 
     const handleShowClick = ({ showName }) => {
         if (showName === selectedShow) {

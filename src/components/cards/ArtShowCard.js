@@ -1,20 +1,17 @@
 import React, { memo } from 'react'
+import { constants } from '../../constants';
 
 const ArtShowCard = memo(function ArtworkCard(props) {
-    const { artifact, selectedArtificats, handleArtifactSelect, handleArtificateUndoSelect } = props;
-    const isSelected = selectedArtificats.some(selectedArtificat => selectedArtificat.id === artifact.id);
+    const { artifact } = props;
 
     return (
-        <div className={`rounded-lg shadow-md  p-2 mb-2 ${isSelected ? "bg-white" : ""}`}
-            onClick={() => {
-                isSelected ? handleArtificateUndoSelect({ artifact }) :
-                    handleArtifactSelect({ artifact });
-            }}>
+        <div className={`rounded-lg shadow-md  p-2 mb-2}`}
+        >
             <div className={"h-44  rounded-lg mb-0"} >
-                <img src={"https://via.placeholder.com/150"} alt={artifact.name}
+                <img src={`${constants.backendUrl}/artThumbnail/${artifact?.displayName}.png`} alt={artifact?.displayName}
                     className="w-full h-full rounded-lg object-cover " />
             </div>
-            <h2 className={`text-center ${isSelected ? "text-black" : ""}`}>{artifact.name}</h2>
+            <h2 className={`text-center`}>{artifact?.displayName}</h2>
         </div>
     )
 });
