@@ -4,25 +4,25 @@
     /* Center the image and slider vertically */
 }
 
-.volume-slider img {
-    width: 30px;
+.volume-slider svg {
+    width: 24px;
     /* Set image width */
-    height: 30px;
+    height: 24px;
     /* Set image height */
-    margin-right: 10px;
+    margin-right: 8px;
     /* Space between the image and the slider */
 }
 
 .slider {
     -webkit-appearance: none;
     /* Remove default appearance */
-    width: 105px;
+    width: 95px;
     /* Adjust the width of the slider */
-    height: 5px;
+    height: 4px;
     /* Adjust the height of the slider */
     background: #ddd;
     /* Background color of the slider */
-    border-radius: 5px;
+    border-radius: 4px;
     /* Round the edges */
     outline: none;
     /* Remove outline */    
@@ -31,9 +31,9 @@
 .slider::-webkit-slider-thumb {
     -webkit-appearance: none;
     /* Remove default appearance of the thumb */
-    width: 15px;
+    width: 11px;
     /* Set the thumb width */
-    height: 15px;
+    height: 11px;
     /* Set the thumb height */
     background: #ffffff;
     /* Thumb color */
@@ -43,10 +43,10 @@
     /* Change cursor on hover */
 }
 
-.slider::-moz-range-thumb {
+/* .slider::-moz-range-thumb {
     width: 15px;
     height: 15px;
     background: #007bff;
     border-radius: 50%;
     cursor: pointer;
-}
+} */
