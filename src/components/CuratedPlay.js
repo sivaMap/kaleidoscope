@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CuratedCard from "./cards/CuratedCard";
 import { constants } from "../constants";
 import { useKaleidoCrud } from "../context/kaleidoscopeCrudContext";
@@ -17,9 +17,33 @@ const CuratedPlay = ({ setLoadCurate, selectedShow, setSelectedShow, shows }) =>
         setCurrentShow(showName)
     }
     const handleEndShow = () => {
+        fetch(`${constants.backendUrl}/curate/control`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                "control": "stop"
+            }),
+        })
+            .catch(error => console.error('Error fetching apps:', error));
         setLoadCurate(constants.loadCurate.show);
+        setSelectedShow({});
         toggleShowRun();
     }
+    useEffect(() => {
+        fetch(`${constants.backendUrl}/curate/start`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                filename: currentShow?.filename,
+            }),
+        })
+            .catch(error => console.error('Error fetching apps:', error));
+
+    }, [currentShow])
 
     return (
         <div

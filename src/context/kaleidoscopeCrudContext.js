@@ -14,6 +14,16 @@ export const KaleidoscopeCrudContext = ({ children }) => {
 
     // state is update for Home Page Navigation
     const navigateHomeScreen = () => {
+        fetch(`${constants.backendUrl}/curate/control`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                "control": "stop"
+            }),
+        })
+            .catch(error => console.error('Error fetching apps:', error));
         setLoadName(constants.loadScreen.default);
         setisShowRunning(false);
     }
