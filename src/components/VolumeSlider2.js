@@ -42,7 +42,7 @@ const VolumeSlider2 = ({ isShowRunning }) => {
     useEffect(() => {
         setSliderEnable(false);
     }, [isShowRunning])
-    console.log(volume)
+    
     return (
         !isSliderEnabled || !isShowRunning ?
             <div className='w-40 ml-2 pl-2 pr-0 py-1 rounded-full'>

@@ -22,8 +22,7 @@ const ArtWorkShows = ({ selectedArtificats, setSelectedArtifacts, setLoadArt }) 
         toggleShowRun();
     }
     
-    useEffect(() => {
-        console.log(selectedArtificats)
+    useEffect(() => {        
         fetch(`${constants.backendUrl}/art/start`, {
             method: 'POST',
             headers: {
