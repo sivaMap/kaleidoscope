@@ -5,11 +5,19 @@ import { constants } from './constants';
 
 const VolumeBar = () => {
   const { isShowRunning } = useKaleidoCrud();
-  const [play, setPlay] = useState(isShowRunning);
+  const [play, setPlay] = useState(false);
   const { navigateHomeScreen } = useKaleidoCrud();
-  useEffect(() => setPlay(true)
-    , [isShowRunning]);
+  useEffect(() => {
+    if (!isShowRunning) {
+      setPlay(true)
 
+    }
+    else {
+      setPlay(false)
+    }
+  }
+    , [isShowRunning]);
+  
   const handlePlay = () => {
     fetch(`${constants.backendUrl}/art/control`, {
       method: 'POST',
