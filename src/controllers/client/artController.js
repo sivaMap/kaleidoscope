@@ -8,7 +8,7 @@ const { exec } = require("child_process");
 const { isAppOpen, getVideoInfo } = require("./vlcFunctions");
 const { applicationPath: applicationPathConfig } = require("../../config");
 
-const wss = new WebSocket.Server({ port: 8082 });
+// const wss = new WebSocket.Server({ port: 8082 });
 // vlc client
 let vlc;
 try {
@@ -25,32 +25,32 @@ try {
 }
 
 // Give vlc live updates to client or frontend
-wss.on('connection', async (ws) => {
-    console.log('New client connected');
+// wss.on('connection', async (ws) => {
+//     console.log('New client connected');
 
-    // Send initial status when a client connects
-    vlc.status().then((status) => {
-        ws.send(JSON.stringify(status));
-    }).catch((error) => {
-        console.error('Error fetching VLC status:', error.message);
-    });
+//     // Send initial status when a client connects
+//     vlc.status().then((status) => {
+//         ws.send(JSON.stringify(status));
+//     }).catch((error) => {
+//         console.error('Error fetching VLC status:', error.message);
+//     });
 
 
-    // Periodically send status updates
-    const interval = setInterval(() => {
-        vlc.status().then((status) => {
-            ws.send(JSON.stringify(status));
-        }).catch((error) => {
-            console.error('Error fetching VLC status:', error.message);
-            clearInterval(interval);
-        });
-    }, 1000); // Update every second
+//     // Periodically send status updates
+//     const interval = setInterval(() => {
+//         vlc.status().then((status) => {
+//             ws.send(JSON.stringify(status));
+//         }).catch((error) => {
+//             console.error('Error fetching VLC status:', error.message);
+//             clearInterval(interval);
+//         });
+//     }, 1000); // Update every second
 
-    ws.on('close', () => {
-        console.log('Client disconnected');
-        clearInterval(interval); // Stop sending updates when the client disconnects
-    });
-});
+//     ws.on('close', () => {
+//         console.log('Client disconnected');
+//         clearInterval(interval); // Stop sending updates when the client disconnects
+//     });
+// });
 
 
 //@desc Get All Art videos in a Art folder
