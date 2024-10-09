@@ -6,7 +6,7 @@ import { TouchableOpacity, View } from 'react-native';
 import Svg, { G, Mask, Path, Rect } from 'react-native-svg';
 
 const VolumeBar = () => {
-    const { isShowRunning, navigateHomeScreen } = useKaleidoCrud();
+    const { isShowRunning, width, navigateHomeScreen } = useKaleidoCrud();
     const [play, setPlay] = useState(false);
 
     useEffect(() => {
@@ -50,8 +50,8 @@ const VolumeBar = () => {
     return (
         // <View className="bg-black bg-opacity-30 w-full h-[50px] p-1 flex flex-row justify-between items-center">
         <View
-            style={{ backgroundColor: 'rgba(0,0,0,0.3)' }}
-            className="w-full h-[50px] p-1 flex flex-row justify-between items-center">
+            style={{ backgroundColor: 'rgba(0,0,0,0.4)' }}
+            className={`absolute bottom-0 w-full ${width<770?"h-[35px]":"h-[50px]"} p-1 flex flex-row justify-between items-center`}>
             <TouchableOpacity className={`flex flex-col justify-center ${!isShowRunning ? 'opacity-30' : ''}`}>
                 <VolumeSlider2 isShowRunning={isShowRunning} />
             </TouchableOpacity>
