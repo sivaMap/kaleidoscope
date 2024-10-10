@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import VolumeSlider2 from './subcomponents/VolumeSlider2';
 import { useKaleidoCrud } from '../context/kaleidoscopeCrudContext';
 import { constants } from '../constants';
-import { TouchableOpacity, View } from 'react-native';
+import { BackHandler, Platform, TouchableOpacity, View } from 'react-native';
 import Svg, { G, Mask, Path, Rect } from 'react-native-svg';
 
 const VolumeBar = () => {
@@ -14,19 +14,19 @@ const VolumeBar = () => {
     }, [isShowRunning]);
 
     const handlePlay = (action) => {
-        // fetch(`${constants.backendUrl}/art/control`, {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify({
-        //         control: action === "play" ? "play" : "pause",
-        //     }),
-        // }).catch(error => console.error('Error fetching apps:', error));
+        fetch(`${constants.backendUrl}/art/control`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                control: action === "play" ? "play" : "pause",
+            }),
+        }).catch(error => console.error('Error fetching apps:', error));
     };
 
     const svgPlay = (
-        <Svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 56 56" fill="none">
+        <Svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 56 56" fill="none">
             <Mask id="mask0_1680_2134" style={{ maskType: "alpha" }} maskUnits="userSpaceOnUse" x="0" y="0" width="56" height="56">
                 <Rect width="56" height="56" fill="#D9D9D9" />
             </Mask>
@@ -47,11 +47,17 @@ const VolumeBar = () => {
         </Svg>
     );
 
+    const exitApp = () => {
+        if (Platform.OS === 'android') {
+            BackHandler.exitApp();
+        }
+    }
+
     return (
         // <View className="bg-black bg-opacity-30 w-full h-[50px] p-1 flex flex-row justify-between items-center">
         <View
             style={{ backgroundColor: 'rgba(0,0,0,0.4)' }}
-            className={`absolute bottom-0 w-full ${width<770?"h-[35px]":"h-[50px]"} p-1 flex flex-row justify-between items-center`}>
+            className={`absolute bottom-0 w-full ${width < 770 ? "h-[35px]" : "h-[50px]"} px-5 py-3 flex flex-row justify-between items-center`}>
             <TouchableOpacity className={`flex flex-col justify-center ${!isShowRunning ? 'opacity-30' : ''}`}>
                 <VolumeSlider2 isShowRunning={isShowRunning} />
             </TouchableOpacity>
@@ -73,14 +79,14 @@ const VolumeBar = () => {
             <View className="flex flex-col justify-center">
                 <View className='flex flex-row gap-4 mr-2'>
                     {/* reset */}
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={navigateHomeScreen}>
                         <Svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 34 40" fill="none">
                             <Path d="M17 39.3333C14.7083 39.3333 12.5618 38.8979 10.5604 38.0271C8.55903 37.1563 6.81736 35.9799 5.33542 34.4979C3.85347 33.016 2.67708 31.2743 1.80625 29.2729C0.935417 27.2715 0.5 25.125 0.5 22.8333C0.5 20.5417 0.935417 18.3951 1.80625 16.3938C2.67708 14.3924 3.85347 12.6507 5.33542 11.1688C6.81736 9.68682 8.55903 8.51043 10.5604 7.63959C12.5618 6.76876 14.7083 6.33334 17 6.33334H17.275L14.4333 3.49168L17 0.833344L24.3333 8.16668L17 15.5L14.4333 12.8417L17.275 10H17C13.425 10 10.3924 11.2451 7.90208 13.7354C5.41181 16.2257 4.16667 19.2583 4.16667 22.8333C4.16667 26.4083 5.41181 29.441 7.90208 31.9313C10.3924 34.4215 13.425 35.6667 17 35.6667C20.575 35.6667 23.6076 34.4215 26.0979 31.9313C28.5882 29.441 29.8333 26.4083 29.8333 22.8333H33.5C33.5 25.125 33.0646 27.2715 32.1938 29.2729C31.3229 31.2743 30.1465 33.016 28.6646 34.4979C27.1826 35.9799 25.441 37.1563 23.4396 38.0271C21.4382 38.8979 19.2917 39.3333 17 39.3333Z" fill="white" />
                         </Svg>
                     </TouchableOpacity>
 
                     {/* close */}
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={exitApp}>
                         <Svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 44 44" fill="none">
                             <Mask id="mask0_1660_25993" style={{ maskType: "alpha" }} maskUnits="userSpaceOnUse" x="0" y="0" width="44" height="44">
                                 <Rect width="44" height="44" fill="#D9D9D9" />
