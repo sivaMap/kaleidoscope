@@ -5,19 +5,18 @@ import { useKaleidoCrud } from '../context/kaleidoscopeCrudContext';
 const TaskBar = () => {
     const { fontsLoaded, setIpVisible } = useKaleidoCrud();
     const { width } = useWindowDimensions();
-
-
+    
     return (
-        <View className={`flex flex-row justify-between w-full  ${width < 770 ? "h-10" : "h-16"} flex-shrink-0 flex-none`}
+        <View className={`flex flex-row justify-between w-full ${width < 770 ? "h-10" : "h-[70px]"} flex-shrink-0 flex-none`}
             style={{ backgroundColor: 'rgba(0,0,0,0.4)' }}
         >
             {/* MAP SYMBOL */}
-            <View className="flex flex-col justify-center  pl-5">
-                <View className="w-4 h-10">
+            <View className="flex flex-col justify-center  pl-5 h-[72px] w-[139px]">
+                <View className="w-24 h-12">
                     <Image
                         source={require('../assets/images/map.png')}
                         alt="map"
-                        className="px-6 py-0"
+                        className="px-9 py-0"
                         style={{ width: '100%', height: '100%' }}
                     />
                 </View>
@@ -26,21 +25,21 @@ const TaskBar = () => {
 
             {/* TEXT */}
             <View className="flex flex-col justify-center">
-                <Text className="font-medium text-white text-xl"
-                    style={{ fontFamily: fontsLoaded ? 'Geometria' : '' }}
+                <Text className=" text-white text-2xl"
+                    style={{ fontFamily: fontsLoaded ? 'Geometria' : '',"fontWeight": 700 ,"letterSpacing":1}}
                 >
                     KALEIDOSCOPE
                 </Text>
             </View>
 
             {/* OPEZEE SYMBOL */}
-            <View className="flex flex-col justify-center">
-                <View className="w-20 h-10">
-                    <TouchableOpacity onPress={() => setIpVisible(true)}>
+            <View className="flex flex-col justify-center ">
+                <View className="pr-3">
+                    <TouchableOpacity className="w-[82px] h-[30px]" onPress={() => setIpVisible(true)}>
                         <Image
                             source={require('../assets/images/opezee.png')}
                             alt="opezee"
-                            className="pl-16 py-0 w-3 h-6"
+                            className="py-0 w-full h-full"
                         />
                     </TouchableOpacity>
                 </View>

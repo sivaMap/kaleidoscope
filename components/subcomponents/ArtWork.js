@@ -37,7 +37,7 @@ const ArtWork = () => {
         switch (loadArt) {
             case constants.loadArt.show:
                 view.push(
-                    <View className="relative" key={"ArtDefault"}>
+                    <View className="relative h-5/6" key={"ArtDefault"}>
                         <View className="flex-row justify-between">
                             <View className="flex-row items-center space-x-4">
                                 <TouchableOpacity
@@ -52,7 +52,7 @@ const ArtWork = () => {
                                     </Text>
                                 </TouchableOpacity>
 
-                                <Text className="text-2xl" 
+                                <Text className="text-2xl text-white"
                                 // style={{ fontFamily: 'Geometria' }}
                                 >
                                     Select any 5 artworks
@@ -61,16 +61,23 @@ const ArtWork = () => {
                             <TouchableOpacity
                                 className="border-white border-2 rounded-full px-4 py-2"
                                 onPress={() => {
-                                    if (selectedArtificats.length < 1) return;
+                                    if (!(selectedArtificats.length === 5)) return;
                                     setLoadArt(constants.loadArt.play);
                                     toggleShowRun();
                                 }}
                             >
-                                <Text className="mt-2">Start Show</Text>
+                                <Text className="mt-2 text-white">Start Show</Text>
                             </TouchableOpacity>
                         </View>
 
-                        <ScrollView className="grid grid-cols-4 gap-x-5 -ml-2 mt-4 px-4 pb-4 h-[calc(19rem)] custom-scroll overflow-auto">
+                        <ScrollView className="gap-x-5 -ml-2 mt-4 px-4 pb-4 h-[calc(19rem)] custom-scroll overflow-auto"
+                            contentContainerStyle={{
+                                flexDirection: 'row',
+                                flexWrap: 'wrap',
+                                justifyContent: 'space-between', // Ensures space between items
+
+                                paddingHorizontal: 4, // Optional: add horizontal padding if needed
+                            }}>
                             {artifacts.map((artifact, index) => (
                                 <ArtworkCard
                                     key={index}
@@ -81,6 +88,17 @@ const ArtWork = () => {
                                 />
                             ))}
                         </ScrollView>
+                        {/* <ScrollView className="grid grid-cols-4 gap-x-5 -ml-2 mt-4 px-4 pb-4 h-[calc(19rem)] custom-scroll overflow-auto">
+                            {artifacts.map((artifact, index) => (
+                                <ArtworkCard
+                                    key={index}
+                                    artifact={artifact}
+                                    selectedArtificats={selectedArtificats}
+                                    handleArtifactSelect={handleArtifactSelect}
+                                    handleArtificateUndoSelect={handleArtificateUndoSelect}
+                                />
+                            ))}
+                        </ScrollView> */}
                     </View>
                 );
                 break;

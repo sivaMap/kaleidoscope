@@ -4,7 +4,7 @@ import { constants } from '../../constants';
 import { useKaleidoCrud } from '../../context/kaleidoscopeCrudContext';
 
 const Home = () => {
-    const { setLoadName } = useKaleidoCrud();
+    const { setLoadName, fontsLoaded } = useKaleidoCrud();
 
     return (
         <View className="flex flex-col justify-center gap-4 mt-4 mb-0 h-5/6">
@@ -12,27 +12,30 @@ const Home = () => {
                 className="flex flex-row justify-center" onPress={() => setLoadName(constants.loadScreen.curate)}>
                 <View style={styles.borderContainer}>
                     <Text
-                        style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)',borderColor: 'rgba(255, 255, 255, 0.3)' }}
+                        // style={{ fontFamily: fontsLoaded ? 'Geometria' : '' }}
+                        style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)', borderColor: 'rgba(255, 255, 255, 0.3)', fontFamily: fontsLoaded ? 'Geometria' : '' ,"fontWeight": 700}}
                         // style={styles.text}
-                        className=" rounded-full px-20 py-5 text-center text-base text-white"
+                        className=" rounded-full px-20 py-6 text-center text-base text-white"
                     >
-                        Experience a Curated Show
+                        Experience a curated show
                     </Text>
                 </View>
             </Pressable>
 
             <View className="mb-3 flex flex-row justify-center items-center gap-5">
-                <View style={{ borderColor: 'rgba(255, 255, 255, 0.3)' }} className="w-2/12 border-t mx-2" />
-                <Text className="text-white">OR</Text>
+                <View style={{ borderColor: 'rgba(255, 255, 255, 0.3)', fontFamily: fontsLoaded ? 'Geometria' : '' }} className="w-2/12 border-t mx-2" />
+                <Text 
+                style={{"fontWeight": 700}}
+                className="text-white">OR</Text>
                 <View style={{ borderColor: 'rgba(255, 255, 255, 0.3)' }} className="w-2/12 border-t mx-2" />
             </View>
 
             <Pressable className="flex flex-row justify-center" onPress={() => setLoadName(constants.loadScreen.art)}>
                 <View style={styles.borderContainer}>
                     <Text
-                        style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)', borderColor: 'rgba(255, 255, 255, 0.3)' }}
+                        style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)', borderColor: 'rgba(255, 255, 255, 0.3)', fontFamily: fontsLoaded ? 'Geometria' : '' ,"fontWeight": 700}}
                         className="rounded-full px-24 py-6 text-center text-base text-white">
-                        Create your own Show
+                        Create your own show
                     </Text>
                 </View>
             </Pressable>

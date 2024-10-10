@@ -24,7 +24,7 @@ const Kaleidoscope = () => {
     };
 
     return (
-        <View className={`flex-grow px-10 ${width < 770 ? "mt-5" : "mt-10"}`}>
+        <View className={`flex-grow px-10 ${width < 770 ? "mt-6" : "mt-10"}`}>
             <View
                 style={{
                     backgroundColor: 'rgba(0,0,0,0.4)',                    

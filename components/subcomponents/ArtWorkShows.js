@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Button } from 'react-native';
 import ArtShowCard from './cards/ArtShowCard';
 import { useKaleidoCrud } from '../../context/kaleidoscopeCrudContext';
 import { constants } from '../../constants';
@@ -38,22 +38,48 @@ const ArtWorkShows = ({ selectedArtificats, setSelectedArtifacts, setLoadArt }) 
     }, []);
 
     return (
-        <View className='relative'>
-            <Text className='text-2xl font-[Geometria]'>
+        <View className='relative gap-3 h-5/6'>
+            <Text className='text-2xl text-white'>
                 Artworks in the Current Show
             </Text>
 
-            <ScrollView className="grid grid-cols-5 gap-x-5 -ml-2 mt-4 h-[calc(17rem)] overflow-auto">
+            <ScrollView className=" gap-x-5 -ml-2 mt-4 h-[calc(17rem)] overflow-auto"
+                contentContainerStyle={{
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                    justifyContent: 'space-between',
+                    paddingHorizontal: 4,
+                }}>
                 {selectedArtificats?.map((artifact, index) => (
                     <ArtShowCard key={index} artifact={artifact} />
                 ))}
             </ScrollView>
+            {/* <ScrollView className="grid grid-cols-5 gap-x-5 -ml-2 mt-4 h-[calc(17rem)] overflow-auto">
+                {selectedArtificats?.map((artifact, index) => (
+                    <ArtShowCard key={index} artifact={artifact} />
+                ))}
+            </ScrollView> */}
 
-            <View className="flex justify-end mt-4">
-                <TouchableOpacity className="px-6 py-2 border border-white rounded-full" onPress={handleEndShow}>
-                    <Text className="text-white">End Show</Text>
+            {/* <View className="flex-row justify-end mt-4"> */}
+            {/* <View className="absolute -bottom-16 right-0  mt-4 rounded-full">
+                <Button
+                    title="End Show"
+                    onPress={handleEndShow}
+                    className="px-6 py-2 border border-white rounded-full"
+                />
+            </View> */}
+
+            < View className="absolute -bottom-16 right-0  mt-4 " >
+                <TouchableOpacity
+                    className="border-white border-2 rounded-full px-4 py-2"
+                    onPress={handleEndShow}
+                >
+                    <Text className="text-white"
+                    // style={{ fontFamily: 'Geometria' }}
+                    >
+                        End Show</Text>
                 </TouchableOpacity>
-            </View>
+            </View >
         </View>
     );
 };
