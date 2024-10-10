@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { View, Text, TextInput, TouchableOpacity, Modal } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useKaleidoCrud } from '../../context/kaleidoscopeCrudContext';
+import { constants } from '../../constants';
 
 
 const IpConfig = () => {
@@ -35,8 +36,10 @@ const IpConfig = () => {
     const storeData = async () => {
         try {
             console.log('ipAddress', ipAddress, 'port', port)
-            // await AsyncStorage.setItem('ipAddress', ipAddress);
-            // await AsyncStorage.setItem('port', port);
+            await AsyncStorage.setItem('ipAddress', ipAddress);
+            await AsyncStorage.setItem('port', port);
+            constants.ipAddress = ipAddress;
+            constants.port = port;
             console.log('Data stored successfully!');
             hideModal();
         } catch (error) {
@@ -52,24 +55,24 @@ const IpConfig = () => {
             onRequestClose={hideModal}
         >
             <View className="flex-1 justify-center items-center bg-black/50">
-                <View className="w-80 p-6 border border-gray-300 rounded-lg shadow-md bg-white">
-                    <Text className="text-lg mb-4 text-center">Please enter the following details</Text>
+                <View className="w-6/12 p-6 border border-gray-300 rounded-lg shadow-md bg-white">
+                    <Text className="text-lg mb-4 text-start">Please enter the following details</Text>
 
                     <TextInput
                         placeholder="Enter the IP Address"
-                        className="w-full border border-gray-300 rounded-md px-4 py-2 mb-4 text-base"
+                        className="w-full border border-gray-800 rounded-md px-4 py-2 mb-4 text-base"
                         value={ipAddress}
                         onChangeText={text => setIpAddress(text)}
                     />
 
                     <TextInput
                         placeholder="Enter the Port"
-                        className="w-full border border-gray-300 rounded-md px-4 py-2 mb-6 text-base"
+                        className="w-full border border-gray-800 rounded-md px-4 py-2 mb-6 text-base"
                         value={port}
                         onChangeText={text => setPort(text)}
                     />
 
-                    <View className="flex-row justify-between">
+                    <View className="flex-row justify-center gap-6">
                         <TouchableOpacity
                             className="px-6 py-3 rounded-full border border-black"
                             onPress={hideModal}
