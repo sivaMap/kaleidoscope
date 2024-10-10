@@ -29,24 +29,24 @@ const VolumeSlider2 = ({ isShowRunning }) => {
     const [volume, setVolume] = useState(5);
 
     const debounceFunction = useCallback(() => {
-        // fetch(`${constants.backendUrl}/art/control`, {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify({
-        //         "control": "volume",
-        //         "volume": volume
-        //     }),
-        // })
-        //     .catch(error => console.error('Error fetching apps:', error));
+        fetch(`${constants.backendUrl}/art/control`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                "control": "volume",
+                "volume": volume
+            }),
+        })
+            .catch(error => console.error('Error fetching apps:', error));
     }, [volume]);
 
     useDebounce(debounceFunction, debounceTiming, [volume]);
 
-    // useEffect(() => {
-    //     setSliderEnable(false);
-    // }, [isShowRunning]);
+    useEffect(() => {
+        setSliderEnable(false);
+    }, [isShowRunning]);
 
     return (
         !isSliderEnabled || !isShowRunning ? (
