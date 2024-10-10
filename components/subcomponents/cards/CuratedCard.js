@@ -11,7 +11,7 @@ const CuratedCard = (props) => {
 
     return (
         <TouchableOpacity             
-            className={`flex flex-row gap-4 bg-black rounded-xl shadow-md w-[350] h-40 mt-0 mb-10 mx-0 ${isSelected ? "border-white border-2" : "border-transparent border-2"}`}
+            className={`flex flex-row gap-4 bg-black rounded-xl shadow-md w-[350] h-40 mt-0 mb-2 mx-0 ${isSelected ? "border-white border-2" : "border-transparent border-2"}`}
             onPress={() => handleShowClick({ showName: show })}
         >
             {/* Image Section */}
@@ -24,7 +24,7 @@ const CuratedCard = (props) => {
             </View>
 
             {/* Text Section */}
-            <View className="flex-col justify-end w-fit">
+            <View className="flex-col justify-end w-fit mb-2">
                 <Text className="text-white text-base font-semibold">{show?.displayName}</Text>
                 <Text className="text-gray-400 text-sm mt-1">{minutes} : {seconds}</Text>
             </View>
