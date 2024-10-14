@@ -6,7 +6,7 @@ import { constants } from '../../constants';
 
 
 const IpConfig = () => {
-    const { ipVisible, setIpVisible } = useKaleidoCrud();
+    const { ipVisible, setIpVisible, fontsLoaded } = useKaleidoCrud();
     const [ipAddress, setIpAddress] = useState('');
     const [port, setPort] = useState('5001');
     const hideModal = () => { setIpVisible(false) }
@@ -56,18 +56,18 @@ const IpConfig = () => {
         >
             <View className="flex-1 justify-center items-center bg-black/50">
                 <View className="w-6/12 p-6 border border-gray-300 rounded-lg shadow-md bg-white">
-                    <Text className="text-lg mb-4 text-start">Please enter the following details</Text>
+                    <Text className={`text-lg mb-4 text-start ${fontsLoaded ? "font-gBold" : ""}`}>Please enter the following details</Text>
 
                     <TextInput
                         placeholder="Enter the IP Address"
-                        className="w-full border border-gray-800 rounded-md px-4 py-2 mb-4 text-base"
+                        className={`w-full border border-gray-800 rounded-md px-4 py-2 mb-4 ${fontsLoaded ? "font-gBold" : ""}`}
                         value={ipAddress}
                         onChangeText={text => setIpAddress(text)}
                     />
 
                     <TextInput
                         placeholder="Enter the Port"
-                        className="w-full border border-gray-800 rounded-md px-4 py-2 mb-6 text-base"
+                        className={`w-full border border-gray-800 rounded-md px-4 py-2 mb-6 ${fontsLoaded ? "font-gBold" : ""}`}
                         value={port}
                         onChangeText={text => setPort(text)}
                     />
@@ -77,14 +77,14 @@ const IpConfig = () => {
                             className="px-6 py-3 rounded-full border border-black"
                             onPress={hideModal}
                         >
-                            <Text className="text-black text-center">Cancel</Text>
+                            <Text className={`text-black text-center ${fontsLoaded ? "font-gBold" : ""}`}>Cancel</Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity
                             className="px-6 py-3 rounded-full bg-black"
                             onPress={storeData}
                         >
-                            <Text className="text-white text-center">Submit</Text>
+                            <Text className={`text-white text-center ${fontsLoaded ? "font-gBold" : ""}`}>Submit</Text>
                         </TouchableOpacity>
                     </View>
                 </View>

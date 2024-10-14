@@ -6,14 +6,13 @@ import { useKaleidoCrud } from '../../context/kaleidoscopeCrudContext';
 import { constants } from '../../constants';
 import { SvgXml } from 'react-native-svg'; // For the SVG
 import CuratedPlay from './CuratedPlay';
-import { useFonts } from 'expo-font';
 
 const CuratedShows = () => {
     const [selectedShow, setSelectedShow] = useState({});
     const [shows, setShows] = useState([]);
     const [loadCurate, setLoadCurate] = useState(constants.loadCurate.show);
-    const { navigateHomeScreen, toggleShowRun,fontsLoaded  } = useKaleidoCrud();
-    
+    const { navigateHomeScreen, toggleShowRun, fontsLoaded } = useKaleidoCrud();
+
 
     // Fetch all the shows from server1
     useEffect(() => {
@@ -38,7 +37,7 @@ const CuratedShows = () => {
         switch (loadCurate) {
             case constants.loadCurate.show:
                 view.push(
-                    <View className="relative flex flex-col  h-5/6 " key={"CurateShowDefault"}>
+                    <View className="relative flex flex-col  h-5/6 mt-4" key={"CurateShowDefault"}>
                         {/* Header Section */}
                         <View className="flex-row items-center space-x-4">
                             <TouchableOpacity className="bg-black py-2 px-3 rounded-full" onPress={navigateHomeScreen}>
@@ -49,8 +48,7 @@ const CuratedShows = () => {
                                 </svg>`} />
                             </TouchableOpacity>
 
-                            <Text className=" text-white  "
-                                style={{ fontFamily: fontsLoaded ? 'Geometria' : '', "fontWeight": 700,"fontSize":20 }}
+                            <Text className={`text-white text-xl  ${fontsLoaded ? "font-gExtraBold" : ""}`}                            
                             >
                                 Curated Shows
                             </Text>
@@ -69,11 +67,11 @@ const CuratedShows = () => {
                         <View style={{
                             flexDirection: 'row',
                             flexWrap: 'wrap',
-                            justifyContent: 'space-between',
-                            paddingHorizontal: 7,
+                            // justifyContent: 'space-between',
+                            paddingHorizontal: 0,
                             marginTop: 24,
                             height: 128,
-                            gap: 20
+                            gap: 30
                         }}
                         >
                             {shows.map((show, index) => (
@@ -84,7 +82,7 @@ const CuratedShows = () => {
                             {/* </ScrollView> */}
                         </View>
                         {/* Start Show Button */}
-                        < View className="absolute -bottom-16 right-0  mt-4 " >
+                        < View className="absolute -bottom-16 right-2  mt-4 " >
                             <TouchableOpacity
                                 className="border-white border-2 rounded-full px-4 py-2"
                                 onPress={() => {
@@ -93,8 +91,8 @@ const CuratedShows = () => {
                                     toggleShowRun();
                                 }}
                             >
-                                <Text className="text-white font-bold px-3 py-1 text-xl"
-                                    style={{ fontFamily: 'Geometria', fontFamily: fontsLoaded ? 'Geometria' : '' }}
+                                <Text className={`text-white px-3 py-1 text-xl ${fontsLoaded ? "font-gBold" : ""}`}
+                                    // style={{ fontFamily: 'Geometria', fontFamily: fontsLoaded ? 'Geometria' : '' }}
                                 >
                                     Start Show</Text>
                             </TouchableOpacity>

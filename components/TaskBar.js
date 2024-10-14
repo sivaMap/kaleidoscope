@@ -5,7 +5,7 @@ import { useKaleidoCrud } from '../context/kaleidoscopeCrudContext';
 const TaskBar = () => {
     const { fontsLoaded, setIpVisible } = useKaleidoCrud();
     const { width } = useWindowDimensions();
-    
+
     return (
         <View className={`flex flex-row justify-between w-full ${width < 770 ? "h-10" : "h-[70px]"} flex-shrink-0 flex-none`}
             style={{ backgroundColor: 'rgba(0,0,0,0.4)' }}
@@ -25,8 +25,8 @@ const TaskBar = () => {
 
             {/* TEXT */}
             <View className="flex flex-col justify-center">
-                <Text className=" text-white text-2xl"
-                    style={{ fontFamily: fontsLoaded ? 'Geometria' : '',"fontWeight": 700 ,"letterSpacing":1}}
+                <Text className={` text-white text-2xl ${fontsLoaded ? "font-gGeometria font-[600]" : ""} `}
+                // style={{ fontFamily: fontsLoaded ? 'Geometria' : '',"fontWeight": 700 ,"letterSpacing":1}}
                 >
                     KALEIDOSCOPE
                 </Text>

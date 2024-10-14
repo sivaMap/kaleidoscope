@@ -5,7 +5,7 @@ import { useKaleidoCrud } from '../../context/kaleidoscopeCrudContext';
 import { constants } from '../../constants';
 
 const ArtWorkShows = ({ selectedArtificats, setSelectedArtifacts, setLoadArt }) => {
-    const { toggleShowRun } = useKaleidoCrud();
+    const { toggleShowRun, fontsLoaded } = useKaleidoCrud();
 
     const handleEndShow = () => {
         fetch(`${constants.backendUrl}/art/control`, {
@@ -39,21 +39,32 @@ const ArtWorkShows = ({ selectedArtificats, setSelectedArtifacts, setLoadArt }) 
 
     return (
         <View className='relative gap-3 h-5/6'>
-            <Text className='text-2xl text-white'>
+            <Text className={`text-xl text-white ${fontsLoaded ? "font-gBold" : ""}`}>
                 Artworks in the Current Show
             </Text>
 
-            <ScrollView className=" gap-x-5 -ml-2 mt-4 h-[calc(17rem)] overflow-auto"
+            {/* <ScrollView className=" gap-x-5 -ml-2 mt-4 h-[calc(17rem)] overflow-auto"
                 contentContainerStyle={{
                     flexDirection: 'row',
                     flexWrap: 'wrap',
                     justifyContent: 'space-between',
                     paddingHorizontal: 4,
-                }}>
+                }}> */}
+            <View style={{
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+                // justifyContent: 'space-between',
+                paddingHorizontal: 0,
+                marginTop: 22,
+                height: 128,                
+                gap: 20
+            }}
+            >
                 {selectedArtificats?.map((artifact, index) => (
                     <ArtShowCard key={index} artifact={artifact} />
                 ))}
-            </ScrollView>
+            </View>
+            {/* </ScrollView> */}
             {/* <ScrollView className="grid grid-cols-5 gap-x-5 -ml-2 mt-4 h-[calc(17rem)] overflow-auto">
                 {selectedArtificats?.map((artifact, index) => (
                     <ArtShowCard key={index} artifact={artifact} />
@@ -74,7 +85,7 @@ const ArtWorkShows = ({ selectedArtificats, setSelectedArtifacts, setLoadArt }) 
                     className="border-white border-2 rounded-full px-4 py-2"
                     onPress={handleEndShow}
                 >
-                    <Text className="text-white"
+                    <Text className={`text-white px-7 py-0 text-lg ${fontsLoaded ? "font-gBold" : ""}`}
                     // style={{ fontFamily: 'Geometria' }}
                     >
                         End Show</Text>

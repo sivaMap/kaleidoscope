@@ -1,23 +1,26 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { constants } from '../../../constants';
+import { useKaleidoCrud } from '../../../context/kaleidoscopeCrudContext';
 
 const CuratedCard = (props) => {
     const { show, selectedShow, handleShowClick } = props;
+    const { fontsLoaded } = useKaleidoCrud();
     const isSelected = selectedShow?.displayName === show?.displayName;
 
     const minutes = Math.floor(show?.duration / 60);
     const seconds = Math.floor(show?.duration % 60);
 
     return (
-        <TouchableOpacity             
-            className={`flex flex-row gap-4 bg-black rounded-xl shadow-md w-[350] h-40 mt-0 mb-2 mx-0 ${isSelected ? "border-white border-2" : "border-transparent border-2"}`}
+        <TouchableOpacity
+            className={`flex flex-row gap-3 bg-black rounded-xl shadow-md w-[369]  mt-0 mb-0 mx-0 ${isSelected ? "border-white border-2" : "border-transparent border-2"}`}
             onPress={() => handleShowClick({ showName: show })}
         >
             {/* Image Section */}
-            <View className='h-28'>
+            <View className="pb-3">
                 <Image
-                    className="w-40 h-32 object-cover rounded-md"
+                    // style={{ width: imageWidth, height: imageHeight, borderRadius: 8 }}
+                    className="w-48 h-36 object-cover rounded-md "
                     source={{ uri: `${constants.backendUrl}/curateThumbnail/${show?.displayName}.png` }}
                     alt={show.displayName}
                 />
@@ -25,8 +28,8 @@ const CuratedCard = (props) => {
 
             {/* Text Section */}
             <View className="flex-col justify-end w-fit mb-2">
-                <Text className="text-white text-base font-semibold">{show?.displayName}</Text>
-                <Text className="text-gray-400 text-sm mt-1">{minutes} : {seconds}</Text>
+                <Text className={`text-white ${fontsLoaded ? "font-gBold" : ""}`}>{show?.displayName}</Text>
+                <Text className={`text-white mt-1 text-xs  ${fontsLoaded ? "font-gGeometria" : ""}`}>{minutes} : {seconds}</Text>
             </View>
         </TouchableOpacity>
     );

@@ -13,9 +13,12 @@ const Home = () => {
                 <View style={styles.borderContainer}>
                     <Text
                         // style={{ fontFamily: fontsLoaded ? 'Geometria' : '' }}
-                        style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)', borderColor: 'rgba(255, 255, 255, 0.3)', fontFamily: fontsLoaded ? 'Geometria' : '' ,"fontWeight": 700}}
+                        style={{
+                            backgroundColor: 'rgba(0, 0, 0, 0.2)', borderColor: 'rgba(255, 255, 255, 0.3)',
+                            // fontFamily: fontsLoaded ? 'Geometria' : '' ,"fontWeight": 700
+                        }}
                         // style={styles.text}
-                        className=" rounded-full px-20 py-6 text-center text-base text-white"
+                        className={` rounded-full px-20 py-6 text-center text-base text-white ${fontsLoaded ? "font-gBold" : ""}`}
                     >
                         Experience a curated show
                     </Text>
@@ -24,17 +27,20 @@ const Home = () => {
 
             <View className="mb-3 flex flex-row justify-center items-center gap-5">
                 <View style={{ borderColor: 'rgba(255, 255, 255, 0.3)', fontFamily: fontsLoaded ? 'Geometria' : '' }} className="w-2/12 border-t mx-2" />
-                <Text 
-                style={{"fontWeight": 700}}
-                className="text-white">OR</Text>
+                <Text
+                    // style={{ "fontWeight": 700 }}
+                    className={`text-white ${fontsLoaded ? "font-gBold" : ""}`}>OR</Text>
                 <View style={{ borderColor: 'rgba(255, 255, 255, 0.3)' }} className="w-2/12 border-t mx-2" />
             </View>
 
             <Pressable className="flex flex-row justify-center" onPress={() => setLoadName(constants.loadScreen.art)}>
                 <View style={styles.borderContainer}>
                     <Text
-                        style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)', borderColor: 'rgba(255, 255, 255, 0.3)', fontFamily: fontsLoaded ? 'Geometria' : '' ,"fontWeight": 700}}
-                        className="rounded-full px-24 py-6 text-center text-base text-white">
+                        style={{
+                            backgroundColor: 'rgba(0, 0, 0, 0.2)', borderColor: 'rgba(255, 255, 255, 0.3)',
+                            // fontFamily: fontsLoaded ? 'Geometria' : '', "fontWeight": 700
+                        }}
+                        className={`rounded-full px-24 py-6 text-center text-base text-white ${fontsLoaded ? "font-gBold" : ""}`}>
                         Create your own show
                     </Text>
                 </View>

@@ -48,65 +48,78 @@ const CuratedPlay = ({ setLoadCurate, selectedShow, setSelectedShow, shows }) =>
     }, [currentShow]);
 
     return (
-        <View className="flex-row gap-3 mt-2 mr-3 h-5/6">
+        <View className="flex-row w-full h-5/6 mx-1 mt-1 mb-3">
             {/* Currently Showing */}
             <View
                 style={{
                     backgroundColor: 'rgba(0,0,0,0.5)',
                 }}
                 // className="bg-black bg-opacity-50 w-3/12 p-4 rounded-lg">
-                className="w-3/12 p-4 rounded-lg h-[460] flex-col">
-                <Text className="text-lg font-bold mb-4 text-center text-white"
-                    style={{ fontFamily: fontsLoaded ? 'Geometria' : '' }}
-                >Currently Showing</Text>
-                <View className=" p-4 rounded-lg h-2/3 max-h-60">
-                    <Image
-                        source={{ uri: `${constants.backendUrl}/curateThumbnail/${currentShow?.displayName}.png` }}
-                        alt={currentShow?.displayName}
-                        className="w-full h-64 mb-4 rounded "
-                    />
-                    <View className="flex-row justify-between">
-                        <Text className="font-semibold text-base mb-2 text-white">{currentShow.displayName}</Text>
-                        <Text className="text-sm text-white">{minutes} : {seconds}</Text>
+                className=" p-4 rounded-lg flex-1 mr-5 -ml-5 h-[560]">
+                <View className="  h-[540] flex-col">
+                    <Text className={`text-2xl mb-2 text-center text-white ${fontsLoaded ? "font-gBold" : ""}`}>
+                        Currently Showing
+                    </Text>
+                    <View className="p-4 rounded-lg h-2/3 max-h-60">
+                        <Image
+                            source={{ uri: `${constants.backendUrl}/curateThumbnail/${currentShow?.displayName}.png` }}
+                            alt={currentShow?.displayName}
+                            className="w-full h-[350] mb-4 rounded "
+                        />
+                        <View className="flex-row justify-between">
+                            <Text className={`mb-2 text-white ${fontsLoaded ? "font-gBold" : ""}`}>{currentShow.displayName}</Text>
+                            <Text className={`text-xs text-white ${fontsLoaded ? "font-gLight" : ""}`}>{minutes} : {seconds}</Text>
+                        </View>
                     </View>
-                </View>
-                {/* <View className="flex-row justify-center">
+                    {/* <View className="flex-row justify-center">
                     <Button
                         title="End Show"
                         onPress={handleEndShow}
                         className="mt-4 px-6 py-2 border border-white rounded-full"
                     />
                 </View> */}
-                < View className="absolute bottom-3 left-[40%]  mt-4 " >
-                    <TouchableOpacity
-                        className="border-white border-2 rounded-full px-4 py-2"
-                        onPress={handleEndShow}
-                    >
-                        <Text className="text-white font-bold text-xl"
-                            style={{ fontFamily: 'Geometria' }}
+                    < View className="absolute bottom-3 ml-5 mt-4 w-[90%]" >
+                        <TouchableOpacity
+                            className="border-white border-2 rounded-full px-4 py-2"
+                            onPress={handleEndShow}
                         >
-                            End Show</Text>
-                    </TouchableOpacity>
-                </View >
+                            <Text className={`text-white text-center py-0 text-lg ${fontsLoaded ? "font-gBold" : ""}`}
+                            // style={{ fontFamily: 'Geometria' }}
+                            >
+                                End Show</Text>
+                        </TouchableOpacity>
+                    </View >
+                </View>
             </View>
-
+            {/* text-lg mb-0 text-center text-white ${fontsLoaded ? "font-gBold" : ""} */}
             {/* Choose a different show */}
             <View
                 style={{
                     backgroundColor: 'rgba(0,0,0,0.5)',
                 }}
-                className="w-9/12 p-4 h-[460]">
-                <Text className="text-white text-lg font-bold mb-4"
-                    style={{ fontFamily: 'Geometria', fontFamily: fontsLoaded ? 'Geometria' : '' }}
-                >Choose a different show</Text>
-                <ScrollView className="gap-x-5 gap-y-5 px-4 pb-4 mt-6 h-32 "
+                className="rounded-lg w-8/12 p-4 h-[560] -mr-3">
+                <Text className={`text-white text-2xl mb-0 ${fontsLoaded ? "font-gBold" : ""}`}>
+                    Choose a different show
+                </Text>
+                {/* <ScrollView className="gap-x-5 gap-y-5 px-4 pb-4 mt-6 h-32 "
                     contentContainerStyle={{
                         flexDirection: 'row',
                         flexWrap: 'wrap',
                         justifyContent: 'space-between',
-
-                        paddingHorizontal: 4,
+                        paddingHorizontal: 0,
+                        item
+                                         
                     }}
+                > */}
+                <View style={{
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                    // justifyContent: 'space-between',
+                    paddingHorizontal: 0,
+                    marginTop: 22,
+                    height: 128,
+                    gap: 10
+                }}
                 >
                     {shows.map((show, index) => {
                         if (show.displayName === currentShow.displayName) return null;
@@ -119,7 +132,8 @@ const CuratedPlay = ({ setLoadCurate, selectedShow, setSelectedShow, shows }) =>
                             />
                         );
                     })}
-                </ScrollView>
+                </View>
+                {/* </ScrollView> */}
             </View>
         </View>
     );
