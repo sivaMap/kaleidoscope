@@ -7,9 +7,10 @@ import Kaleidoscope from './components/Kaleidoscope';
 import IpConfig from './components/subcomponents/IpConfig';
 import React, { useEffect } from 'react';
 import { updateConstants } from './constants';
-
+import * as NavigationBar from 'expo-navigation-bar';
 
 export default function App() {
+  NavigationBar.setVisibilityAsync("hidden");
   useEffect(() => {    
     const fncall = async () => {
 
