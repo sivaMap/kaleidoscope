@@ -12,7 +12,7 @@ const { artVideoUrl, curateVideoUrl, PORT } = require("./config");
 const initializeServer = async () => {
     const app = express();
 
-    port = PORT || 5000;
+    const port = PORT || 5000;
 
     app.use(credentials);
     // app.use(cors(corsOptions));
@@ -27,8 +27,7 @@ const initializeServer = async () => {
     app.use('/artThumbnail', express.static(path.join(artVideoUrl, 'thumbnail')));
 
     app.use('/', require('./routes/root'));
-
-    // app.use('/client/video', require('./routes/api/client/clientVideo'));
+    
     app.use('/curate', require('./routes/api/client/curateRoute'));
     app.use('/art', require('./routes/api/client/artRoute'));
 
