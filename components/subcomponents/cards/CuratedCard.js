@@ -8,8 +8,8 @@ const CuratedCard = (props) => {
     const { fontsLoaded } = useKaleidoCrud();
     const isSelected = selectedShow?.displayName === show?.displayName;
 
-    const minutes = Math.floor(show?.duration / 60);
-    const seconds = Math.floor(show?.duration % 60);
+    const minutes = String(Math.floor(show?.duration / 60)).padStart(2, '0');
+    const seconds = String(Math.floor(show?.duration % 60)).padStart(2, '0');
 
     return (
         <TouchableOpacity
@@ -18,8 +18,7 @@ const CuratedCard = (props) => {
         >
             {/* Image Section */}
             <View className="pb-3">
-                <Image
-                    // style={{ width: imageWidth, height: imageHeight, borderRadius: 8 }}
+                <Image                    
                     className="w-48 h-36 object-cover rounded-md "
                     source={{ uri: `${constants.backendUrl}/curateThumbnail/${show?.displayName}.png` }}
                     alt={show.displayName}
