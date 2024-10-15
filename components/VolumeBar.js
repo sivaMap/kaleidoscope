@@ -63,7 +63,7 @@ const VolumeBar = () => {
             </TouchableOpacity>
 
             <TouchableOpacity
-                className={`flex flex-col justify-center ${!isShowRunning ? 'opacity-30' : ''}`}
+                className={`flex flex-col justify-center mr-10 ${!isShowRunning ? 'opacity-30' : ''}`}
                 onPress={() => {
                     if (isShowRunning) {
                         setPlay((prev) => !prev);
