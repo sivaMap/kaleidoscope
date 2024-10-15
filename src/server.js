@@ -8,11 +8,14 @@ const corsOptions = require('./config/corsOptions');
 const cookieParser = require('cookie-parser');
 const credentials = require("./util/middleware/credentials");
 const { artVideoUrl, curateVideoUrl, PORT } = require("./config");
+const { forceStopVlc, startVlcInitial } = require("./controllers/client/vlcFunctions");
 
 const initializeServer = async () => {
     const app = express();
 
     const port = PORT || 5000;
+    //Starting vlc player
+    startVlcInitial();
 
     app.use(credentials);
     // app.use(cors(corsOptions));
@@ -27,7 +30,7 @@ const initializeServer = async () => {
     app.use('/artThumbnail', express.static(path.join(artVideoUrl, 'thumbnail')));
 
     app.use('/', require('./routes/root'));
-    
+
     app.use('/curate', require('./routes/api/client/curateRoute'));
     app.use('/art', require('./routes/api/client/artRoute'));
 
@@ -44,7 +47,7 @@ const initializeServer = async () => {
 
     app.use(errorHandler);
 
-    app.listen(port, () => {
+    const server = app.listen(port, () => {
         console.log(`Server runnig on port ${port}`)
     });
 };

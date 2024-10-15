@@ -1,7 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const path = require('path');
 const fs = require('fs');
-const { curateVideoUrl } = require("../../config");
+const { curateVideoUrl, vlcIp, vlcPassword, vlcUsername, vlcPort, defaultVideo } = require("../../config");
 const VLC = require("vlc-client");
 const WebSocket = require('ws');
 const { exec } = require("child_process");
@@ -12,12 +12,11 @@ const { startVlcIfNeeded, isAppOpen, getVideoInfo } = require("./vlcFunctions");
 let vlc;
 try {
     vlc = new VLC.Client({
-        ip: "127.0.0.1",
-        port: 8080,
-        username: "",
-        password: "123456789"
+        ip: vlcIp,
+        port: Number(vlcPort),
+        username: vlcUsername,
+        password: vlcPassword
     });
-
 
     console.log("CURATE VLC instance created");
 } catch (error) {
@@ -89,11 +88,10 @@ const startCurate = asyncHandler(async (req, res) => {
 
     if (!isRunning) {
         startVlcIfNeeded({ vlc, filename })
-
         res.status(200).json({ "message": "Success" })
         return
     }
-    
+
     const videoPath = filename;
     vlc.playFile(videoPath)
     vlc.setFullscreen(true)
@@ -110,7 +108,7 @@ const controlApplication = asyncHandler(async (req, res) => {
         res.status(400);
         throw new Error("vlc not available")
     }
-    
+
     switch (control) {
         case "pause":
             const checkIsPlaying = await vlc.isPlaying();
@@ -125,7 +123,11 @@ const controlApplication = asyncHandler(async (req, res) => {
             vlc.previous();
             break;
         case "stop":
-            exec('taskkill /F /IM vlc.exe');
+            // exec('taskkill /F /IM vlc.exe');
+            vlc.emptyPlaylist();
+            vlc.playFile(defaultVideo);
+            vlc.setFullscreen(true);
+            vlc.setLooping(true);
             break;
         default:
             break;
@@ -135,7 +137,7 @@ const controlApplication = asyncHandler(async (req, res) => {
 });
 
 
-module.exports = {    
+module.exports = {
     startCurate,
     getClientVideos,
     controlApplication

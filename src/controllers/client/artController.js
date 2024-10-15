@@ -1,7 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const path = require('path');
 const fs = require('fs');
-const { artVideoUrl } = require("../../config");
+const { artVideoUrl, vlcIp, vlcPort, vlcPassword, vlcUsername, defaultVideo } = require("../../config");
 const VLC = require("vlc-client");
 const WebSocket = require('ws');
 const { exec } = require("child_process");
@@ -13,10 +13,10 @@ const { applicationPath: applicationPathConfig } = require("../../config");
 let vlc;
 try {
     vlc = new VLC.Client({
-        ip: "127.0.0.1",
-        port: 8080,
-        username: "",
-        password: "123456789"
+        ip: vlcIp,
+        port: Number(vlcPort),
+        username: vlcUsername,
+        password: vlcPassword
     });
 
     console.log("ART VLC instance created");
@@ -90,24 +90,53 @@ const startArtShow = asyncHandler(async (req, res) => {
 
     if (!isRunning) {
         const applicationPath = path.resolve(applicationPathConfig);
-        const command = `"${applicationPath}" --fullscreen`;
+        // const command = `"${applicationPath}" --fullscreen`;
+        const command = `"${applicationPath}" --fullscreen --no-video-title-show --qt-minimal-view`;
         exec(command);
 
-        setTimeout(async () => {
+        const pollInterval = 500;
+        const maxAttempts = 10;
+        let attempt = 0;
+
+        const checkVLCReady = setInterval(async () => {
             try {
-                vlc.emptyPlaylist()
-                selectedArtificats.forEach(selectedArtificat => {
-                    vlc.addToPlaylist(selectedArtificat?.filename
-                    );
-                })
+                // const playList = await vlc.getPlaylist();
+                const isRunning = await isAppOpen();
+                if (isRunning) {
+                    vlc.emptyPlaylist()
+                    selectedArtificats.forEach(selectedArtificat => {
+                        vlc.addToPlaylist(selectedArtificat?.filename
+                        );
+                    })
 
-                const playList = await vlc.getPlaylist();
-                vlc.playFromPlaylist(playList[0].id);
-
+                    const playList = await vlc.getPlaylist();
+                    vlc.playFromPlaylist(playList[0].id);
+                    clearInterval(checkVLCReady);
+                }
             } catch (error) {
-                return false;
+                console.log("catch", attempt)
+                attempt++;
+                if (attempt >= maxAttempts) {
+                    clearInterval(checkVLCReady);
+                }
             }
-        }, 100);
+        }, pollInterval);
+
+        // setTimeout(async () => {
+        //     try {
+        //         vlc.emptyPlaylist()
+        //         selectedArtificats.forEach(selectedArtificat => {
+        //             vlc.addToPlaylist(selectedArtificat?.filename
+        //             );
+        //         })
+
+        //         const playList = await vlc.getPlaylist();
+        //         vlc.playFromPlaylist(playList[0].id);
+
+        //     } catch (error) {
+        //         return false;
+        //     }
+        // }, 100);
 
         res.status(200).json({ "message": "Success" })
         return
@@ -142,8 +171,11 @@ const controlApplication = asyncHandler(async (req, res) => {
                     : vlc.play();
                 break;
             case "volume":
-                const { volume } = req.body;
-                vlc.setVolume(volume ?? 45);
+                const isVlclOpen = await isAppOpen();
+                if (isVlclOpen) {
+                    const { volume } = req.body;
+                    vlc.setVolume(volume ?? 45);
+                }
                 break;
             case "next":
                 vlc.next();
@@ -152,7 +184,11 @@ const controlApplication = asyncHandler(async (req, res) => {
                 vlc.previous();
                 break;
             case "stop":
-                exec('taskkill /F /IM vlc.exe');
+                vlc.emptyPlaylist();
+                vlc.playFile(defaultVideo);
+                vlc.setFullscreen(true);
+                vlc.setLooping(true);
+                // exec('taskkill /F /IM vlc.exe');
                 break;
             default:
                 break;

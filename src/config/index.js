@@ -9,8 +9,12 @@ if (process.env.NODE_ENV !== "prod") {
 
 module.exports = {
     PORT: process.env.PORT,
-    videoUrl: process.env.VIDEOURL,
     curateVideoUrl: process.env.CURATEVIDEOURL,
     artVideoUrl: process.env.ARTVIDEOURL,
-    applicationPath: process.env.APPLICATION
+    applicationPath: process.env.APPLICATION,
+    defaultVideo: process.env.DEFAULTVIDEO,
+    vlcPort: process.env.VLCPORT,
+    vlcIp: process.env.VLCIP,
+    vlcUsername: process.env.VLCUSERNAMVE,
+    vlcPassword: process.env.VLCPASSWORD
 };
