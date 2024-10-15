@@ -39,14 +39,18 @@ const VolumeSlider2 = ({ isShowRunning }) => {
                 "volume": volume
             }),
         })
-            .catch(error => console.error('Error fetching apps:', error));
+            .catch(error => console.error('Error setting volume:', error));
     }, [volume]);
 
     useDebounce(debounceFunction, debounceTiming, [volume]);
 
     useEffect(() => {
-        setSliderEnable(false);
+        setSliderEnable(true);
     }, [isShowRunning]);
+
+    const VolumeIcon = React.memo(({ volume, volumeChanger, lowVolume, highVolume }) => {
+        return volume < volumeChanger ? lowVolume : highVolume;
+    });
 
     return (
         !isSliderEnabled ? (
@@ -58,26 +62,31 @@ const VolumeSlider2 = ({ isShowRunning }) => {
                 </TouchableOpacity>
             </View>
         ) : (
-            <View className="flex flex-row items-center  w-36 pl-2 ml-2 pr-0 py-1 rounded-full bg-black bg-opacity-30">
+            <View
+                style={{
+                    backgroundColor: 'rgba(0,0,0,0.3)',
+                }}
+                className="flex flex-row items-center  w-36 pl-2 ml-2 pr-0 py-1 rounded-full">
                 <TouchableOpacity onPress={() => setSliderEnable(prev => !prev)}>
                     {volume < volumeChanger ? lowVolume : highVolume}
                 </TouchableOpacity>
 
-                {/* <View style={{ width: 90, height: 3, marginLeft: 5, backgroundColor: '#FFFFFF', borderRadius: 3 }}> */}
                 <Slider
-                    style={{ width: 110, height: 6, marginLeft: -8, marginTop: -2 }}
+                    style={{ width: 110, height: 20, marginLeft: -6, marginTop: -2 }}
                     minimumValue={0}
-                    maximumValue={100}
-                    step={5}
+                    maximumValue={1}
+                    // step={5}
                     value={volume}
-                    onValueChange={(value) => setVolume(value)}
+                    onValueChange={(value) => {                      
+                        setVolume(value)
+                    }}
                     minimumTrackTintColor="#FFFFFF"
                     maximumTrackTintColor="rgba(255, 255, 255, 1)"
                     thumbTintColor="#FFFFFF"
                 />
-                {/* </View> */}
-
             </View>
+            // {/* <View style={{ width: 90, height: 3, marginLeft: 5, backgroundColor: '#FFFFFF', borderRadius: 3 }}> */}
+            // {/* </View> */}
         )
     );
 };
