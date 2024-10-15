@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, Text, Button, ScrollView, TouchableOpacity, StyleSheet, StatusBar, SafeAreaView } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, StatusBar, SafeAreaView } from 'react-native';
 import { useKaleidoCrud } from '../../context/kaleidoscopeCrudContext';
 import { constants } from '../../constants';
 import { SvgXml } from 'react-native-svg';
