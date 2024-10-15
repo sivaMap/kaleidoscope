@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Button, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import CuratedCard from './cards/CuratedCard';
-// import CuratedPlay from './CuratedPlay';
 import { useKaleidoCrud } from '../../context/kaleidoscopeCrudContext';
 import { constants } from '../../constants';
 import { SvgXml } from 'react-native-svg'; // For the SVG
@@ -12,6 +11,7 @@ const CuratedShows = () => {
     const [shows, setShows] = useState([]);
     const [loadCurate, setLoadCurate] = useState(constants.loadCurate.show);
     const { navigateHomeScreen, toggleShowRun, fontsLoaded } = useKaleidoCrud();
+    const isCuratedShowSelected = Object.keys(selectedShow)?.length === 0;
 
 
     // Fetch all the shows from server1
@@ -48,26 +48,16 @@ const CuratedShows = () => {
                                 </svg>`} />
                             </TouchableOpacity>
 
-                            <Text className={`text-white text-xl  ${fontsLoaded ? "font-gExtraBold" : ""}`}                            
+                            <Text className={`text-white text-xl  ${fontsLoaded ? "font-gExtraBold" : ""}`}
                             >
                                 Curated Shows
                             </Text>
                         </View>
 
                         {/* Shows List */}
-                        {/* <ScrollView className="gap-x-5 gap-y-5 px-4  mt-6 h-32 "
-                            contentContainerStyle={{
-                                flexDirection: 'row',
-                                flexWrap: 'wrap',
-                                justifyContent: 'space-between', // Ensures space between items                                
-                                paddingHorizontal: 4, // Optional: add horizontal padding if needed
-                                // gap: -5
-                            }}
-                        > */}
                         <View style={{
                             flexDirection: 'row',
                             flexWrap: 'wrap',
-                            // justifyContent: 'space-between',
                             paddingHorizontal: 0,
                             marginTop: 24,
                             height: 128,
@@ -76,25 +66,26 @@ const CuratedShows = () => {
                         >
                             {shows.map((show, index) => (
                                 <CuratedCard key={index} show={show} selectedShow={selectedShow} handleShowClick={handleShowClick}
-
                                 />
                             ))}
-                            {/* </ScrollView> */}
                         </View>
                         {/* Start Show Button */}
-                        < View className="absolute -bottom-16 right-2  mt-4 " >
-                            <TouchableOpacity
-                                className="border-white border-2 rounded-full px-4 py-2"
+                        < View className="absolute -bottom-16 right-2  mt-4" >
+                            <TouchableOpacity                                
                                 onPress={() => {
-                                    if (Object.keys(selectedShow)?.length === 0) return;
+                                    if (isCuratedShowSelected) return;
                                     setLoadCurate(constants.loadCurate.play);
                                     toggleShowRun();
                                 }}
                             >
-                                <Text className={`text-white px-3 py-1 text-xl ${fontsLoaded ? "font-gBold" : ""}`}
-                                    // style={{ fontFamily: 'Geometria', fontFamily: fontsLoaded ? 'Geometria' : '' }}
+                                <View
+                                    style={styles.borderContainer}                                    
+                                    className={`rounded-full px-4 py-2 ${isCuratedShowSelected ? "opacity-30" : ""}`}
                                 >
-                                    Start Show</Text>
+                                    <Text className={`text-white px-3 py-1 text-xl ${fontsLoaded ? "font-gBold" : ""}`}>
+                                        Start Show
+                                    </Text>
+                                </View>
                             </TouchableOpacity>
                         </View >
                     </View >
@@ -122,3 +113,11 @@ const CuratedShows = () => {
 };
 
 export default CuratedShows;
+
+const styles = StyleSheet.create({
+    borderContainer: {
+        backgroundColor: 'rgba(0, 0, 0, 0.3)',
+        borderColor: 'rgba(255, 255, 255, 1)',
+        borderWidth: 2,
+    },
+});
