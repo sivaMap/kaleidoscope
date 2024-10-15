@@ -25,8 +25,7 @@ const TaskBar = () => {
 
             {/* TEXT */}
             <View className="flex flex-col justify-center">
-                <Text className={` text-white text-2xl ${fontsLoaded ? "font-gGeometria font-[600]" : ""} `}
-                // style={{ fontFamily: fontsLoaded ? 'Geometria' : '',"fontWeight": 700 ,"letterSpacing":1}}
+                <Text className={` text-white text-2xl ${fontsLoaded ? "font-gBold" : ""} `}                
                 >
                     KALEIDOSCOPE
                 </Text>
