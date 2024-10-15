@@ -58,12 +58,12 @@ const VolumeBar = () => {
         <View
             style={{ backgroundColor: 'rgba(0,0,0,0.4)' }}
             className={`absolute bottom-0 w-full ${width < 770 ? "h-[35px]" : "h-[50px]"} px-5 py-3 flex flex-row justify-between items-center`}>
-            <TouchableOpacity className={`flex flex-col justify-center ${!isShowRunning ? 'opacity-30' : ''}`}>
+            <TouchableOpacity className={`flex flex-col justify-center `}>
                 <VolumeSlider2 isShowRunning={isShowRunning} />
             </TouchableOpacity>
 
             <TouchableOpacity
-                className={`flex flex-col justify-center mr-10 ${!isShowRunning ? 'opacity-30' : ''}`}
+                className={`flex flex-col justify-center mr-10 `}
                 onPress={() => {
                     if (isShowRunning) {
                         setPlay((prev) => !prev);
