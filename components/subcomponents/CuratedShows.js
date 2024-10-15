@@ -20,7 +20,7 @@ const CuratedShows = () => {
             .then(response => response.json())
             .then(data => setShows([...data])
             )
-            .catch(error => console.error('Error fetching apps:', error));
+            .catch(error => console.error('Error fetching Videos:', error));
     }, []);
 
     const handleShowClick = ({ showName }) => {

@@ -31,7 +31,7 @@ const ArtWork = () => {
         fetch(`${constants.backendUrl}/art`)
             .then(response => response.json())
             .then(data => setArtifcats([...data]))
-            .catch(error => console.error('Error fetching apps:', error));
+            .catch(error => console.error('Error fetching videos:', error));
     }, []);
     const styles = StyleSheet.create({
         container: {

@@ -34,13 +34,11 @@ const IpConfig = () => {
 
     // Function to store IP Address and Port
     const storeData = async () => {
-        try {
-            console.log('ipAddress', ipAddress, 'port', port)
+        try {            
             await AsyncStorage.setItem('ipAddress', ipAddress);
             await AsyncStorage.setItem('port', port);
             constants.ipAddress = ipAddress;
-            constants.port = port;
-            console.log('Data stored successfully!');
+            constants.port = port;            
             hideModal();
         } catch (error) {
             console.error('Failed to store data:', error);
