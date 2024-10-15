@@ -25,7 +25,7 @@ const TaskBar = () => {
 
             {/* TEXT */}
             <View className="flex flex-col justify-center">
-                <Text className={` text-white text-2xl ${fontsLoaded ? "font-gBold" : ""} `}                
+                <Text className={` text-white text-2xl pr-8 ${fontsLoaded ? "font-gBold" : ""} `}                
                 >
                     KALEIDOSCOPE
                 </Text>
