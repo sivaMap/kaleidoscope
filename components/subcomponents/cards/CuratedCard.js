@@ -10,7 +10,7 @@ const CuratedCard = (props) => {
 
     const minutes = String(Math.floor(show?.duration / 60)).padStart(2, '0');
     const seconds = String(Math.floor(show?.duration % 60)).padStart(2, '0');
-
+    // console.log(new Date().getMinutes(),new Date().getDate(),new Date().getSeconds())
     return (
         <TouchableOpacity
             className={`flex flex-row gap-3 bg-black rounded-xl shadow-md w-[369]  mt-0 mb-0 mx-0 ${isSelected ? "border-white border-2" : "border-transparent border-2"}`}
@@ -20,9 +20,12 @@ const CuratedCard = (props) => {
             <View className="pb-3">
                 <Image                    
                     className="w-48 h-36 object-cover rounded-md "
-                    source={{ uri: `${constants.backendUrl}/curateThumbnail/${show?.displayName}.png` }}
+                    source={{
+                        uri: `${constants.backendUrl}/curateThumbnail/${show?.displayName}.png?timestamp=${new Date().getMinutes()}`,
+                        cache: 'default'
+                    }}
                     alt={show.displayName}
-                />
+                />                
             </View>
 
             {/* Text Section */}
