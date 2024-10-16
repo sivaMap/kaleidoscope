@@ -7,14 +7,17 @@ import Svg, { G, Mask, Path, Rect } from 'react-native-svg';
 
 const VolumeSlider2 = ({ isShowRunning }) => {
     const lowVolume = (
-        <Svg xmlns="http://www.w3.org/2000/svg" className="w-7 h-7" viewBox="0 0 32 38" fill="none">
-            <Path d="M0 25.9999V11.9999H9.33333L21 0.333252V37.6666L9.33333 25.9999H0ZM25.6667 28.3333V9.54992C27.4167 10.3666 28.8264 11.6305 29.8958 13.3416C30.9653 15.0527 31.5 16.9388 31.5 18.9999C31.5 21.061 30.9653 22.9277 29.8958 24.5999C28.8264 26.2721 27.4167 27.5166 25.6667 28.3333ZM16.3333 11.6499L11.3167 16.6666H4.66667V21.3333H11.3167L16.3333 26.3499V11.6499Z" fill="#BABABA" />
+        <Svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 32 38" fill="none">
+            <Path d="M0 25.9999V11.9999H9.33333L21 0.333252V37.6666L9.33333 25.9999H0ZM25.6667 28.3333V9.54992C27.4167 10.3666 28.8264 11.6305 29.8958 13.3416C30.9653 15.0527 31.5 16.9388 31.5 18.9999C31.5 21.061 30.9653 22.9277 29.8958 24.5999C28.8264 26.2721 27.4167 27.5166 25.6667 28.3333ZM16.3333 11.6499L11.3167 16.6666H4.66667V21.3333H11.3167L16.3333 26.3499V11.6499Z" fill="white" />
         </Svg>
+        // <Svg xmlns="http://www.w3.org/2000/svg" className="w-7 h-7" viewBox="0 0 32 38" fill="none">
+        //     <Path d="M0 25.9999V11.9999H9.33333L21 0.333252V37.6666L9.33333 25.9999H0ZM25.6667 28.3333V9.54992C27.4167 10.3666 28.8264 11.6305 29.8958 13.3416C30.9653 15.0527 31.5 16.9388 31.5 18.9999C31.5 21.061 30.9653 22.9277 29.8958 24.5999C28.8264 26.2721 27.4167 27.5166 25.6667 28.3333ZM16.3333 11.6499L11.3167 16.6666H4.66667V21.3333H11.3167L16.3333 26.3499V11.6499Z" fill="white" />
+        // </Svg>
     );
 
-    const highVolume = (
+    const highVolume = (        
         <Svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 44 44" fill="none">
-            <Mask id="mask0_1660_26259" style={{ maskType: "alpha" }} maskUnits="userSpaceOnUse" x="0" y="0" width="44" height="44">
+            <Mask id="mask0_1660_26259" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="44" height="44">
                 <Rect width="44" height="44" fill="#D9D9D9" />
             </Mask>
             <G mask="url(#mask0_1660_26259)">
@@ -45,19 +48,15 @@ const VolumeSlider2 = ({ isShowRunning }) => {
     useDebounce(debounceFunction, debounceTiming, [volume]);
 
     useEffect(() => {
-        setSliderEnable(true);
+        setSliderEnable(false);
     }, [isShowRunning]);
-
-    const VolumeIcon = React.memo(({ volume, volumeChanger, lowVolume, highVolume }) => {
-        return volume < volumeChanger ? lowVolume : highVolume;
-    });
 
     return (
         !isSliderEnabled ? (
             <View className='w-36 ml-2 pl-2 pr-0 py-1 rounded-full'>
                 <TouchableOpacity onPress={() => setSliderEnable(prev => !prev)}>
                     <Svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 32 38" fill="none">
-                        <Path d="M0 25.9999V11.9999H9.33333L21 0.333252V37.6666L9.33333 25.9999H0ZM25.6667 28.3333V9.54992C27.4167 10.3666 28.8264 11.6305 29.8958 13.3416C30.9653 15.0527 31.5 16.9388 31.5 18.9999C31.5 21.061 30.9653 22.9277 29.8958 24.5999C28.8264 26.2721 27.4167 27.5166 25.6667 28.3333ZM16.3333 11.6499L11.3167 16.6666H4.66667V21.3333H11.3167L16.3333 26.3499V11.6499Z" fill="#BABABA" />
+                        <Path d="M0 25.9999V11.9999H9.33333L21 0.333252V37.6666L9.33333 25.9999H0ZM25.6667 28.3333V9.54992C27.4167 10.3666 28.8264 11.6305 29.8958 13.3416C30.9653 15.0527 31.5 16.9388 31.5 18.9999C31.5 21.061 30.9653 22.9277 29.8958 24.5999C28.8264 26.2721 27.4167 27.5166 25.6667 28.3333ZM16.3333 11.6499L11.3167 16.6666H4.66667V21.3333H11.3167L16.3333 26.3499V11.6499Z" fill="white" />
                     </Svg>
                 </TouchableOpacity>
             </View>
@@ -74,10 +73,10 @@ const VolumeSlider2 = ({ isShowRunning }) => {
                 <Slider
                     style={{ width: 110, height: 20, marginLeft: -6, marginTop: -2 }}
                     minimumValue={0}
-                    maximumValue={1}
-                    // step={5}
+                    maximumValue={100}
+                    step={5}
                     value={volume}
-                    onValueChange={(value) => {                      
+                    onValueChange={(value) => {
                         setVolume(value)
                     }}
                     minimumTrackTintColor="#FFFFFF"
