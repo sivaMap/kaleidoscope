@@ -18,7 +18,7 @@ const CuratedShows = () => {
     useEffect(() => {
         fetch(`${constants.backendUrl}/curate/videos`)
             .then(response => response.json())
-            .then(data => setShows([...data])
+            .then(data => setShows([...data].slice(0, 5))
             )
             .catch(error => console.error('Error fetching Videos:', error));
     }, []);
@@ -71,7 +71,7 @@ const CuratedShows = () => {
                         </View>
                         {/* Start Show Button */}
                         < View className="absolute -bottom-16 right-2  mt-4" >
-                            <TouchableOpacity                                
+                            <TouchableOpacity
                                 onPress={() => {
                                     if (isCuratedShowSelected) return;
                                     setLoadCurate(constants.loadCurate.play);
@@ -79,7 +79,7 @@ const CuratedShows = () => {
                                 }}
                             >
                                 <View
-                                    style={styles.borderContainer}                                    
+                                    style={styles.borderContainer}
                                     className={`rounded-full px-4 py-2 ${isCuratedShowSelected ? "opacity-30" : ""}`}
                                 >
                                     <Text className={`text-white px-3 py-1 text-xl ${fontsLoaded ? "font-gBold" : ""}`}>
