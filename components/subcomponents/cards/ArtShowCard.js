@@ -11,7 +11,7 @@ const ArtShowCard = memo(function ArtShowCard(props) {
         <View className="rounded-lg shadow-md p-2 mb-2 w-56">
             <View className="h-56 rounded-lg mb-0">
                 <Image
-                    source={{ uri: `${constants.backendUrl}/artThumbnail/${artifact?.displayName}.png` }}
+                    source={{ uri: `${constants.backendUrl}/artThumbnail/${artifact?.displayName}.png?timestamp=${new Date().getMinutes()}` }}
                     alt={artifact?.displayName}
                     className="w-full h-full rounded-lg object-cover"
                 />

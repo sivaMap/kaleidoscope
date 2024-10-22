@@ -15,14 +15,16 @@ const ArtworkCard = memo(function ArtworkCard(props) {
                 isSelected ? handleArtificateUndoSelect({ artifact }) : handleArtifactSelect({ artifact });
             }}
         >
-            <View className="h-40 w-40 rounded-lg mb-2">
-                <Image
-                    source={{ uri: `${constants.backendUrl}/artThumbnail/${artifact?.displayName}.png` }}
-                    alt={artifact?.displayName}
-                    className="w-full h-full rounded-lg object-cover"
-                />
+            <View className="w-40">
+                <View className="h-40 w-40 rounded-lg mb-2">
+                    <Image
+                        source={{ uri: `${constants.backendUrl}/artThumbnail/${artifact?.displayName}.png?timestamp=${new Date().getMinutes()}` }}
+                        alt={artifact?.displayName}
+                        className="w-full h-full rounded-lg object-cover"
+                    />
+                </View>
+                <Text className={`text-center text-xs ${fontsLoaded ? "font-gGeometria" : ""} ${isSelected ? "text-black" : "text-white"}`}>{artifact?.displayName}</Text>
             </View>
-            <Text className={`text-center text-xs ${fontsLoaded?"font-gGeometria":""} ${isSelected ? "text-black" : "text-white"}`}>{artifact?.displayName}</Text>
         </TouchableOpacity>
     );
 });

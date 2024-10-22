@@ -21,7 +21,7 @@ const CuratedCard = (props) => {
                 <Image                    
                     className="w-48 h-36 object-cover rounded-md "
                     source={{
-                        uri: `${constants.backendUrl}/curateThumbnail/${show?.displayName}.png?timestamp=${new Date().getMinutes()}`,
+                        uri: `${constants.backendUrl}/curateThumbnail/${show?.displayName}.png`,
                         cache: 'default'
                     }}
                     alt={show.displayName}
