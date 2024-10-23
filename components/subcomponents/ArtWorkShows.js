@@ -80,12 +80,12 @@ const ArtWorkShows = ({ selectedArtificats, setSelectedArtifacts, setLoadArt }) 
                 />
             </View> */}
 
-            < View className="absolute -bottom-16 right-0  mt-4 " >
+            < View className="absolute -bottom-24 right-1  mt-4 " >
                 <TouchableOpacity
-                    className="border-white border-2 rounded-full px-4 py-2"
+                    className="border-white border-2 rounded-full px-3 py-2"
                     onPress={handleEndShow}
                 >
-                    <Text className={`text-white px-7 py-0 text-lg ${fontsLoaded ? "font-gBold" : ""}`}
+                    <Text className={`text-white px-3 py-0 text-lg ${fontsLoaded ? "font-gBold" : ""}`}
                     // style={{ fontFamily: 'Geometria' }}
                     >
                         End Show</Text>
