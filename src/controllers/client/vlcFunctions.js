@@ -41,7 +41,7 @@ const startVlcIfNeeded = ({ vlc, filename }) => {
 
 const startVlcInitial = () => {
     const applicationPath = path.resolve(applicationPathConfig);
-    const command = `"${applicationPath}" "${defaultVideo}" --fullscreen --no-video-title-show --qt-minimal-view`;
+    const command = `"${applicationPath}" "${defaultVideo}" --fullscreen --no-video-title-show --qt-minimal-view --loop --qt-continue=0`;
 
     exec(command);
 }
