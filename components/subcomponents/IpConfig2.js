@@ -1,0 +1,101 @@
+import React, { useEffect, useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import Modal, { FadeAnimation } from 'react-native-modals';
+import { useKaleidoCrud } from '../../context/kaleidoscopeCrudContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { constants } from '../../constants';
+
+const IpConfig2 = () => {
+    const { ipVisible, setIpVisible, fontsLoaded } = useKaleidoCrud();
+
+    const [ipAddress, setIpAddress] = useState('');
+    const [port, setPort] = useState('5001');
+    const hideModal = () => { setIpVisible(false) }
+
+    useEffect(() => {
+        const loadStoredData = async () => {
+            try {
+                const storedIpAddress = await AsyncStorage.getItem('ipAddress');
+                const storedPort = await AsyncStorage.getItem('port');
+
+                if (storedIpAddress !== null) {
+                    setIpAddress(storedIpAddress);
+                }
+                if (storedPort !== null) {
+                    setPort(storedPort);
+                }
+            } catch (error) {
+                console.error("Failed to load stored data:", error);
+            }
+        };
+
+        loadStoredData();
+    }, []);
+
+    // Function to store IP Address and Port
+    const storeData = async () => {
+        try {
+            await AsyncStorage.setItem('ipAddress', ipAddress);
+            await AsyncStorage.setItem('port', port);
+            constants.ipAddress = ipAddress;
+            constants.port = port;
+            hideModal();
+        } catch (error) {
+            console.error('Failed to store data:', error);
+        }
+    };
+
+    return (
+        <Modal
+            height={0.36}
+            width={0.5}
+            visible={ipVisible}            
+            onTouchOutside={() => setIpVisible(false)}
+            modalAnimation={new FadeAnimation({
+                initialValue: 0,
+                animationDuration: 150,
+            })}
+            onSwipeOut={() => setIpVisible(false)}
+            onHardwareBackPress={() => {
+                setIpVisible(false);
+                return true;
+            }}
+        >            
+            <View className="w-full p-6 border border-gray-300 rounded-lg shadow-md bg-white">
+                <Text className={`text-lg mb-4 text-start ${fontsLoaded ? "font-gBold" : ""}`}>Please enter the following details</Text>
+
+                <TextInput
+                    placeholder="Enter the IP Address"
+                    className={`w-full border border-gray-800 rounded-md px-4 py-2 mb-4 ${fontsLoaded ? "font-gBold" : ""}`}
+                    value={ipAddress}
+                    onChangeText={text => setIpAddress(text)}
+                />
+
+                <TextInput
+                    placeholder="Enter the Port"
+                    className={`w-full border border-gray-800 rounded-md px-4 py-2 mb-6 ${fontsLoaded ? "font-gBold" : ""}`}
+                    value={port}
+                    onChangeText={text => setPort(text)}
+                />
+
+                <View className="flex-row justify-center gap-6">
+                    <TouchableOpacity
+                        className="px-6 py-3 rounded-full border border-black"
+                        onPress={hideModal}
+                    >
+                        <Text className={`text-black text-center ${fontsLoaded ? "font-gBold" : ""}`}>Cancel</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        className="px-6 py-3 rounded-full bg-black"
+                        onPress={storeData}
+                    >
+                        <Text className={`text-white text-center ${fontsLoaded ? "font-gBold" : ""}`}>Submit</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>         
+        </Modal>
+    );
+};
+
+export default IpConfig2;
