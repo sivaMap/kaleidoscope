@@ -7,6 +7,8 @@ const WebSocket = require('ws');
 const { exec } = require("child_process");
 const { isAppOpen, getVideoInfo } = require("./vlcFunctions");
 const { applicationPath: applicationPathConfig } = require("../../config");
+const { randomBytes } = require('crypto');
+
 
 // const wss = new WebSocket.Server({ port: 8082 });
 // vlc client
@@ -57,7 +59,7 @@ try {
 //@route GET /art/videos
 //access public
 const getClientVideos = asyncHandler(async (req, res) => {
-    const videoDir = path.join(artVideoUrl);
+    const videoDir = path.join(artVideoUrl, 'v1');
 
     if (!fs.existsSync(videoDir)) {
         res.status(400);
@@ -91,7 +93,7 @@ const startArtShow = asyncHandler(async (req, res) => {
     if (!isRunning) {
         const applicationPath = path.resolve(applicationPathConfig);
         // const command = `"${applicationPath}" --fullscreen`;
-        const command = `"${applicationPath}" --fullscreen --no-video-title-show --qt-minimal-view`;
+        const command = `"${applicationPath}" --fullscreen --no-video-title-show --qt-minimal-view --loop --qt-continue=0`;
         exec(command);
 
         const pollInterval = 500;
@@ -100,13 +102,18 @@ const startArtShow = asyncHandler(async (req, res) => {
 
         const checkVLCReady = setInterval(async () => {
             try {
+
                 // const playList = await vlc.getPlaylist();
                 const isRunning = await isAppOpen();
                 if (isRunning) {
-                    vlc.emptyPlaylist()
+                    vlc.emptyPlaylist();
+                    const randomValue = randomBytes(1)[0] / 256;
+
                     selectedArtificats.forEach(selectedArtificat => {
-                        vlc.addToPlaylist(selectedArtificat?.filename
-                        );
+                        const selectedFileName = selectedArtificat?.filename
+                        const updatedFileName = selectedFileName.replace('\\v1\\', '\\v2\\');
+                        const fileToPlay = randomValue > 0.5 ? selectedFileName : updatedFileName;
+                        vlc.addToPlaylist(fileToPlay);
                     })
 
                     const playList = await vlc.getPlaylist();
@@ -114,7 +121,7 @@ const startArtShow = asyncHandler(async (req, res) => {
                     clearInterval(checkVLCReady);
                 }
             } catch (error) {
-                console.log("catch", attempt)
+                // console.log("catch", attempt)
                 attempt++;
                 if (attempt >= maxAttempts) {
                     clearInterval(checkVLCReady);
@@ -143,8 +150,12 @@ const startArtShow = asyncHandler(async (req, res) => {
     }
 
     vlc.emptyPlaylist()
+    const randomValue = randomBytes(1)[0] / 256;
     selectedArtificats.forEach(selectedArtificat => {
-        vlc.addToPlaylist(selectedArtificat?.filename);
+        const selectedFileName = selectedArtificat?.filename
+        const updatedFileName = selectedFileName.replace('\\v1\\', '\\v2\\');
+        const fileToPlay = randomValue > 0.5 ? selectedFileName : updatedFileName;
+        vlc.addToPlaylist(fileToPlay);
     })
     const playList = await vlc.getPlaylist();
     vlc.playFromPlaylist(playList[0].id);
