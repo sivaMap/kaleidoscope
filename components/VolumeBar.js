@@ -9,8 +9,8 @@ const VolumeBar = () => {
     const { isShowRunning, width, navigateHomeScreen } = useKaleidoCrud();
     const [play, setPlay] = useState(false);
 
-    useEffect(() => {
-        setPlay(!isShowRunning);
+    useEffect(() => {                
+            setPlay(false);        
     }, [isShowRunning]);
 
     const handlePlay = (action) => {
