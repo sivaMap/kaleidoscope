@@ -11,7 +11,7 @@ const TaskBar = () => {
             style={{ backgroundColor: 'rgba(0,0,0,0.4)' }}
         >
             {/* MAP SYMBOL */}
-            <View className="flex flex-col justify-center  pl-5 h-[72px] w-[139px]">
+            <View className="flex flex-col justify-center  pl-3 h-[72px] w-[139px]">
                 <View className="w-24 h-12">
                     <Image
                         source={require('../assets/images/map.png')}
