@@ -53,10 +53,10 @@ const ArtWorkShows = ({ selectedArtificats, setSelectedArtifacts, setLoadArt }) 
             <View style={{
                 flexDirection: 'row',
                 flexWrap: 'wrap',
-                // justifyContent: 'space-between',
+                justifyContent: 'center',
                 paddingHorizontal: 0,
                 marginTop: 22,
-                height: 128,                
+                height: 128,
                 gap: 20
             }}
             >
@@ -80,14 +80,12 @@ const ArtWorkShows = ({ selectedArtificats, setSelectedArtifacts, setLoadArt }) 
                 />
             </View> */}
 
-            < View className="absolute -bottom-24 right-1  mt-4 " >
+            < View className="absolute -bottom-24 right-4  mt-4 " >
                 <TouchableOpacity
                     className="border-white border-2 rounded-full px-3 py-2"
                     onPress={handleEndShow}
                 >
-                    <Text className={`text-white px-3 py-0 text-lg ${fontsLoaded ? "font-gBold" : ""}`}
-                    // style={{ fontFamily: 'Geometria' }}
-                    >
+                    <Text className={`text-white px-3 py-0 text-lg ${fontsLoaded ? "font-gBold" : ""}`}>
                         End Show</Text>
                 </TouchableOpacity>
             </View >
