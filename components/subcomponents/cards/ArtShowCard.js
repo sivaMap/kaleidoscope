@@ -16,7 +16,7 @@ const ArtShowCard = memo(function ArtShowCard(props) {
                     className="w-full h-full rounded-lg object-cover"
                 />
             </View>
-            <Text className={`text-center text-white mt-2 ${fontsLoaded ? "font-gGeometria" : ""}`}>{artifact?.displayName}</Text>
+            <Text className={`text-center text-white mt-2 ${fontsLoaded ? "font-gBold" : ""}`}>{artifact?.displayName}</Text>
         </View>
     );
 });

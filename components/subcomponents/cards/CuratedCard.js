@@ -31,7 +31,7 @@ const CuratedCard = (props) => {
             {/* Text Section */}
             <View className="flex-col justify-end w-fit mb-2">
                 <Text className={`text-white ${fontsLoaded ? "font-gBold" : ""}`}>{show?.displayName}</Text>
-                <Text className={`text-white mt-1 text-xs  ${fontsLoaded ? "font-gGeometria" : ""}`}>{minutes} : {seconds}</Text>
+                <Text className={`text-white mt-1 text-xs  ${fontsLoaded ? "font-gBold" : ""}`}>{minutes} : {seconds}</Text>
             </View>
         </TouchableOpacity>
     );

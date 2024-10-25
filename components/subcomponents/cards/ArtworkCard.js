@@ -23,7 +23,7 @@ const ArtworkCard = memo(function ArtworkCard(props) {
                         className="w-full h-full rounded-lg object-cover"
                     />
                 </View>
-                <Text className={`text-center text-xs ${fontsLoaded ? "font-gGeometria" : ""} ${isSelected ? "text-black" : "text-white"}`}>{artifact?.displayName}</Text>
+                <Text className={`text-center text-xs ${fontsLoaded ? "font-gBold" : ""} ${isSelected ? "text-black" : "text-white"}`}>{artifact?.displayName}</Text>
             </View>
         </TouchableOpacity>
     );

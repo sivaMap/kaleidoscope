@@ -68,7 +68,7 @@ const CuratedPlay = ({ setLoadCurate, selectedShow, setSelectedShow, shows }) =>
                         />
                         <View className="flex-row justify-between">
                             <Text className={`mb-2 text-white ${fontsLoaded ? "font-gBold" : ""}`}>{currentShow.displayName}</Text>
-                            <Text className={`text-xs text-white ${fontsLoaded ? "font-gLight" : ""}`}>{minutes} : {seconds}</Text>
+                            <Text className={`text-xs text-white ${fontsLoaded ? "font-gBold" : ""}`}>{minutes} : {seconds}</Text>
                         </View>
                     </View>
                     {/* <View className="flex-row justify-center">
