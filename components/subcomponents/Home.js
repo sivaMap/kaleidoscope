@@ -16,7 +16,7 @@ const Home = () => {
                             style={{
                                 backgroundColor: 'rgba(0, 0, 0, 0.2)', borderColor: 'rgba(255, 255, 255, 0.3)',
                             }}
-                            className={` rounded-full px-20 py-6 text-center text-base text-white ${fontsLoaded ? "font-gBold" : ""}`}
+                            className={` rounded-full px-20 py-6 text-center text-lg text-white ${fontsLoaded ? "font-gBold" : ""}`}
                         >
                             Experience a curated show
                         </Text>
@@ -28,7 +28,7 @@ const Home = () => {
             <View className="mb-3 flex flex-row justify-center items-center gap-5">
                 <View style={{ borderColor: 'rgba(255, 255, 255, 0.3)', fontFamily: fontsLoaded ? 'Geometria' : '' }} className="w-2/12 border-t mx-2" />
                 <Text
-                    className={`text-white ${fontsLoaded ? "font-gBold" : ""}`}>OR</Text>
+                    className={`text-white text-lg ${fontsLoaded ? "font-gBold" : ""}`}>OR</Text>
                 <View style={{ borderColor: 'rgba(255, 255, 255, 0.3)' }} className="w-2/12 border-t mx-2" />
             </View>
 
@@ -39,7 +39,7 @@ const Home = () => {
                             style={{
                                 backgroundColor: 'rgba(0, 0, 0, 0.2)', borderColor: 'rgba(255, 255, 255, 0.3)',
                             }}
-                            className={`rounded-full px-24 py-6 text-center text-base text-white ${fontsLoaded ? "font-gBold" : ""}`}>
+                            className={`rounded-full px-24 py-6 text-center text-lg text-white ${fontsLoaded ? "font-gBold" : ""}`}>
                             Create your own show
                         </Text>
                     </View>
