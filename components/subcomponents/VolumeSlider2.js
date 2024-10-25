@@ -19,7 +19,7 @@ const VolumeSlider2 = ({ isShowRunning }) => {
         // <Svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#5f6368">
         //     <Path d="M560-131v-68.67q94.67-27.33 154-105 59.33-77.66 59.33-176.33 0-98.67-59-176.67-59-78-154.33-104.66V-831q124 28 202 125.5T840-481q0 127-78 224.5T560-131ZM120-360v-240h160l200-200v640L280-360H120Zm426.67 45.33v-332Q599-628 629.5-582T660-480q0 55-30.83 100.83-30.84 45.84-82.5 64.5ZM413.33-634l-104 100.67H186.67v106.66h122.66l104 101.34V-634Zm-96 154Z" />
         // </Svg>
-        <Svg width="28" height="28" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <Svg className="-mt-2.5" width="35" height="45" viewBox="0 0 45 44" fill="none" xmlns="http://www.w3.org/2000/svg">
             <Mask id="mask0_1660_26259" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="44" height="44">
                 <Rect width="44" height="44" fill="#D9D9D9" />
             </Mask>
@@ -70,7 +70,9 @@ const VolumeSlider2 = ({ isShowRunning }) => {
                 }}
                 className="flex flex-row items-center  w-36 pl-2 ml-2 pr-0 py-1 rounded-full">
                 <TouchableOpacity onPress={() => setSliderEnable(prev => !prev)}>
-                    {volume < volumeChanger ? lowVolume : highVolume}
+                    <View style={{ width: 28, height: 28 }}>
+                        {volume < volumeChanger ? lowVolume : highVolume}
+                    </View>
                 </TouchableOpacity>
 
                 <Slider
