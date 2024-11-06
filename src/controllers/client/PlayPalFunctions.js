@@ -27,13 +27,10 @@ let client = null;
 function sendTcpCommand({ PlayPalCommand }) {
     return new Promise((resolve, reject) => {
         if (!client) {
-            client = new net.Socket(); // Create a new client if it doesn't exist
-            client.connect(vlcPort, () => {
-                console.log(`Connected to TCP server at ${vlcPort}`);
-            });
+            client = new net.Socket();
+            client.connect(vlcPort);
         }
-
-        // Write the data to the TCP server
+        
         client.write(PlayPalCommand);
     });
 }
