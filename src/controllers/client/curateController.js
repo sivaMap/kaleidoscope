@@ -11,9 +11,7 @@ const { startPlayerIfNeeded, isAppOpen, getVideoInfo } = require("./PlayPalFunct
 function sendTcpCommand({ PlayPalCommand }) {
     return new Promise((resolve, reject) => {
         const client = new net.Socket(); // Create a new client if it doesn't exist
-        client.connect(vlcPort, () => {
-            console.log(`Connected to TCP server at ${vlcPort}`);
-        });
+        client.connect(vlcPort);
 
         // Write the data to the TCP server
         client.write(PlayPalCommand);
