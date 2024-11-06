@@ -1,26 +1,33 @@
 const asyncHandler = require("express-async-handler");
 const path = require('path');
 const fs = require('fs');
-const { curateVideoUrl, vlcIp, vlcPassword, vlcUsername, vlcPort, defaultVideo } = require("../../config");
-const VLC = require("vlc-client");
+const { curateVideoUrl, vlcPort, defaultVideo } = require("../../config");
+const net = require('net');
 const WebSocket = require('ws');
-const { exec } = require("child_process");
-const { startVlcIfNeeded, isAppOpen, getVideoInfo } = require("./vlcFunctions");
+const { startPlayerIfNeeded, isAppOpen, getVideoInfo } = require("./PlayPalFunctions");
 
 // const wss = new WebSocket.Server({ port: 8081 });
-// vlc client
-let vlc;
-try {
-    vlc = new VLC.Client({
-        ip: vlcIp,
-        port: Number(vlcPort),
-        username: vlcUsername,
-        password: vlcPassword
-    });
 
-    console.log("CURATE VLC instance created");
-} catch (error) {
-    console.log("Failed to create VLC instance:", error.message);
+function sendTcpCommand({ PlayPalCommand }) {
+    return new Promise((resolve, reject) => {
+        const client = new net.Socket(); // Create a new client if it doesn't exist
+        client.connect(vlcPort, () => {
+            console.log(`Connected to TCP server at ${vlcPort}`);
+        });
+
+        // Write the data to the TCP server
+        client.write(PlayPalCommand);
+
+        // Handle data from the server (response)
+        client.on('data', (data) => {
+            resolve(data.toString());
+        });
+
+        // Handle errors
+        client.on('error', (err) => {
+            console.log(err.message)
+        });
+    });
 }
 
 // Give vlc live updates to client or frontend
@@ -84,50 +91,60 @@ const getClientVideos = asyncHandler(async (req, res) => {
 //access public
 const startCurate = asyncHandler(async (req, res) => {
     const { filename } = req.body;
-    const isRunning = await isAppOpen();
+    const isRunning = await isAppOpen("OpezeePlayer.exe");
 
+    const command = "open_url";
+    const PlayPalCommand = JSON.stringify({
+        CMD: command,
+        StringParameter: filename.replace(/\\/g, '/'),
+    });
     if (!isRunning) {
-        startVlcIfNeeded({ vlc, filename })
+        startPlayerIfNeeded({ PlayPalCommand });
         res.status(200).json({ "message": "Success" })
         return
     }
-
-    const videoPath = filename;
-    vlc.playFile(videoPath)
-    vlc.setFullscreen(true)
+    sendTcpCommand({ PlayPalCommand })
 
     res.status(200).send({ "message": "Success" });
 });
 
-//@desc Control Vlc
+//@desc Control PlayPal
 //@route POST /curate/control
 //access public
 const controlApplication = asyncHandler(async (req, res) => {
     const { control } = req.body;
-    if (!vlc) {
-        res.status(400);
-        throw new Error("vlc not available")
-    }
 
     switch (control) {
         case "pause":
-            const checkIsPlaying = await vlc.isPlaying();
-            checkIsPlaying
-                ? vlc.pause()
-                : vlc.play();
+            console.log("pause")
+            const tcpdata = await sendTcpCommand({
+                PlayPalCommand: JSON.stringify({
+                    CMD: "get_playback_info",
+                })
+            });
+            const parsedTcpData = JSON.parse(tcpdata)?.PlaybackState
+
+            const command = parsedTcpData === 'Playing' ? "pause" : "play";
+            const PlayPalCommand2 = JSON.stringify({
+                CMD: command
+            });
+            sendTcpCommand({ PlayPalCommand: PlayPalCommand2 });
             break;
-        case "next":
-            vlc.next();
-            break;
-        case "prev":
-            vlc.previous();
+        case "volume":
+            const { volume } = req.body;
+            const PlayPalVolCommand = JSON.stringify({
+                CMD: "set_volume",
+                IntParameter: volume
+            });
+            sendTcpCommand({ PlayPalCommand: PlayPalVolCommand });
             break;
         case "stop":
-            // exec('taskkill /F /IM vlc.exe');
-            vlc.emptyPlaylist();
-            vlc.playFile(defaultVideo);
-            vlc.setFullscreen(true);
-            vlc.setLooping(true);
+            const commandStop = "open_url";
+            const PlayPalStopCommand = JSON.stringify({
+                CMD: commandStop,
+                StringParameter: defaultVideo.replace(/\\/g, '/'),
+            });
+            sendTcpCommand({ PlayPalCommand: PlayPalStopCommand });
             break;
         default:
             break;
