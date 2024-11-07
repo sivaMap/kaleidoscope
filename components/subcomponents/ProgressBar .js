@@ -79,6 +79,10 @@ import { View, Text, TouchableWithoutFeedback } from 'react-native';
 import Slider from '@react-native-community/slider'; // Use a slider package like this for React Native
 
 const convertSeconds = (seconds) => {
+    if (isNaN(seconds) || seconds < 0) {
+        seconds = 0;
+    }
+
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
     const secs = seconds % 60;
@@ -98,7 +102,7 @@ const TimeDisplay = ({ totalSeconds }) => {
 };
 
 const ProgressBar = (props) => {
-    const { status } = props    
+    const { status } = props
 
     return (
         <View className="flex-row items-center justify-between space-x-2">
