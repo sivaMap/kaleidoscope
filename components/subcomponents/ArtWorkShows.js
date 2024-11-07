@@ -1,11 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Button } from 'react-native';
 import ArtShowCard from './cards/ArtShowCard';
 import { useKaleidoCrud } from '../../context/kaleidoscopeCrudContext';
 import { constants } from '../../constants';
+import { getBasename, getFilenameWithoutExtension } from '../../userFunctions';
+import ProgressBar from './ProgressBar ';
 
 const ArtWorkShows = ({ selectedArtificats, setSelectedArtifacts, setLoadArt }) => {
     const { toggleShowRun, fontsLoaded } = useKaleidoCrud();
+    const [currentFileName, setCurrentFileName] = useState('');
+    const [status, setStatus] = useState(null);
 
     const handleEndShow = () => {
         fetch(`${constants.backendUrl}/art/control`, {
@@ -37,11 +41,52 @@ const ArtWorkShows = ({ selectedArtificats, setSelectedArtifacts, setLoadArt }) 
         // eslint-disable-next-line
     }, []);
 
+    useEffect(() => {
+        const ws = new WebSocket('ws://192.168.68.128:8082');
+
+        ws.onmessage = (event) => {
+            // console.log(event.data)
+            let data;
+            try {
+                data = JSON.parse(event.data);
+            } catch (error) { }
+            
+            if (data) {
+                const tfilename = data?.CurrentMediaFile;
+                const baseName = getFilenameWithoutExtension(tfilename);
+                setCurrentFileName(baseName);
+                setStatus(data);
+            }
+        };
+        ws.onclose = () => {
+            console.log('WebSocket connection closed');
+            handleEndShow();
+        };
+
+        return () => {
+            ws.close();
+        };
+    }, []);
+
     return (
         <View className='relative gap-3 h-5/6'>
-            <Text className={`text-xl text-white ${fontsLoaded ? "font-gBold" : ""}`}>
-                Artworks in the Current Show
-            </Text>
+            <View className={`flex-row justify-between px-1 py-1`}>
+                <Text className={`text-xl text-white ${fontsLoaded ? "font-gBold" : ""}`}>
+                    Artworks in the Current Show
+                </Text>
+                < View
+                // className="absolute -bottom-24 right-4  mt-4 "
+                >
+                    <TouchableOpacity
+                        className="border-white border-2 rounded-full px-3 py-2"
+                        onPress={handleEndShow}
+                    >
+                        <Text className={`text-white px-3 py-0 text-lg ${fontsLoaded ? "font-gBold" : ""}`}>
+                            End Show</Text>
+                    </TouchableOpacity>
+                </View >
+            </View>
+
 
             {/* <ScrollView className=" gap-x-5 -ml-2 mt-4 h-[calc(17rem)] overflow-auto"
                 contentContainerStyle={{
@@ -61,7 +106,7 @@ const ArtWorkShows = ({ selectedArtificats, setSelectedArtifacts, setLoadArt }) 
             }}
             >
                 {selectedArtificats?.map((artifact, index) => (
-                    <ArtShowCard key={index} artifact={artifact} />
+                    <ArtShowCard key={index} artifact={artifact} currentFileName={currentFileName} />
                 ))}
             </View>
             {/* </ScrollView> */}
@@ -80,7 +125,7 @@ const ArtWorkShows = ({ selectedArtificats, setSelectedArtifacts, setLoadArt }) 
                 />
             </View> */}
 
-            < View className="absolute -bottom-24 right-4  mt-4 " >
+            {/* < View className="absolute -bottom-24 right-4  mt-4 " >
                 <TouchableOpacity
                     className="border-white border-2 rounded-full px-3 py-2"
                     onPress={handleEndShow}
@@ -88,7 +133,10 @@ const ArtWorkShows = ({ selectedArtificats, setSelectedArtifacts, setLoadArt }) 
                     <Text className={`text-white px-3 py-0 text-lg ${fontsLoaded ? "font-gBold" : ""}`}>
                         End Show</Text>
                 </TouchableOpacity>
-            </View >
+            </View > */}
+            {<View className="relative -bottom-72">
+                <ProgressBar status={status} />
+            </View>}
         </View>
     );
 };
