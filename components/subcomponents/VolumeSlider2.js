@@ -6,6 +6,12 @@ import { constants } from '../../constants';
 import Svg, { G, Mask, Path, Rect } from 'react-native-svg';
 
 const VolumeSlider2 = ({ isShowRunning }) => {
+
+    const muteVolume = (
+        // <Svg className="-mt-2 -ml-1" xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#5f6368"><Path d="M280-360v-240h160l200-200v640L440-360H280Zm66.67-66.67h122.66l104 101.34V-634l-104 100.67H346.67v106.66ZM459.33-480Z" fill="white" /></Svg>
+        <Svg className="-mt-1.5 -ml-3" xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="48px" fill="#5f6368"><Path d="M280-360v-240h160l200-200v640L440-360H280Zm60-60h127l113 109v-337L467-540H340v120Zm119-60Z" fill="white" /></Svg>
+    )
+
     const lowVolume = (
         <Svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 32 38" fill="none">
             <Path d="M0 25.9999V11.9999H9.33333L21 0.333252V37.6666L9.33333 25.9999H0ZM25.6667 28.3333V9.54992C27.4167 10.3666 28.8264 11.6305 29.8958 13.3416C30.9653 15.0527 31.5 16.9388 31.5 18.9999C31.5 21.061 30.9653 22.9277 29.8958 24.5999C28.8264 26.2721 27.4167 27.5166 25.6667 28.3333ZM16.3333 11.6499L11.3167 16.6666H4.66667V21.3333H11.3167L16.3333 26.3499V11.6499Z" fill="white" />
@@ -71,7 +77,10 @@ const VolumeSlider2 = ({ isShowRunning }) => {
                 className="flex flex-row items-center  w-36 pl-2 ml-2 pr-0 py-1 rounded-full">
                 <TouchableOpacity onPress={() => setSliderEnable(prev => !prev)}>
                     <View style={{ width: 28, height: 28 }}>
-                        {volume < volumeChanger ? lowVolume : highVolume}
+                        {/* {volume < volumeChanger ? lowVolume : highVolume} */}
+                        {volume < volumeChanger ?
+                            volume === 0 ? muteVolume : lowVolume
+                            : highVolume}
                     </View>
                 </TouchableOpacity>
 
