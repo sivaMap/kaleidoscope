@@ -100,7 +100,7 @@ const ArtWork = () => {
                                     ))}
                                 </ScrollView>
                             </ScrollViewIndicator>
-                            <View style={styles.track} />
+                            {artifacts.length > 0 && <View style={styles.track} />}
                         </SafeAreaView>
                     </View>
                 );
