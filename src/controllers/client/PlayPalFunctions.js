@@ -4,6 +4,7 @@ const { applicationPath: applicationPathConfig, defaultVideo, vlcPort } = requir
 const ffmpeg = require('fluent-ffmpeg');
 const ffprobeStatic = require('ffprobe-static');
 const net = require('net');
+const { getFilenameWithoutExtension } = require("./calcFunctions");
 
 const isAppOpen = (appName = "OpezeePlayer.exe") => {
     return new Promise((resolve, reject) => {
@@ -30,7 +31,6 @@ function sendTcpCommand({ PlayPalCommand }) {
             client = new net.Socket();
             client.connect(vlcPort);
         }
-        
         client.write(PlayPalCommand);
     });
 }
@@ -49,6 +49,62 @@ const startPlayerIfNeeded = async ({ PlayPalCommand }) => {
     }, 1000);
 }
 
+// Function to play a file on the TCP-connected player
+function playPlayListTcpPlayer(client, filePath, selectedArtificats, activeWebSocketClients) {
+    return new Promise((resolve, reject) => {
+        // Format the command to play the file
+        const command = JSON.stringify({ CMD: 'open_url', StringParameter: filePath });
+
+        // Send command to play the file
+        client.write(command, (err) => {
+            if (err) {}
+        });
+        client.write(JSON.stringify({ CMD: "set_looping", IntParameter: "0" }));
+
+        const intervalId = setInterval(() => {
+            client.write(JSON.stringify({
+                CMD: "get_playback_info",
+            }));
+        }, 1000)
+
+        // Listen for completion or any other response that indicates the file has finished
+        client.on('data', (data) => {
+            try {
+                const response = data.toString();
+                const parsedResponse = JSON.parse(response)               
+
+                const runnningFilename = getFilenameWithoutExtension(parsedResponse?.CurrentMediaFile)
+                // To detect unexpected playList exit
+                const isArtExit = selectedArtificats.some(selectedArtificat => selectedArtificat?.displayName === runnningFilename)
+
+                // Stop the interval
+                if (parsedResponse?.PlaybackState === "Stopped" || parsedResponse?.PlaybackTime > (parsedResponse?.MediaDuration - 1)) {
+                    clearInterval(intervalId);
+                    resolve("completed");
+                }
+                if (!isArtExit) {
+                    clearInterval(intervalId);
+                    console.log("exiting",runnningFilename)
+                    resolve("exit");
+                }
+
+                activeWebSocketClients.forEach(ws => {
+                    ws.send(response);
+                });
+            } catch (error) { }
+        });
+
+        client.on('end', () => {
+            activeWebSocketClients.forEach((ws) => {
+                ws.close(1000, 'Playlist End');
+            });
+            console.log("ending")
+        })
+
+        client.on('error', (err) => console.log(err));
+    });
+}
+
 const startVlcInitial = () => {
     const applicationPath = path.resolve(applicationPathConfig);
     // const command = `"${applicationPath}" "${defaultVideo}" --no-video-title-show --qt-minimal-view --loop --qt-continue=0 --fullscreen`;
@@ -63,14 +119,10 @@ const startVlcInitial = () => {
     sendTcpCommand(PlayPalCommand)
 }
 
-const forceStopVlc = async (callback) => {
-    console.log("stoping vlc")
+const forceStopPlayPal = async () => {    
     // await exec('taskkill /F /IM vlc.exe');
-    exec('taskkill /F /IM vlc.exe', (error, stdout, stderr) => {
-        console.log("first")
-        callback();
-    });
-    console.log("stoped vlc")
+    // exec('taskkill /F /IM OpezeePlayer.exe');
+    exec('taskkill /IM  OpezeePlayer.exe');    
 }
 
 // setting ffprobe path to ffmpeg
@@ -91,6 +143,7 @@ const getVideoInfo = (videoPath, file) => {
 
 module.exports = {
     isAppOpen, getVideoInfo,
-    startVlcInitial, forceStopVlc,
-    startPlayerIfNeeded
+    startVlcInitial,
+    startPlayerIfNeeded, playPlayListTcpPlayer,
+    forceStopPlayPal
 }
