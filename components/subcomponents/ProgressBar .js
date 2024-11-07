@@ -75,9 +75,9 @@
 // export default ProgressBar;
 
 import React from 'react';
-import { View, Text, TouchableWithoutFeedback } from 'react-native';
-import Slider from '@react-native-community/slider'; // Use a slider package like this for React Native
-
+import { View, Text } from 'react-native';
+import Slider from '@react-native-community/slider';
+import { useKaleidoCrud } from '../../context/kaleidoscopeCrudContext';
 const convertSeconds = (seconds) => {
     if (isNaN(seconds) || seconds < 0) {
         seconds = 0;
@@ -92,11 +92,12 @@ const convertSeconds = (seconds) => {
 
 // TimeDisplay component for React Native
 const TimeDisplay = ({ totalSeconds }) => {
+    const { fontsLoaded } = useKaleidoCrud();
     const { minutes, seconds } = convertSeconds(totalSeconds);
 
     return (
-        <Text className="text-white">
-            {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
+        <Text className={`text-white text-xs ${fontsLoaded ? "font-gBold" : ""}`}>
+            {minutes < 10 ? `0${minutes}` : minutes} : {seconds < 10 ? `0${seconds}` : seconds}
         </Text>
     );
 };
@@ -105,24 +106,28 @@ const ProgressBar = (props) => {
     const { status } = props
 
     return (
-        <View className="flex-row items-center justify-between space-x-2">
-            <TimeDisplay totalSeconds={status?.PlaybackTime} />
-            <TouchableWithoutFeedback>
-                <Slider
-                    className='bg-white'
-                    style={{ flex: 1 }}
-                    minimumValue={0}
-                    maximumValue={status?.MediaDuration}
-                    // step={0.1}
-                    value={status?.PlaybackTime}
-                    minimumTrackTintColor="#FFFFFF"
-                    maximumTrackTintColor="rgba(255, 255, 255, 1)"
-                    thumbTintColor="#FFFFFF"
-                // disabled={true}               
+        // <View className="flex-row items-center justify-between space-x-2">
+        <View className="flex-col justify-between space-y-4">
 
-                />
-            </TouchableWithoutFeedback>
-            <TimeDisplay totalSeconds={status?.MediaDuration} />
+            {/* <TouchableWithoutFeedback> */}
+            <Slider
+                className='bg-white'
+                style={{ flex: 1 }}
+                minimumValue={0}
+                maximumValue={status?.MediaDuration}
+                // step={0.1}
+                value={status?.PlaybackTime}
+                minimumTrackTintColor="#FFFFFF"
+                maximumTrackTintColor="rgba(255, 255, 255, 1)"
+                thumbTintColor="#FFFFFF"
+            // disabled={true}               
+
+            />
+            {/* </TouchableWithoutFeedback> */}
+            <View className="flex-row items-center justify-between px-4">
+                <TimeDisplay totalSeconds={status?.PlaybackTime} />
+                <TimeDisplay totalSeconds={status?.MediaDuration} />
+            </View>
         </View>
     );
 };
