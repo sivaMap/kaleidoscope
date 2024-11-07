@@ -3,56 +3,73 @@ const path = require('path');
 const fs = require('fs');
 const { artVideoUrl, vlcIp, vlcPort, vlcPassword, vlcUsername, defaultVideo } = require("../../config");
 const VLC = require("vlc-client");
+const net = require('net');
 const WebSocket = require('ws');
 const { exec } = require("child_process");
-const { isAppOpen, getVideoInfo } = require("./vlcFunctions");
+const { getVideoInfo } = require("./vlcFunctions");
 const { applicationPath: applicationPathConfig } = require("../../config");
 const { randomBytes } = require('crypto');
+const { playPlayListTcpPlayer, forceStopPlayPal, isAppOpen } = require("./PlayPalFunctions");
 
 
-// const wss = new WebSocket.Server({ port: 8082 });
-// vlc client
-let vlc;
-try {
-    vlc = new VLC.Client({
-        ip: vlcIp,
-        port: Number(vlcPort),
-        username: vlcUsername,
-        password: vlcPassword
+// let client = null;
+
+function sendTcpCommand({ PlayPalCommand }) {
+    return new Promise((resolve, reject) => {
+        const client = new net.Socket();
+        client.connect(vlcPort);
+
+        // Write the data to the TCP server
+        client.write(PlayPalCommand);
+
+        client.on('data', (data) => {
+            resolve(data.toString());
+        });
+
+        // Handle errors
+        client.on('error', (err) => {
+            console.log(err.message)
+        });
     });
-
-    console.log("ART VLC instance created");
-} catch (error) {
-    console.log("Failed to create VLC instance:", error.message);
 }
+
+const wss = new WebSocket.Server({ port: 8082 });
 
 // Give vlc live updates to client or frontend
 // wss.on('connection', async (ws) => {
 //     console.log('New client connected');
-
 //     // Send initial status when a client connects
-//     vlc.status().then((status) => {
-//         ws.send(JSON.stringify(status));
-//     }).catch((error) => {
-//         console.error('Error fetching VLC status:', error.message);
-//     });
-
+//     const clientWS = new net.Socket();
+//     clientWS.connect(vlcPort);
+//     // Write the data to the TCP server
+//     clientWS.on('data', (data) => {
+//         ws.send(data.toString());        
+//     });     
 
 //     // Periodically send status updates
 //     const interval = setInterval(() => {
-//         vlc.status().then((status) => {
-//             ws.send(JSON.stringify(status));
-//         }).catch((error) => {
-//             console.error('Error fetching VLC status:', error.message);
-//             clearInterval(interval);
-//         });
+//         clientWS.write(JSON.stringify({
+//             CMD: "get_playback_info",
+//         }));        
 //     }, 1000); // Update every second
 
 //     ws.on('close', () => {
 //         console.log('Client disconnected');
-//         clearInterval(interval); // Stop sending updates when the client disconnects
+//         clearInterval(interval); 
+//         clientWS.end();
 //     });
 // });
+
+
+const activeWebSocketClients = new Set();
+wss.on('connection', (ws) => {
+    activeWebSocketClients.add(ws);
+
+    // Clean up when a WebSocket client disconnects
+    ws.on('close', () => {
+        activeWebSocketClients.delete(ws);
+    });
+});
 
 
 //@desc Get All Art videos in a Art folder
@@ -86,79 +103,101 @@ const getClientVideos = asyncHandler(async (req, res) => {
 //@route POST /art/start
 //access public
 const startArtShow = asyncHandler(async (req, res) => {
-
     const { selectedArtificats } = req.body;
-    const isRunning = await isAppOpen();
-
+    const isRunning = await isAppOpen("OpezeePlayer.exe");
     if (!isRunning) {
-        const applicationPath = path.resolve(applicationPathConfig);
-        // const command = `"${applicationPath}" --fullscreen`;
-        const command = `"${applicationPath}" --fullscreen --no-video-title-show --qt-minimal-view --loop --qt-continue=0`;
-        exec(command);
-
-        const pollInterval = 500;
-        const maxAttempts = 10;
-        let attempt = 0;
-
-        const checkVLCReady = setInterval(async () => {
-            try {
-
-                // const playList = await vlc.getPlaylist();
-                const isRunning = await isAppOpen();
-                if (isRunning) {
-                    vlc.emptyPlaylist();
-                    const randomValue = randomBytes(1)[0] / 256;
-
-                    selectedArtificats.forEach(selectedArtificat => {
-                        const selectedFileName = selectedArtificat?.filename
-                        const updatedFileName = selectedFileName.replace('\\v1\\', '\\v2\\');
-                        const fileToPlay = randomValue > 0.5 ? selectedFileName : updatedFileName;
-                        vlc.addToPlaylist(fileToPlay);
-                    })
-
-                    const playList = await vlc.getPlaylist();
-                    vlc.playFromPlaylist(playList[0].id);
-                    clearInterval(checkVLCReady);
-                }
-            } catch (error) {
-                // console.log("catch", attempt)
-                attempt++;
-                if (attempt >= maxAttempts) {
-                    clearInterval(checkVLCReady);
-                }
-            }
-        }, pollInterval);
-
-        // setTimeout(async () => {
-        //     try {
-        //         vlc.emptyPlaylist()
-        //         selectedArtificats.forEach(selectedArtificat => {
-        //             vlc.addToPlaylist(selectedArtificat?.filename
-        //             );
-        //         })
-
-        //         const playList = await vlc.getPlaylist();
-        //         vlc.playFromPlaylist(playList[0].id);
-
-        //     } catch (error) {
-        //         return false;
-        //     }
-        // }, 100);
-
-        res.status(200).json({ "message": "Success" })
         return
     }
 
-    vlc.emptyPlaylist()
-    const randomValue = randomBytes(1)[0] / 256;
-    selectedArtificats.forEach(selectedArtificat => {
-        const selectedFileName = selectedArtificat?.filename
-        const updatedFileName = selectedFileName.replace('\\v1\\', '\\v2\\');
-        const fileToPlay = randomValue > 0.5 ? selectedFileName : updatedFileName;
-        vlc.addToPlaylist(fileToPlay);
-    })
-    const playList = await vlc.getPlaylist();
-    vlc.playFromPlaylist(playList[0].id);
+    // console.log(selectedArtificats)
+
+    // if (!isRunning) {
+    //     const applicationPath = path.resolve(applicationPathConfig);
+    //     // const command = `"${applicationPath}" --fullscreen`;
+    //     const command = `"${applicationPath}" --no-video-title-show --qt-minimal-view --loop --qt-continue=0 --fullscreen --no-qt-fs-controller`;
+    //     exec(command);
+
+    //     const pollInterval = 500;
+    //     const maxAttempts = 10;
+    //     let attempt = 0;
+
+    //     const checkVLCReady = setInterval(async () => {
+    //         try {
+
+    //             // const playList = await vlc.getPlaylist();
+    //             const isRunning = await isAppOpen();
+    //             if (isRunning) {
+    //                 vlc.emptyPlaylist();
+    //                 const randomValue = randomBytes(1)[0] / 256;
+
+    //                 selectedArtificats.forEach(selectedArtificat => {
+    //                     const selectedFileName = selectedArtificat?.filename
+    //                     const updatedFileName = selectedFileName.replace('\\v1\\', '\\v2\\');
+    //                     const fileToPlay = randomValue > 0.5 ? selectedFileName : updatedFileName;
+    //                     vlc.addToPlaylist(fileToPlay);
+    //                 })
+
+    //                 const playList = await vlc.getPlaylist();
+    //                 vlc.playFromPlaylist(playList[0].id);
+    //                 clearInterval(checkVLCReady);
+    //             }
+    //         } catch (error) {
+    //             // console.log("catch", attempt)
+    //             attempt++;
+    //             if (attempt >= maxAttempts) {
+    //                 clearInterval(checkVLCReady);
+    //             }
+    //         }
+    //     }, pollInterval);
+
+    //     // setTimeout(async () => {
+    //     //     try {
+    //     //         vlc.emptyPlaylist()
+    //     //         selectedArtificats.forEach(selectedArtificat => {
+    //     //             vlc.addToPlaylist(selectedArtificat?.filename
+    //     //             );
+    //     //         })
+
+    //     //         const playList = await vlc.getPlaylist();
+    //     //         vlc.playFromPlaylist(playList[0].id);
+
+    //     //     } catch (error) {
+    //     //         return false;
+    //     //     }
+    //     // }, 100);
+
+    //     res.status(200).json({ "message": "Success" })
+    //     return
+    // }
+
+    // vlc.emptyPlaylist()
+
+    const clientPL = net.createConnection({ port: 17568 }, async () => {
+        try {
+            const randomValue = randomBytes(1)[0] / 256;
+
+            for (const selectedArtificat of selectedArtificats) {
+                const selectedFileName = selectedArtificat?.filename
+                const updatedFileName = selectedFileName.replace('\\v1\\', '\\v2\\');
+                const fileToPlay = randomValue > 0.5 ? selectedFileName : updatedFileName;
+
+                const exitStatus = await playPlayListTcpPlayer(clientPL, fileToPlay, selectedArtificats, activeWebSocketClients);
+                if (exitStatus === "exit") {
+                    break;
+                }
+            }
+        } catch (error) {
+            // console.error('Error playing files:', error);            
+        } finally {
+            const command = JSON.stringify({ CMD: 'open_url', StringParameter: defaultVideo });
+            clientPL.write(command, (err) => {
+                if (err);
+            })
+            clientPL.end();
+        }
+    });
+
+
 
     res.status(200).send({ "message": "Success" });
 });
@@ -168,42 +207,48 @@ const startArtShow = asyncHandler(async (req, res) => {
 //access public
 const controlApplication = asyncHandler(async (req, res) => {
     const { control } = req.body;
-    if (!vlc) {
-        res.status(400);
-        throw new Error("vlc not available")
+    const isRunning = await isAppOpen("OpezeePlayer.exe");
+    if (!isRunning) {
+        return
     }
-    const isVlcOpen = await isAppOpen();
-    if (isVlcOpen)
-        switch (control) {
-            case "pause":
-                const checkIsPlaying = await vlc.isPlaying();
-                checkIsPlaying
-                    ? vlc.pause()
-                    : vlc.play();
-                break;
-            case "volume":
-                const isVlclOpen = await isAppOpen();
-                if (isVlclOpen) {
-                    const { volume } = req.body;
-                    vlc.setVolume(volume ?? 45);
-                }
-                break;
-            case "next":
-                vlc.next();
-                break;
-            case "prev":
-                vlc.previous();
-                break;
-            case "stop":
-                vlc.emptyPlaylist();
-                vlc.playFile(defaultVideo);
-                vlc.setFullscreen(true);
-                vlc.setLooping(true);
-                // exec('taskkill /F /IM vlc.exe');
-                break;
-            default:
-                break;
-        }
+
+    switch (control) {
+        case "pause":
+            const tcpdata = await sendTcpCommand({
+                PlayPalCommand: JSON.stringify({
+                    CMD: "get_playback_info",
+                })
+            });
+            const parsedTcpData = JSON.parse(tcpdata)?.PlaybackState
+
+            const command = parsedTcpData === 'Playing' ? "pause" : "play";
+            const PlayPalCommand2 = JSON.stringify({
+                CMD: command
+            });
+            sendTcpCommand({ PlayPalCommand: PlayPalCommand2 });
+            break;
+        case "volume":
+            const { volume } = req.body;
+            const PlayPalVolCommand = JSON.stringify({
+                CMD: "set_volume",
+                IntParameter: volume
+            });
+            sendTcpCommand({ PlayPalCommand: PlayPalVolCommand });
+            break;
+        case "stop":
+            const commandStop = "open_url";
+            const PlayPalStopCommand = JSON.stringify({
+                CMD: commandStop,
+                StringParameter: defaultVideo.replace(/\\/g, '/'),
+            });
+            sendTcpCommand({ PlayPalCommand: PlayPalStopCommand });
+            break;
+        case "exit":
+            forceStopPlayPal();
+            break;
+        default:
+            break;
+    }
 
     res.status(200).json({ "Message": "Control Success" });
 });
