@@ -4,7 +4,7 @@ const fs = require('fs');
 const { curateVideoUrl, vlcPort, defaultVideo } = require("../../config");
 const net = require('net');
 const WebSocket = require('ws');
-const { startPlayerIfNeeded, isAppOpen, getVideoInfo } = require("./PlayPalFunctions");
+const { startPlayerIfNeeded, isAppOpen, getVideoInfo, forceStopPlayPal } = require("./PlayPalFunctions");
 
 // const wss = new WebSocket.Server({ port: 8081 });
 
@@ -23,7 +23,7 @@ function sendTcpCommand({ PlayPalCommand }) {
 
         // Handle errors
         client.on('error', (err) => {
-            console.log(err.message)
+            // console.log(err.message)
         });
     });
 }
@@ -111,10 +111,13 @@ const startCurate = asyncHandler(async (req, res) => {
 //access public
 const controlApplication = asyncHandler(async (req, res) => {
     const { control } = req.body;
+    const isRunning = await isAppOpen("OpezeePlayer.exe");
+    if (!isRunning) {        
+        return
+    }
 
     switch (control) {
-        case "pause":
-            console.log("pause")
+        case "pause":            
             const tcpdata = await sendTcpCommand({
                 PlayPalCommand: JSON.stringify({
                     CMD: "get_playback_info",
@@ -143,6 +146,9 @@ const controlApplication = asyncHandler(async (req, res) => {
                 StringParameter: defaultVideo.replace(/\\/g, '/'),
             });
             sendTcpCommand({ PlayPalCommand: PlayPalStopCommand });
+            break;
+        case "exit":
+            forceStopPlayPal();            
             break;
         default:
             break;
