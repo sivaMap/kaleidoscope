@@ -1,10 +1,11 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, StatusBar, SafeAreaView } from 'react-native';
 import { useKaleidoCrud } from '../../context/kaleidoscopeCrudContext';
 import { constants } from '../../constants';
 import { SvgXml } from 'react-native-svg';
 import ArtworkCard from './cards/ArtworkCard';
 import ArtWorkShows from './ArtWorkShows';
+import { ScrollViewIndicator } from '@fanchenbao/react-native-scroll-indicator';
 
 const ArtWork = () => {
     const [artifacts, setArtifcats] = useState([]);
@@ -12,8 +13,6 @@ const ArtWork = () => {
     const [loadArt, setLoadArt] = useState(constants.loadArt.show);
     const { navigateHomeScreen, toggleShowRun, fontsLoaded } = useKaleidoCrud();
     const isArtShowSected = selectedArtificats.length === 5;
-    const scrollViewRef = useRef('');
-
 
     const handleArtifactSelect = ({ artifact }) => {
         if (selectedArtificats.length < 5) {
@@ -38,8 +37,8 @@ const ArtWork = () => {
         switch (loadArt) {
             case constants.loadArt.show:
                 view.push(
-                    <View className="relative h-[548] mb-4 " key={"ArtDefault"}>
-                        <View className="flex-row justify-between">
+                    <View className="relative h-[548] mb-4 px-0" key={"ArtDefault"}>
+                        <View className="flex-row justify-between px-1 pr-2 mb-1">
                             <View className="flex-row items-center space-x-4">
                                 <TouchableOpacity className="bg-black py-2 px-3 rounded-full" onPress={navigateHomeScreen}>
                                     {/* SVG Back Arrow */}
@@ -62,7 +61,7 @@ const ArtWork = () => {
                             >
                                 <View
                                     style={styles.borderContainer}
-                                    className={`border-white border-2 rounded-full px-4 py-2 ${!isArtShowSected ? "opacity-30" : ""}`}
+                                    className={`border-white border-2 rounded-full px-3 py-2 ${!isArtShowSected ? "opacity-30" : ""}`}
                                 >
                                     <Text className={` text-white px-3 py-0 text-lg ${fontsLoaded ? "font-gBold" : ""}`}>Start Show</Text>
                                 </View>
@@ -70,25 +69,38 @@ const ArtWork = () => {
                         </View>
 
                         <SafeAreaView style={styles.container}>
-                            <ScrollView className=" -ml-2  px-4 h-full "
-                                indicatorStyle='white'
-                                style={styles.scrollView}
-                                contentContainerStyle={{
-                                    flexDirection: 'row',
-                                    flexWrap: 'wrap',
-                                    paddingHorizontal: 4,
-                                    gap: 20
-                                }}>
-                                {artifacts.map((artifact, index) => (
-                                    <ArtworkCard
-                                        key={index}
-                                        artifact={artifact}
-                                        selectedArtificats={selectedArtificats}
-                                        handleArtifactSelect={handleArtifactSelect}
-                                        handleArtificateUndoSelect={handleArtificateUndoSelect}
-                                    />
-                                ))}
-                            </ScrollView>
+                            <ScrollViewIndicator
+                                indStyle={{
+                                    width: 8,
+                                    backgroundColor: 'white',
+                                    marginRight: 12
+                                }}
+                            >
+                                <ScrollView className=" -ml-2  px-4 h-full "
+                                    indicatorStyle='white'
+                                    style={styles.scrollView}
+                                    contentContainerStyle={{
+                                        flexDirection: 'row',
+                                        flexWrap: 'wrap',
+                                        paddingHorizontal: 4,
+                                        rowGap: 0,
+                                        columnGap: 20
+                                    }}
+                                    persistentScrollbar={true}
+
+                                >
+                                    {artifacts.map((artifact, index) => (
+                                        <ArtworkCard
+                                            key={index}
+                                            artifact={artifact}
+                                            selectedArtificats={selectedArtificats}
+                                            handleArtifactSelect={handleArtifactSelect}
+                                            handleArtificateUndoSelect={handleArtificateUndoSelect}
+                                        />
+                                    ))}
+                                </ScrollView>
+                            </ScrollViewIndicator>
+                            <View style={styles.track} />
                         </SafeAreaView>
                     </View>
                 );
@@ -128,6 +140,15 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0, 0, 0, 0.3)',
         borderColor: 'rgba(255, 255, 255, 1)',
         borderWidth: 2,
+    },
+    track: {
+        position: 'absolute',
+        top: 15,
+        right: 14.5,
+        width: 3,
+        height: '104%',
+        backgroundColor: 'white',
+        borderRadius: 3
     },
 });
 
