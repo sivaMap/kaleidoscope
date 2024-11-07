@@ -51,6 +51,15 @@ const VolumeBar = () => {
         if (Platform.OS === 'android') {
             BackHandler.exitApp();
         }
+        fetch(`${constants.backendUrl}/art/control`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                control: "exit",
+            }),
+        }).catch(error => console.error('Error fetching apps:', error));
     }
 
     return (
@@ -63,7 +72,7 @@ const VolumeBar = () => {
             </View>
 
             <TouchableOpacity
-                className={`flex flex-col justify-center mr-16`}
+                className={`flex flex-col justify-center mr-28`}
                 onPress={() => {
                     setPlay((prev) => !prev);
                     handlePlay();
