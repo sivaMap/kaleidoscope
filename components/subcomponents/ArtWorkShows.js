@@ -50,7 +50,6 @@ const ArtWorkShows = ({ selectedArtificats, setSelectedArtifacts, setLoadArt }) 
             try {
                 data = JSON.parse(event.data);
             } catch (error) { }
-            
             if (data) {
                 const tfilename = data?.CurrentMediaFile;
                 const baseName = getFilenameWithoutExtension(tfilename);
@@ -69,7 +68,7 @@ const ArtWorkShows = ({ selectedArtificats, setSelectedArtifacts, setLoadArt }) 
     }, []);
 
     return (
-        <View className='relative gap-3 h-5/6'>
+        <View className='relative gap-3 h-5/6 mt-0 mb-4'>
             <View className={`flex-row justify-between px-1 py-1`}>
                 <Text className={`text-xl text-white ${fontsLoaded ? "font-gBold" : ""}`}>
                     Artworks in the Current Show
@@ -134,9 +133,11 @@ const ArtWorkShows = ({ selectedArtificats, setSelectedArtifacts, setLoadArt }) 
                         End Show</Text>
                 </TouchableOpacity>
             </View > */}
-            {<View className="relative -bottom-72">
-                <ProgressBar status={status} />
-            </View>}
+            {
+                <View className="relative -bottom-72">
+                    <ProgressBar status={status} />
+                </View>
+            }
         </View>
     );
 };
