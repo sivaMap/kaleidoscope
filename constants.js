@@ -8,13 +8,17 @@ exports.constants = {
     port: "5001",
     get backendUrl() {
         return `http://${this.ipAddress}:${this.port}`;
-    }            
+    },
+    get backendIp() {
+        return `http://${this.ipAddress}`;
+    }
 }
 
 exports.updateConstants = async () => {
-    const ipAddress = await AsyncStorage.getItem('ipAddress') || '0.0.0.0' ;
+    // const ipAddress = await AsyncStorage.getItem('ipAddress') || '0.0.0.0' ;
+    const ipAddress = "192.168.68.128";
     const port = await AsyncStorage.getItem('port') || "5001";
-    
+
     exports.constants.ipAddress = ipAddress;
     exports.constants.port = port;
 };
