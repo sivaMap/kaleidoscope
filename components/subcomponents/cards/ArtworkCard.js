@@ -11,12 +11,14 @@ const ArtworkCard = memo(function ArtworkCard(props) {
     return (
         <TouchableOpacity
             className={`rounded-lg shadow-md p-2 mb-6 ${isSelected ? "bg-white" : ""}`}
+            // className={`rounded-lg shadow-md p-2 mb-6`}
             onPress={() => {
                 isSelected ? handleArtificateUndoSelect({ artifact }) : handleArtifactSelect({ artifact });
             }}
         >
             <View className="w-40">
-                <View className="h-40 w-40 rounded-lg mb-2">
+                <View className={`h-40 w-40 rounded-lg mb-2 ${isSelected ? "bg-white" : ""}`}>
+                {/* <View className={`h-40 w-40 rounded-lg mb-2 ${isSelected ? "border-8 border-white" : ""}`}> */}
                     <Image
                         source={{ uri: `${constants.backendUrl}/artThumbnail/${artifact?.displayName}.png?timestamp=${new Date().getMinutes()}` }}
                         alt={artifact?.displayName}
@@ -24,6 +26,7 @@ const ArtworkCard = memo(function ArtworkCard(props) {
                     />
                 </View>
                 <Text className={`text-center text-xs ${fontsLoaded ? "font-gBold" : ""} ${isSelected ? "text-black" : "text-white"}`}>{artifact?.displayName}</Text>
+                {/* <Text className={`text-center text-xs ${fontsLoaded ? "font-gBold" : ""} text-white`}>{artifact?.displayName}</Text> */}
             </View>
         </TouchableOpacity>
     );
