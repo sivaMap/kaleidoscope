@@ -22,7 +22,7 @@ const VolumeBar = () => {
             body: JSON.stringify({
                 control: action === "play" ? "play" : "pause",
             }),
-        }).catch(error => console.error('Error fetching apps:', error));
+        }).catch(error => console.error('Error play:', error));
     };
 
     const svgPlay = (
