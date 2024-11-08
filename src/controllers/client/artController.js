@@ -182,9 +182,9 @@ const startArtShow = asyncHandler(async (req, res) => {
                 const fileToPlay = randomValue > 0.5 ? selectedFileName : updatedFileName;
 
                 const exitStatus = await playPlayListTcpPlayer(clientPL, fileToPlay, selectedArtificats, activeWebSocketClients);
-                if (exitStatus === "exit") {
-                    break;
-                }
+                // if (exitStatus === "exit") {
+                //     break;
+                // }
             }
         } catch (error) {
             // console.error('Error playing files:', error);            
