@@ -51,14 +51,24 @@ const startPlayerIfNeeded = async ({ PlayPalCommand }) => {
 
 // Function to play a file on the TCP-connected player
 function playPlayListTcpPlayer(client, filePath, selectedArtificats, activeWebSocketClients) {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         // Format the command to play the file
         const command = JSON.stringify({ CMD: 'open_url', StringParameter: filePath });
 
         // Send command to play the file
-        client.write(command, (err) => {
-            if (err) {}
-        });
+        // client.write(command, (err) => {
+        //     if (err) {}
+        // });
+        const writeAsync = (client, command) => {
+            return new Promise((resolve, reject) => {
+                client.write(command, (err) => {
+                    if (err) { }
+                    else resolve();
+                });
+            });
+        };        
+        await writeAsync(client, command);
+
         client.write(JSON.stringify({ CMD: "set_looping", IntParameter: "0" }));
 
         const intervalId = setInterval(() => {
@@ -71,7 +81,7 @@ function playPlayListTcpPlayer(client, filePath, selectedArtificats, activeWebSo
         client.on('data', (data) => {
             try {
                 const response = data.toString();
-                const parsedResponse = JSON.parse(response)               
+                const parsedResponse = JSON.parse(response)
 
                 const runnningFilename = getFilenameWithoutExtension(parsedResponse?.CurrentMediaFile)
                 // To detect unexpected playList exit
@@ -84,7 +94,7 @@ function playPlayListTcpPlayer(client, filePath, selectedArtificats, activeWebSo
                 }
                 if (!isArtExit) {
                     clearInterval(intervalId);
-                    console.log("exiting",runnningFilename)
+                    console.log("exiting", runnningFilename)
                     resolve("exit");
                 }
 
@@ -119,10 +129,10 @@ const startVlcInitial = () => {
     sendTcpCommand(PlayPalCommand)
 }
 
-const forceStopPlayPal = async () => {    
+const forceStopPlayPal = async () => {
     // await exec('taskkill /F /IM vlc.exe');
     // exec('taskkill /F /IM OpezeePlayer.exe');
-    exec('taskkill /IM  OpezeePlayer.exe');    
+    exec('taskkill /IM  OpezeePlayer.exe');
 }
 
 // setting ffprobe path to ffmpeg
