@@ -55,7 +55,7 @@ const CuratedPlay = ({ setLoadCurate, selectedShow, setSelectedShow, shows }) =>
                     backgroundColor: 'rgba(0,0,0,0.5)',
                 }}
                 // className="bg-black bg-opacity-50 w-3/12 p-4 rounded-lg">
-                className=" p-4 rounded-lg flex-1 mr-5 -ml-5 h-[560]">
+                className="p-4 rounded-lg flex-1 mr-5 -ml-5 h-[560]">
                 <View className="  h-[540] flex-col">
                     <Text className={`text-2xl mb-2 text-center text-white ${fontsLoaded ? "font-gBold" : ""}`}>
                         Currently Showing
@@ -78,7 +78,7 @@ const CuratedPlay = ({ setLoadCurate, selectedShow, setSelectedShow, shows }) =>
                         className="mt-4 px-6 py-2 border border-white rounded-full"
                     />
                 </View> */}
-                    < View className="absolute bottom-3 ml-5 mt-4 w-[90%] flex-row justify-between" >
+                    < View className="absolute bottom-3 ml-5 mt-4 mb-1  w-[90%] flex-row justify-between" >                        
                         <TouchableOpacity
                             className="border-white border-2 rounded-full px-9 py-2"
                             onPress={handleEndShow}
