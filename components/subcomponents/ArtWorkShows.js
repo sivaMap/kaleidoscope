@@ -7,7 +7,7 @@ import { getBasename, getFilenameWithoutExtension } from '../../userFunctions';
 import ProgressBar from './ProgressBar ';
 
 const ArtWorkShows = ({ selectedArtificats, setSelectedArtifacts, setLoadArt }) => {
-    const { toggleShowRun, fontsLoaded, navigateHomeScreen } = useKaleidoCrud();
+    const { toggleShowRun, fontsLoaded, setLoadName } = useKaleidoCrud();
     const [currentFileName, setCurrentFileName] = useState('');
     const [status, setStatus] = useState(null);
 
@@ -26,6 +26,22 @@ const ArtWorkShows = ({ selectedArtificats, setSelectedArtifacts, setLoadArt }) 
         setLoadArt(constants.loadArt.show);
         toggleShowRun();
     };
+
+    const navigateHomeScreen = () => {
+        fetch(`${constants.backendUrl}/art/control`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                "control": "stop"
+            }),
+        })
+            .catch(error => console.error('Error stoping Show:', error));
+        setLoadName(constants.loadScreen.default);
+        setSelectedArtifacts([]);
+        toggleShowRun();
+    }
 
     useEffect(() => {
         fetch(`${constants.backendUrl}/art/start`, {
