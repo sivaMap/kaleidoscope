@@ -19,6 +19,7 @@ function sendTcpCommand({ PlayPalCommand }) {
         // Handle data from the server (response)
         client.on('data', (data) => {
             resolve(data.toString());
+            client.end();
         });
 
         // Handle errors
@@ -112,7 +113,8 @@ const startCurate = asyncHandler(async (req, res) => {
 const controlApplication = asyncHandler(async (req, res) => {
     const { control } = req.body;
     const isRunning = await isAppOpen("OpezeePlayer.exe");
-    if (!isRunning) {        
+    if (!isRunning) {     
+        res.status(200).json({ "Message": "Control Success" });   
         return
     }
 

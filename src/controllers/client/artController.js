@@ -24,12 +24,14 @@ function sendTcpCommand({ PlayPalCommand }) {
 
         client.on('data', (data) => {
             resolve(data.toString());
+            client.end();
         });
 
         // Handle errors
         client.on('error', (err) => {
             console.log(err.message)
         });
+
     });
 }
 
@@ -106,6 +108,8 @@ const startArtShow = asyncHandler(async (req, res) => {
     const { selectedArtificats } = req.body;
     const isRunning = await isAppOpen("OpezeePlayer.exe");
     if (!isRunning) {
+        console.log("player not runnning")
+        res.status(200).json({ "message": "Success" });
         return
     }
 
@@ -182,13 +186,14 @@ const startArtShow = asyncHandler(async (req, res) => {
                 const fileToPlay = randomValue > 0.5 ? selectedFileName : updatedFileName;
 
                 const exitStatus = await playPlayListTcpPlayer(clientPL, fileToPlay, selectedArtificats, activeWebSocketClients);
-                // if (exitStatus === "exit") {
-                //     break;
-                // }
+                if (exitStatus === "exit") {
+                    break;
+                }
             }
         } catch (error) {
             // console.error('Error playing files:', error);            
         } finally {
+            console.log("finallyEnd")
             const command = JSON.stringify({ CMD: 'open_url', StringParameter: defaultVideo });
             clientPL.write(command, (err) => {
                 if (err);
@@ -209,6 +214,7 @@ const controlApplication = asyncHandler(async (req, res) => {
     const { control } = req.body;
     const isRunning = await isAppOpen("OpezeePlayer.exe");
     if (!isRunning) {
+        res.status(200).json({ "Message": "Control Success" });
         return
     }
 
