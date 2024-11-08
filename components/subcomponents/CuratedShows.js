@@ -29,6 +29,8 @@ const CuratedShows = () => {
             return;
         }
         setSelectedShow(showName);
+        setLoadCurate(constants.loadCurate.play);
+        toggleShowRun();
     };
 
     // Either one of Three bodies or cases will be loaded based on loadName state
@@ -70,7 +72,7 @@ const CuratedShows = () => {
                             ))}
                         </View>
                         {/* Start Show Button */}
-                        < View className="absolute -bottom-16 right-2  mt-4" >
+                        {/* < View className="absolute -bottom-16 right-2  mt-4" >
                             <TouchableOpacity
                                 onPress={() => {
                                     if (isCuratedShowSelected) return;
@@ -87,7 +89,7 @@ const CuratedShows = () => {
                                     </Text>
                                 </View>
                             </TouchableOpacity>
-                        </View >
+                        </View > */}
                     </View >
                 );
                 break;
