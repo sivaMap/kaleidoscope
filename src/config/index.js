@@ -13,8 +13,8 @@ module.exports = {
     artVideoUrl: process.env.ARTVIDEOURL,
     applicationPath: process.env.APPLICATION,
     defaultVideo: process.env.DEFAULTVIDEO,
-    vlcPort: process.env.VLCPORT,
-    vlcIp: process.env.VLCIP,
-    vlcUsername: process.env.VLCUSERNAMVE,
-    vlcPassword: process.env.VLCPASSWORD
+    vlcPort: process.env.PLAYERPORT,
+    vlcIp: "127.0.0.1",
+    vlcUsername: "",
+    vlcPassword: "123456789"
 };
