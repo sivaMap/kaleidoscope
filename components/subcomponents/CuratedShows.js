@@ -42,7 +42,7 @@ const CuratedShows = () => {
                     <View className="relative flex flex-col  h-5/6 mt-4" key={"CurateShowDefault"}>
                         {/* Header Section */}
                         <View className="flex-row items-center space-x-4">
-                            <TouchableOpacity className="bg-black py-2 px-3 rounded-full" onPress={navigateHomeScreen}>
+                            <TouchableOpacity className="bg-black py-2.5 px-3.5 rounded-full" onPress={navigateHomeScreen}>
                                 {/* SVG Back Arrow */}
                                 <SvgXml
                                     xml={`<svg xmlns="http://www.w3.org/2000/svg" width="11" height="18" viewBox="0 0 15 24" fill="none">
