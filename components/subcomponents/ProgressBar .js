@@ -75,7 +75,7 @@
 // export default ProgressBar;
 
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import Slider from '@react-native-community/slider';
 import { useKaleidoCrud } from '../../context/kaleidoscopeCrudContext';
 const convertSeconds = (seconds) => {
@@ -123,6 +123,7 @@ const ProgressBar = (props) => {
             // disabled={true}               
 
             />
+            <View style={styles.track} />
             {/* </TouchableWithoutFeedback> */}
             <View className="flex-row items-center justify-between px-4">
                 <TimeDisplay totalSeconds={status?.PlaybackTime} />
@@ -133,3 +134,15 @@ const ProgressBar = (props) => {
 };
 
 export default ProgressBar;
+
+const styles = StyleSheet.create({
+    track: {
+        position: 'absolute',
+        bottom: 31,
+        left: 15,
+        width: "97.5%",
+        height: 3,
+        backgroundColor: 'white',
+        borderRadius: 3
+    },
+});
