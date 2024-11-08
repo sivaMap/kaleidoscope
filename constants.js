@@ -15,8 +15,7 @@ exports.constants = {
 }
 
 exports.updateConstants = async () => {
-    // const ipAddress = await AsyncStorage.getItem('ipAddress') || '0.0.0.0' ;
-    const ipAddress = "192.168.68.128";
+    const ipAddress = await AsyncStorage.getItem('ipAddress') || '0.0.0.0' ;    
     const port = await AsyncStorage.getItem('port') || "5001";
 
     exports.constants.ipAddress = ipAddress;
