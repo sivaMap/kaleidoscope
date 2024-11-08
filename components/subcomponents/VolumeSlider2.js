@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import Slider from '@react-native-community/slider'
 // import { useDebounce } from '../../hooks/useDebounce';
@@ -41,6 +41,8 @@ const VolumeSlider2 = ({ isShowRunning }) => {
     // useDebounce(debounceFunction, debounceTiming, [volume]);
 
     useEffect(() => {
+        if (constants.backendUrl === "http://0.0.0.0:5001") return
+
         fetch(`${constants.backendUrl}/art/control`, {
             method: 'POST',
             headers: {
