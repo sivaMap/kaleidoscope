@@ -7,7 +7,7 @@ import { getBasename, getFilenameWithoutExtension } from '../../userFunctions';
 import ProgressBar from './ProgressBar ';
 
 const ArtWorkShows = ({ selectedArtificats, setSelectedArtifacts, setLoadArt }) => {
-    const { toggleShowRun, fontsLoaded } = useKaleidoCrud();
+    const { toggleShowRun, fontsLoaded, navigateHomeScreen } = useKaleidoCrud();
     const [currentFileName, setCurrentFileName] = useState('');
     const [status, setStatus] = useState(null);
 
@@ -74,11 +74,18 @@ const ArtWorkShows = ({ selectedArtificats, setSelectedArtifacts, setLoadArt }) 
                     Artworks in the Current Show
                 </Text>
                 < View
-                // className="absolute -bottom-24 right-4  mt-4 "
+                    className="flex-row gap-5"
                 >
                     <TouchableOpacity
                         className="border-white border-2 rounded-full px-3 py-2"
                         onPress={handleEndShow}
+                    >
+                        <Text className={`text-white px-5 py-0 text-lg ${fontsLoaded ? "font-gBold" : ""}`}>
+                            Back</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        className="border-white border-2 rounded-full px-3 py-2"
+                        onPress={navigateHomeScreen}
                     >
                         <Text className={`text-white px-3 py-0 text-lg ${fontsLoaded ? "font-gBold" : ""}`}>
                             End Show</Text>

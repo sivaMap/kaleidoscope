@@ -6,7 +6,7 @@ import { useKaleidoCrud } from "../../context/kaleidoscopeCrudContext";
 
 const CuratedPlay = ({ setLoadCurate, selectedShow, setSelectedShow, shows }) => {
     const [currentShow, setCurrentShow] = useState(selectedShow);
-    const { toggleShowRun, fontsLoaded } = useKaleidoCrud();
+    const { toggleShowRun, fontsLoaded, navigateHomeScreen } = useKaleidoCrud();
     const minutes = Math.floor(currentShow?.duration / 60);
     const seconds = Math.floor(currentShow?.duration % 60);
 
@@ -78,10 +78,19 @@ const CuratedPlay = ({ setLoadCurate, selectedShow, setSelectedShow, shows }) =>
                         className="mt-4 px-6 py-2 border border-white rounded-full"
                     />
                 </View> */}
-                    < View className="absolute bottom-3 ml-5 mt-4 w-[90%]" >
+                    < View className="absolute bottom-3 ml-5 mt-4 w-[90%] flex-row justify-between" >
                         <TouchableOpacity
-                            className="border-white border-2 rounded-full px-4 py-2"
+                            className="border-white border-2 rounded-full px-9 py-2"
                             onPress={handleEndShow}
+                        >
+                            <Text className={`text-white text-center py-0 text-lg ${fontsLoaded ? "font-gBold" : ""}`}
+                            // style={{ fontFamily: 'Geometria' }}
+                            >
+                                Back</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            className="border-white border-2 rounded-full px-9 py-2"
+                            onPress={navigateHomeScreen}
                         >
                             <Text className={`text-white text-center py-0 text-lg ${fontsLoaded ? "font-gBold" : ""}`}
                             // style={{ fontFamily: 'Geometria' }}
