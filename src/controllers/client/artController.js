@@ -29,7 +29,7 @@ function sendTcpCommand({ PlayPalCommand }) {
 
         // Handle errors
         client.on('error', (err) => {
-            console.log(err.message)
+            // console.log(err.message)
         });
 
     });
@@ -106,12 +106,12 @@ const getClientVideos = asyncHandler(async (req, res) => {
 //access public
 const startArtShow = asyncHandler(async (req, res) => {
     const { selectedArtificats } = req.body;
-    const isRunning = await isAppOpen("OpezeePlayer.exe");
-    if (!isRunning) {
-        console.log("player not runnning")
-        res.status(200).json({ "message": "Success" });
-        return
-    }
+    // const isRunning = await isAppOpen("OpezeePlayer.exe");
+    // if (!isRunning) {
+    //     console.log("player not runnning")
+    //     res.status(200).json({ "message": "Success" });
+    //     return
+    // }
 
     // console.log(selectedArtificats)
 
@@ -175,36 +175,37 @@ const startArtShow = asyncHandler(async (req, res) => {
     // }
 
     // vlc.emptyPlaylist()
+    const palyingArtifacts = [...selectedArtificats, ...selectedArtificats, ...selectedArtificats];
 
     const clientPL = net.createConnection({ port: 17568 }, async () => {
         try {
             const randomValue = randomBytes(1)[0] / 256;
 
-            for (const selectedArtificat of selectedArtificats) {
+            for (const selectedArtificat of palyingArtifacts) {
                 const selectedFileName = selectedArtificat?.filename
                 const updatedFileName = selectedFileName.replace('\\v1\\', '\\v2\\');
                 const fileToPlay = randomValue > 0.5 ? selectedFileName : updatedFileName;
 
-                const exitStatus = await playPlayListTcpPlayer(clientPL, fileToPlay, selectedArtificats, activeWebSocketClients);
+                const exitStatus = await playPlayListTcpPlayer(clientPL, fileToPlay, palyingArtifacts, activeWebSocketClients);
                 if (exitStatus === "exit") {
                     break;
                 }
             }
         } catch (error) {
-            // console.error('Error playing files:', error);            
+            console.error('Error playing files:', error);            
         } finally {
-            console.log("finallyEnd")
+            // console.log("finallyEnd")
             const command = JSON.stringify({ CMD: 'open_url', StringParameter: defaultVideo });
             clientPL.write(command, (err) => {
                 if (err);
             })
             clientPL.end();
+            res.status(200).send({ "message": "Success" });
         }
     });
 
 
 
-    res.status(200).send({ "message": "Success" });
 });
 
 //@desc Control Vlc
@@ -212,11 +213,11 @@ const startArtShow = asyncHandler(async (req, res) => {
 //access public
 const controlApplication = asyncHandler(async (req, res) => {
     const { control } = req.body;
-    const isRunning = await isAppOpen("OpezeePlayer.exe");
-    if (!isRunning) {
-        res.status(200).json({ "Message": "Control Success" });
-        return
-    }
+    // const isRunning = await isAppOpen("OpezeePlayer.exe");
+    // if (!isRunning) {
+    //     res.status(200).json({ "Message": "Control Success" });
+    //     return
+    // }
 
     switch (control) {
         case "pause":

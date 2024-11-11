@@ -56,20 +56,20 @@ function playPlayListTcpPlayer(client, filePath, selectedArtificats, activeWebSo
         const command = JSON.stringify({ CMD: 'open_url', StringParameter: filePath });
 
         // Send command to play the file
-        // client.write(command, (err) => {
-        //     if (err) {}
-        // });
-        const writeAsync = (client, command) => {
-            return new Promise((resolve, reject) => {
-                client.write(command, (err) => {
-                    if (err) { }
-                    else resolve();
-                });
-            });
-        };        
-        await writeAsync(client, command);
-
+        client.write(command, (err) => {
+            if (err) { }
+        });
         client.write(JSON.stringify({ CMD: "set_looping", IntParameter: "0" }));
+        // const writeAsync = (client, command) => {
+        //     return new Promise((resolve, reject) => {
+        //         client.write(command, (err) => {
+        //             if (err) { }
+        //             else resolve();
+        //         });
+        //     });
+        // };        
+        // await writeAsync(client, command);       
+
 
         const intervalId = setInterval(() => {
             client.write(JSON.stringify({
@@ -94,7 +94,7 @@ function playPlayListTcpPlayer(client, filePath, selectedArtificats, activeWebSo
                 }
                 if (!isArtExit) {
                     clearInterval(intervalId);
-                    console.log("exiting", runnningFilename)
+                    // console.log("exiting", runnningFilename)
                     resolve("exit");
                 }
 
@@ -108,18 +108,16 @@ function playPlayListTcpPlayer(client, filePath, selectedArtificats, activeWebSo
             activeWebSocketClients.forEach((ws) => {
                 ws.close(1000, 'Playlist End');
             });
-            console.log("ending")
+            // console.log("ending")
         })
 
-        client.on('error', (err) => console.log(err));
+        client.on('error', (err) => { });
     });
 }
 
 const startVlcInitial = () => {
     const applicationPath = path.resolve(applicationPathConfig);
-    // const command = `"${applicationPath}" "${defaultVideo}" --no-video-title-show --qt-minimal-view --loop --qt-continue=0 --fullscreen`;
-    const command = `"${applicationPath}" "${defaultVideo}" --no-video-title-show --qt-minimal-view --loop --qt-continue=0 --fullscreen --no-qt-fs-controller`;
-    // const command = `"${applicationPath}" "${defaultVideo}" --no-video-title-show --loop --qt-continue=0 --fullscreen `;
+    const command = `"${applicationPath}"`;
 
     exec(command);
     const PlayPalCommand = JSON.stringify({
@@ -127,6 +125,30 @@ const startVlcInitial = () => {
         StringParameter: filename.replace(/\\/g, '/'),
     });
     sendTcpCommand(PlayPalCommand)
+}
+const startPlayPalInitial = () => {
+    const applicationPath = path.resolve(applicationPathConfig);
+
+    const command = `"${applicationPath}" "${defaultVideo}" --no-video-title-show --qt-minimal-view --loop --qt-continue=0 --fullscreen --no-qt-fs-controller`;
+
+    const PlayPalCommand = JSON.stringify({
+        CMD: "open_url",
+        StringParameter: defaultVideo.replace(/\\/g, '/'),
+    });
+
+    exec(command);
+    const interval = setInterval(async () => {
+        const result = await isAppOpen();
+        if (result) {
+            sendTcpCommand({ PlayPalCommand })
+            clearInterval(interval);
+        }
+    }, 1000);
+
+    // const PlayPalCommand = JSON.stringify({
+    //     CMD: command,
+    //     StringParameter: filename.replace(/\\/g, '/'),
+    // });    
 }
 
 const forceStopPlayPal = async () => {
@@ -155,5 +177,5 @@ module.exports = {
     isAppOpen, getVideoInfo,
     startVlcInitial,
     startPlayerIfNeeded, playPlayListTcpPlayer,
-    forceStopPlayPal
+    forceStopPlayPal, startPlayPalInitial
 }

@@ -9,6 +9,7 @@ const cookieParser = require('cookie-parser');
 const credentials = require("./util/middleware/credentials");
 const { artVideoUrl, curateVideoUrl, PORT } = require("./config");
 // const { forceStopVlc, startVlcInitial } = require("./controllers/client/vlcFunctions");
+const { startPlayPalInitial } = require("./controllers/client/PlayPalFunctions");
 
 const initializeServer = async () => {
     const app = express();
@@ -16,7 +17,7 @@ const initializeServer = async () => {
     const port = PORT || 5000;
     //Starting vlc player
     // startVlcInitial();
-
+    startPlayPalInitial();
     app.use(credentials);
     // app.use(cors(corsOptions));
     app.use(cors());
