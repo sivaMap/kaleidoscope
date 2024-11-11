@@ -50,7 +50,7 @@ const startPlayerIfNeeded = async ({ PlayPalCommand }) => {
 }
 
 // Function to play a file on the TCP-connected player
-function playPlayListTcpPlayer(client, filePath, selectedArtificats, activeWebSocketClients) {
+function playPlayListTcpPlayer(client, filePath, selectedArtificats, activeWebSocketClients,intervalId) {
     return new Promise(async (resolve, reject) => {
         // Format the command to play the file
         const command = JSON.stringify({ CMD: 'open_url', StringParameter: filePath });
@@ -71,38 +71,41 @@ function playPlayListTcpPlayer(client, filePath, selectedArtificats, activeWebSo
         // await writeAsync(client, command);       
 
 
-        const intervalId = setInterval(() => {
-            client.write(JSON.stringify({
-                CMD: "get_playback_info",
-            }));
-        }, 1000)
+        // const intervalId = setInterval(() => {
+        //     console.log("intervaling")
+        //     client.write(JSON.stringify({
+        //         CMD: "get_playback_info",
+        //     }));
+        // }, 1000)
 
         // Listen for completion or any other response that indicates the file has finished
-        client.on('data', (data) => {
-            try {
-                const response = data.toString();
-                const parsedResponse = JSON.parse(response)
+//         client.on('data', (data) => {
+//             try {
+//                 const response = data.toString();
+//                 const parsedResponse = JSON.parse(response)
 
-                const runnningFilename = getFilenameWithoutExtension(parsedResponse?.CurrentMediaFile)
-                // To detect unexpected playList exit
-                const isArtExit = selectedArtificats.some(selectedArtificat => selectedArtificat?.displayName === runnningFilename)
+//                 const runnningFilename = getFilenameWithoutExtension(parsedResponse?.CurrentMediaFile)
+//                 // To detect unexpected playList exit
+//                 const isArtExit = selectedArtificats.some(selectedArtificat => selectedArtificat?.displayName === runnningFilename)
+// console.log("clientData")
+//                 // Stop the interval
+//                 if (parsedResponse?.PlaybackState === "Stopped" || parsedResponse?.PlaybackTime > (parsedResponse?.MediaDuration - 1)) {
+//                     // clearInterval(intervalId);
+//                     // clearImmediate(intervalId)
+//                     resolve("completed");
+//                 }
+//                 if (!isArtExit) {
+//                     // clearInterval(intervalId);
+//                     // clearImmediate(intervalId);
+//                     console.log("exiting", runnningFilename,selectedArtificats)
+//                     resolve("exit");
+//                 }
 
-                // Stop the interval
-                if (parsedResponse?.PlaybackState === "Stopped" || parsedResponse?.PlaybackTime > (parsedResponse?.MediaDuration - 1)) {
-                    clearInterval(intervalId);
-                    resolve("completed");
-                }
-                if (!isArtExit) {
-                    clearInterval(intervalId);
-                    // console.log("exiting", runnningFilename)
-                    resolve("exit");
-                }
-
-                activeWebSocketClients.forEach(ws => {
-                    ws.send(response);
-                });
-            } catch (error) { }
-        });
+//                 activeWebSocketClients.forEach(ws => {
+//                     ws.send(response);
+//                 });
+//             } catch (error) { }
+//         });
 
         client.on('end', () => {
             activeWebSocketClients.forEach((ws) => {
@@ -111,7 +114,7 @@ function playPlayListTcpPlayer(client, filePath, selectedArtificats, activeWebSo
             // console.log("ending")
         })
 
-        client.on('error', (err) => { });
+        // client.on('error', (err) => { });
     });
 }
 

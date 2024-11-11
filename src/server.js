@@ -17,7 +17,7 @@ const initializeServer = async () => {
     const port = PORT || 5000;
     //Starting vlc player
     // startVlcInitial();
-    startPlayPalInitial();
+    // startPlayPalInitial();
     app.use(credentials);
     // app.use(cors(corsOptions));
     app.use(cors());

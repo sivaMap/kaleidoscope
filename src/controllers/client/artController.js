@@ -10,6 +10,7 @@ const { getVideoInfo } = require("./vlcFunctions");
 const { applicationPath: applicationPathConfig } = require("../../config");
 const { randomBytes } = require('crypto');
 const { playPlayListTcpPlayer, forceStopPlayPal, isAppOpen } = require("./PlayPalFunctions");
+const { getFilenameWithoutExtension } = require("./calcFunctions");
 
 
 // let client = null;
@@ -29,7 +30,7 @@ function sendTcpCommand({ PlayPalCommand }) {
 
         // Handle errors
         client.on('error', (err) => {
-            // console.log(err.message)
+            console.log(err.message)
         });
 
     });
@@ -100,110 +101,91 @@ const getClientVideos = asyncHandler(async (req, res) => {
         videoMetadata
     )
 });
-
+let intervalId;
 //@desc Start Multiple video via creating playlist
 //@route POST /art/start
 //access public
 const startArtShow = asyncHandler(async (req, res) => {
     const { selectedArtificats } = req.body;
-    // const isRunning = await isAppOpen("OpezeePlayer.exe");
-    // if (!isRunning) {
-    //     console.log("player not runnning")
-    //     res.status(200).json({ "message": "Success" });
-    //     return
-    // }
 
-    // console.log(selectedArtificats)
 
-    // if (!isRunning) {
-    //     const applicationPath = path.resolve(applicationPathConfig);
-    //     // const command = `"${applicationPath}" --fullscreen`;
-    //     const command = `"${applicationPath}" --no-video-title-show --qt-minimal-view --loop --qt-continue=0 --fullscreen --no-qt-fs-controller`;
-    //     exec(command);
-
-    //     const pollInterval = 500;
-    //     const maxAttempts = 10;
-    //     let attempt = 0;
-
-    //     const checkVLCReady = setInterval(async () => {
-    //         try {
-
-    //             // const playList = await vlc.getPlaylist();
-    //             const isRunning = await isAppOpen();
-    //             if (isRunning) {
-    //                 vlc.emptyPlaylist();
-    //                 const randomValue = randomBytes(1)[0] / 256;
-
-    //                 selectedArtificats.forEach(selectedArtificat => {
-    //                     const selectedFileName = selectedArtificat?.filename
-    //                     const updatedFileName = selectedFileName.replace('\\v1\\', '\\v2\\');
-    //                     const fileToPlay = randomValue > 0.5 ? selectedFileName : updatedFileName;
-    //                     vlc.addToPlaylist(fileToPlay);
-    //                 })
-
-    //                 const playList = await vlc.getPlaylist();
-    //                 vlc.playFromPlaylist(playList[0].id);
-    //                 clearInterval(checkVLCReady);
-    //             }
-    //         } catch (error) {
-    //             // console.log("catch", attempt)
-    //             attempt++;
-    //             if (attempt >= maxAttempts) {
-    //                 clearInterval(checkVLCReady);
-    //             }
-    //         }
-    //     }, pollInterval);
-
-    //     // setTimeout(async () => {
-    //     //     try {
-    //     //         vlc.emptyPlaylist()
-    //     //         selectedArtificats.forEach(selectedArtificat => {
-    //     //             vlc.addToPlaylist(selectedArtificat?.filename
-    //     //             );
-    //     //         })
-
-    //     //         const playList = await vlc.getPlaylist();
-    //     //         vlc.playFromPlaylist(playList[0].id);
-
-    //     //     } catch (error) {
-    //     //         return false;
-    //     //     }
-    //     // }, 100);
-
-    //     res.status(200).json({ "message": "Success" })
-    //     return
-    // }
-
-    // vlc.emptyPlaylist()
-    const palyingArtifacts = [...selectedArtificats, ...selectedArtificats, ...selectedArtificats];
+    // const palyingArtifacts = [...selectedArtificats, ...selectedArtificats, ...selectedArtificats];
+    const palyingArtifacts = [...selectedArtificats];
 
     const clientPL = net.createConnection({ port: 17568 }, async () => {
         try {
             const randomValue = randomBytes(1)[0] / 256;
 
+
+            let round = 1;
+
+            clientPL.on('data', (data) => {
+                try {
+                    const response = data.toString();
+                    const parsedResponse = JSON.parse(response)
+    
+                    const runnningFilename = getFilenameWithoutExtension(parsedResponse?.CurrentMediaFile)
+                    // To detect unexpected playList exit
+                    const isArtExit = selectedArtificats.some(selectedArtificat => selectedArtificat?.displayName === runnningFilename)
+    console.log("clientData")
+                    // Stop the interval
+                    if (parsedResponse?.PlaybackState === "Stopped" || parsedResponse?.PlaybackTime > (parsedResponse?.MediaDuration - 1)) {
+                        // clearInterval(intervalId);
+                        // clearImmediate(intervalId)
+                        // resolve("completed");
+                    }
+                    if (!isArtExit) {
+                        // clearInterval(intervalId);
+                        // clearImmediate(intervalId);
+                        console.log("exiting", runnningFilename,selectedArtificats)
+                        // resolve("exit");
+                    }
+    
+                    // activeWebSocketClients.forEach(ws => {
+                    //     ws.send(response);
+                    // });
+                } catch (error) {
+
+                    console.log("error",error?.message)
+                 }
+            });
+
             for (const selectedArtificat of palyingArtifacts) {
+                console.log({ round: round++ })
+                if (!intervalId) {
+                    intervalId = setInterval(() => {
+                        console.log("intervaling")
+                        clientPL.write(JSON.stringify({
+                            CMD: "get_playback_info",
+                        }));
+                    }, 1000)
+                }
                 const selectedFileName = selectedArtificat?.filename
                 const updatedFileName = selectedFileName.replace('\\v1\\', '\\v2\\');
                 const fileToPlay = randomValue > 0.5 ? selectedFileName : updatedFileName;
 
-                const exitStatus = await playPlayListTcpPlayer(clientPL, fileToPlay, palyingArtifacts, activeWebSocketClients);
-                if (exitStatus === "exit") {
-                    break;
-                }
+                const exitStatus = await playPlayListTcpPlayer(clientPL, fileToPlay, palyingArtifacts, activeWebSocketClients, intervalId);
+                console.log(exitStatus, intervalId)
+                // if (exitStatus === "exit") {
+                //     break;
+                // }
+                // clearInterval(intervalId)
             }
-        } catch (error) {
-            console.error('Error playing files:', error);            
-        } finally {
-            // console.log("finallyEnd")
-            const command = JSON.stringify({ CMD: 'open_url', StringParameter: defaultVideo });
-            clientPL.write(command, (err) => {
-                if (err);
-            })
             clientPL.end();
-            res.status(200).send({ "message": "Success" });
+        } catch (error) {
+            console.error('Error playing files:', error);
+        } finally {
+            console.log("finallyEnd")
+            const command = JSON.stringify({ CMD: 'open_url', StringParameter: defaultVideo });
+            sendTcpCommand({ PlayPalCommand: command });
+            // clientPL.write(command, (err) => {
+            //     if (err);
+            // })
+            // clientPL.end();
         }
     });
-
+    
+    res.status(200).send({ "message": "Success" });
 
 
 });
@@ -243,6 +225,8 @@ const controlApplication = asyncHandler(async (req, res) => {
             sendTcpCommand({ PlayPalCommand: PlayPalVolCommand });
             break;
         case "stop":
+            clearImmediate(intervalId);
+            intervalId = null;
             const commandStop = "open_url";
             const PlayPalStopCommand = JSON.stringify({
                 CMD: commandStop,
