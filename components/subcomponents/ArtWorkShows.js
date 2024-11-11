@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Button } from 'react-native';
 import ArtShowCard from './cards/ArtShowCard';
 import { useKaleidoCrud } from '../../context/kaleidoscopeCrudContext';
@@ -10,6 +10,24 @@ const ArtWorkShows = ({ selectedArtificats, setSelectedArtifacts, setLoadArt }) 
     const { toggleShowRun, fontsLoaded, setLoadName } = useKaleidoCrud();
     const [currentFileName, setCurrentFileName] = useState('');
     const [status, setStatus] = useState(null);
+    const startTimeRef = useRef(0);
+    const totalDuration = selectedArtificats.reduce((sum, video) => sum + video.duration, 0);
+    let cumulativeTime = 0;
+    const cumulativeDurations = selectedArtificats.map(video => {
+        const result = { displayName: video.displayName, start_time: cumulativeTime };
+        cumulativeTime += video.duration;
+        return result;
+    });    
+    function getStartTime(cumulativeDurations, displayName) {
+        const video = cumulativeDurations.find(video => video.displayName === displayName);
+        console.log(video)
+        return video ? video.start_time : -1; // Return -1 if displayName not found
+    }
+    const interTime=getStartTime(cumulativeDurations, currentFileName)+status?.PlaybackTime
+    // const startTime= startTime>interTime? startTime:interTime;
+    if (interTime > startTimeRef.current) {
+        startTimeRef.current = interTime;
+    }
 
     const handleEndShow = () => {
         fetch(`${constants.backendUrl}/art/control`, {
@@ -58,7 +76,7 @@ const ArtWorkShows = ({ selectedArtificats, setSelectedArtifacts, setLoadArt }) 
     }, []);
 
     useEffect(() => {
-        const ws = new WebSocket('ws://192.168.68.128:8082');
+        const ws = new WebSocket(`ws://${constants.ipAddress}:8082`);
 
         ws.onmessage = (event) => {
             // console.log(event.data)
@@ -75,7 +93,7 @@ const ArtWorkShows = ({ selectedArtificats, setSelectedArtifacts, setLoadArt }) 
         };
         ws.onclose = () => {
             console.log('WebSocket connection closed');
-            handleEndShow();
+            // handleEndShow();
         };
 
         return () => {
@@ -158,7 +176,7 @@ const ArtWorkShows = ({ selectedArtificats, setSelectedArtifacts, setLoadArt }) 
             </View > */}
             {
                 <View className="relative -bottom-72">
-                    <ProgressBar status={status} />
+                    <ProgressBar status={status} totalDuration={totalDuration} cumulativeDurations={cumulativeDurations} currentFileName={currentFileName} startTime={startTimeRef.current}/>
                 </View>
             }
         </View>

@@ -16,8 +16,29 @@ export default function App() {
     const fncall = async () => {
 
       await updateConstants();
+      // fetch(`${constants.backendUrl}/art/control`, {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify({
+      //     "control": "needStart",
+      //   }),
+      // })
+      //   .catch(error => console.error('Error fetching apps:', error));
     }
     fncall();
+console.log("makerequst")
+    // fetch(`${backendUrl}/art/control`, {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify({
+    //     "control": "needStart",
+    //   }),
+    // })
+    //   .catch(error => console.error('Error fetching apps:', error));
 
   }, [])
 

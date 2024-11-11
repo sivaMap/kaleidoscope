@@ -85,7 +85,7 @@ const convertSeconds = (seconds) => {
 
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
-    const secs = seconds % 60;
+    const secs = Math.floor(seconds % 60);
 
     return { hours, minutes, seconds: secs };
 };
@@ -102,9 +102,18 @@ const TimeDisplay = ({ totalSeconds }) => {
     );
 };
 
-const ProgressBar = (props) => {
-    const { status } = props
+function getStartTime(cumulativeDurations, displayName) {
+    const video = cumulativeDurations.find(video => video.displayName === displayName);
+    console.log(video)
+    return video ? video.start_time : -1; // Return -1 if displayName not found
+}
 
+const ProgressBar = (props) => {
+    const { status, totalDuration, cumulativeDurations, currentFileName,startTime } = props
+    const currentduration = getStartTime(cumulativeDurations, currentFileName);
+    const runningTime = runningTime < currentduration + status?.PlaybackTime ? currentduration + status?.PlaybackTime : runningTime;
+
+    // console.log(currentduration)
     return (
         // <View className="flex-row items-center justify-between space-x-2">
         <View className="flex-col justify-between space-y-4">
@@ -114,9 +123,9 @@ const ProgressBar = (props) => {
                 className='bg-white'
                 style={{ flex: 1 }}
                 minimumValue={0}
-                maximumValue={status?.MediaDuration}
-                // step={0.1}
-                value={status?.PlaybackTime}
+                maximumValue={totalDuration}
+                // step={0.1}                
+                value={startTime}
                 minimumTrackTintColor="#FFFFFF"
                 maximumTrackTintColor="rgba(255, 255, 255, 1)"
                 thumbTintColor="#FFFFFF"
@@ -125,9 +134,9 @@ const ProgressBar = (props) => {
             />
             <View style={styles.track} />
             {/* </TouchableWithoutFeedback> */}
-            <View className="flex-row items-center justify-between px-4">
-                <TimeDisplay totalSeconds={status?.PlaybackTime} />
-                <TimeDisplay totalSeconds={status?.MediaDuration} />
+            <View className="flex-row items-center justify-between px-4">                
+                <TimeDisplay totalSeconds={startTime} />                
+                <TimeDisplay totalSeconds={totalDuration} />
             </View>
         </View>
     );
