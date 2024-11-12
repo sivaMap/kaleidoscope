@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import TaskBar from './components/TaskBar';
-import VolumeBar from './components/VolumeBar';
+// import VolumeBar from './components/VolumeBar';
 import { KaleidoscopeCrudContext } from './context/kaleidoscopeCrudContext';
 import Kaleidoscope from './components/Kaleidoscope';
 import IpConfig from './components/subcomponents/IpConfig2';
@@ -51,7 +51,7 @@ console.log("makerequst")
       <KaleidoscopeCrudContext>
         <TaskBar />
         <Kaleidoscope />
-        <VolumeBar />
+        {/* <VolumeBar /> */}
         <IpConfig />
       </KaleidoscopeCrudContext>
       <ModalPortal />
