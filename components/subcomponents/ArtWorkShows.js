@@ -17,13 +17,13 @@ const ArtWorkShows = ({ selectedArtificats, setSelectedArtifacts, setLoadArt }) 
         const result = { displayName: video.displayName, start_time: cumulativeTime };
         cumulativeTime += video.duration;
         return result;
-    });    
+    });
     function getStartTime(cumulativeDurations, displayName) {
         const video = cumulativeDurations.find(video => video.displayName === displayName);
         console.log(video)
         return video ? video.start_time : -1; // Return -1 if displayName not found
     }
-    const interTime=getStartTime(cumulativeDurations, currentFileName)+status?.PlaybackTime
+    const interTime = getStartTime(cumulativeDurations, currentFileName) + status?.PlaybackTime
     // const startTime= startTime>interTime? startTime:interTime;
     if (interTime > startTimeRef.current) {
         startTimeRef.current = interTime;
@@ -45,22 +45,6 @@ const ArtWorkShows = ({ selectedArtificats, setSelectedArtifacts, setLoadArt }) 
         toggleShowRun();
     };
 
-    const navigateHomeScreen = () => {
-        fetch(`${constants.backendUrl}/art/control`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                "control": "stop"
-            }),
-        })
-            .catch(error => console.error('Error stoping Show:', error));
-        setLoadName(constants.loadScreen.default);
-        setSelectedArtifacts([]);
-        toggleShowRun();
-    }
-
     useEffect(() => {
         fetch(`${constants.backendUrl}/art/start`, {
             method: 'POST',
@@ -75,31 +59,31 @@ const ArtWorkShows = ({ selectedArtificats, setSelectedArtifacts, setLoadArt }) 
         // eslint-disable-next-line
     }, []);
 
-    useEffect(() => {
-        const ws = new WebSocket(`ws://${constants.ipAddress}:8082`);
+    // useEffect(() => {
+    //     const ws = new WebSocket(`ws://${constants.ipAddress}:8082`);
 
-        ws.onmessage = (event) => {
-            // console.log(event.data)
-            let data;
-            try {
-                data = JSON.parse(event.data);
-            } catch (error) { }
-            if (data) {
-                const tfilename = data?.CurrentMediaFile;
-                const baseName = getFilenameWithoutExtension(tfilename);
-                setCurrentFileName(baseName);
-                setStatus(data);
-            }
-        };
-        ws.onclose = () => {
-            console.log('WebSocket connection closed');
-            // handleEndShow();
-        };
+    //     ws.onmessage = (event) => {
+    //         // console.log(event.data)
+    //         let data;
+    //         try {
+    //             data = JSON.parse(event.data);
+    //         } catch (error) { }
+    //         if (data) {
+    //             const tfilename = data?.CurrentMediaFile;
+    //             const baseName = getFilenameWithoutExtension(tfilename);
+    //             setCurrentFileName(baseName);
+    //             setStatus(data);
+    //         }
+    //     };
+    //     ws.onclose = () => {
+    //         console.log('WebSocket connection closed');
+    //         // handleEndShow();
+    //     };
 
-        return () => {
-            ws.close();
-        };
-    }, []);
+    //     return () => {
+    //         ws.close();
+    //     };
+    // }, []);
 
     return (
         <View className='relative gap-3 h-5/6 mt-0 mb-4'>
@@ -113,13 +97,6 @@ const ArtWorkShows = ({ selectedArtificats, setSelectedArtifacts, setLoadArt }) 
                     <TouchableOpacity
                         className="border-white border-2 rounded-full px-3 py-2"
                         onPress={handleEndShow}
-                    >
-                        <Text className={`text-white px-5 py-0 text-lg ${fontsLoaded ? "font-gBold" : ""}`}>
-                            Back</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        className="border-white border-2 rounded-full px-3 py-2"
-                        onPress={navigateHomeScreen}
                     >
                         <Text className={`text-white px-3 py-0 text-lg ${fontsLoaded ? "font-gBold" : ""}`}>
                             End Show</Text>
@@ -176,7 +153,7 @@ const ArtWorkShows = ({ selectedArtificats, setSelectedArtifacts, setLoadArt }) 
             </View > */}
             {
                 <View className="relative -bottom-72">
-                    <ProgressBar status={status} totalDuration={totalDuration} cumulativeDurations={cumulativeDurations} currentFileName={currentFileName} startTime={startTimeRef.current}/>
+                    <ProgressBar status={status} totalDuration={totalDuration} cumulativeDurations={cumulativeDurations} currentFileName={currentFileName} startTime={startTimeRef.current} />
                 </View>
             }
         </View>
