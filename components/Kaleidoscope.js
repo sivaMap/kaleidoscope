@@ -5,6 +5,7 @@ import { useKaleidoCrud } from '../context/kaleidoscopeCrudContext';
 import { View, Text } from 'react-native';
 import CuratedShows from './subcomponents/CuratedShows';
 import ArtWork from './subcomponents/ArtWork';
+import SvgSideBar from './subcomponents/SvgSideBar';
 
 const Kaleidoscope = () => {
     const { loadName, width } = useKaleidoCrud();
@@ -24,10 +25,11 @@ const Kaleidoscope = () => {
     };
 
     return (
-        <View className={`flex-grow px-10 ${width < 770 ? "mt-6" : "mt-10"}`}>
+        <View className={`flex-grow px-16 ${width < 770 ? "mt-6" : "mt-14"}`}>            
+            <SvgSideBar/>
             <View
                 style={{
-                    backgroundColor: 'rgba(0,0,0,0.4)',                    
+                    backgroundColor: 'rgba(0,0,0,0.4)',
                 }}
                 className="rounded-lg p-4"
             >
