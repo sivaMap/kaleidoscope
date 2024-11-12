@@ -119,7 +119,7 @@ const ArtWorkShows = ({ selectedArtificats, setSelectedArtifacts, setLoadArt }) 
                 paddingHorizontal: 0,
                 marginTop: 22,
                 height: 128,
-                gap: 20
+                gap: 10
             }}
             >
                 {selectedArtificats?.map((artifact, index) => (

@@ -37,7 +37,7 @@ const ArtWork = () => {
         switch (loadArt) {
             case constants.loadArt.show:
                 view.push(
-                    <View className="relative h-[548] mb-4 px-0" key={"ArtDefault"}>
+                    <View className="relative h-[530] mb-4 px-0" key={"ArtDefault"}>
                         <View className="flex-row justify-between px-1 pr-2 mb-1">
                             <View className="flex-row items-center space-x-4">
                                 <TouchableOpacity className="bg-black py-2.5 px-3.5 rounded-full" onPress={navigateHomeScreen}>
@@ -82,12 +82,12 @@ const ArtWork = () => {
                                     contentContainerStyle={{
                                         flexDirection: 'row',
                                         flexWrap: 'wrap',
-                                        paddingHorizontal: 4,
+                                        paddingHorizontal: 0,
                                         rowGap: 0,
-                                        columnGap: 20
+                                        columnGap: 12
                                     }}
                                     persistentScrollbar={true}
-
+                                    scrollEnabled={true}                                                                       
                                 >
                                     {artifacts.map((artifact, index) => (
                                         <ArtworkCard

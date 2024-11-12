@@ -61,48 +61,83 @@ const VolumeSlider2 = ({ isShowRunning }) => {
     }, [isShowRunning]);
 
     return (
-        !isSliderEnabled ? (
-            <View className='w-36 ml-2 pl-2 pr-0 py-1 rounded-full'>
-                <TouchableOpacity onPress={() => setSliderEnable(prev => !prev)}>
-                    {volume === 0 ? muteVolume : (<Svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 32 38" fill="none">
-                        <Path d="M0 25.9999V11.9999H9.33333L21 0.333252V37.6666L9.33333 25.9999H0ZM25.6667 28.3333V9.54992C27.4167 10.3666 28.8264 11.6305 29.8958 13.3416C30.9653 15.0527 31.5 16.9388 31.5 18.9999C31.5 21.061 30.9653 22.9277 29.8958 24.5999C28.8264 26.2721 27.4167 27.5166 25.6667 28.3333ZM16.3333 11.6499L11.3167 16.6666H4.66667V21.3333H11.3167L16.3333 26.3499V11.6499Z" fill="white" />
-                    </Svg>)
-                    }
 
-                </TouchableOpacity>
-            </View>
-        ) : (
-            <View
-                style={{
-                    backgroundColor: 'rgba(0,0,0,0.3)',
+        <View
+            style={{
+                backgroundColor: 'rgba(0,0,0,0.3)',
+                borderColor: 'rgba(256,256,256,0.7)',
+                borderWidth: 2
+            }}
+            className="flex flex-row items-center  w-full pl-2 ml-2 pr-0 py-1 rounded-full mt-2 mb-4">
+            <TouchableOpacity onPress={() => setSliderEnable(prev => !prev)}>
+                <View style={{ width: 28, height: 28 }}>
+                    {volume < volumeChanger ?
+                        volume === 0 ? muteVolume : lowVolume
+                        : highVolume}
+                </View>
+            </TouchableOpacity>
+
+            <Slider
+                style={{ width: "95%", height: 20, marginLeft: 0, marginTop: -2 }}
+                minimumValue={0}
+                maximumValue={100}
+                step={5}
+                value={volume}
+                onValueChange={(value) => {
+                    setVolume(value)
                 }}
-                className="flex flex-row items-center  w-36 pl-2 ml-2 pr-0 py-1 rounded-full">
-                <TouchableOpacity onPress={() => setSliderEnable(prev => !prev)}>
-                    <View style={{ width: 28, height: 28 }}>
-                        {volume < volumeChanger ?
-                            volume === 0 ? muteVolume : lowVolume
-                            : highVolume}
-                    </View>
-                </TouchableOpacity>
+                minimumTrackTintColor="#FFFFFF"
+                maximumTrackTintColor="rgba(255, 255, 255, 1)"
+                thumbTintColor="#FFFFFF"
+            />
+            <View style={{ width: "93%", height: 3, marginLeft: "-95%", backgroundColor: '#FFFFFF', borderRadius: 3 }} />
+        </View>
 
-                <Slider
-                    style={{ width: 110, height: 20, marginLeft: 0, marginTop: -2 }}
-                    minimumValue={0}
-                    maximumValue={100}
-                    step={5}
-                    value={volume}
-                    onValueChange={(value) => {
-                        setVolume(value)
-                    }}
-                    minimumTrackTintColor="#FFFFFF"
-                    maximumTrackTintColor="rgba(255, 255, 255, 1)"
-                    thumbTintColor="#FFFFFF"
-                />
-            </View>
-            // {/* <View style={{ width: 90, height: 3, marginLeft: 5, backgroundColor: '#FFFFFF', borderRadius: 3 }}> */}
-            // {/* </View> */}
-        )
+
     );
+    // return (
+    //     !isSliderEnabled ? (
+    //         <View className='w-36 ml-2 pl-2 pr-0 py-1 rounded-full'>
+    //             <TouchableOpacity onPress={() => setSliderEnable(prev => !prev)}>
+    //                 {volume === 0 ? muteVolume : (<Svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 32 38" fill="none">
+    //                     <Path d="M0 25.9999V11.9999H9.33333L21 0.333252V37.6666L9.33333 25.9999H0ZM25.6667 28.3333V9.54992C27.4167 10.3666 28.8264 11.6305 29.8958 13.3416C30.9653 15.0527 31.5 16.9388 31.5 18.9999C31.5 21.061 30.9653 22.9277 29.8958 24.5999C28.8264 26.2721 27.4167 27.5166 25.6667 28.3333ZM16.3333 11.6499L11.3167 16.6666H4.66667V21.3333H11.3167L16.3333 26.3499V11.6499Z" fill="white" />
+    //                 </Svg>)
+    //                 }
+
+    //             </TouchableOpacity>
+    //         </View>
+    //     ) : (
+    //         <View
+    //             style={{
+    //                 backgroundColor: 'rgba(0,0,0,0.3)',
+    //             }}
+    //             className="flex flex-row items-center  w-36 pl-2 ml-2 pr-0 py-1 rounded-full">
+    //             <TouchableOpacity onPress={() => setSliderEnable(prev => !prev)}>
+    //                 <View style={{ width: 28, height: 28 }}>
+    //                     {volume < volumeChanger ?
+    //                         volume === 0 ? muteVolume : lowVolume
+    //                         : highVolume}
+    //                 </View>
+    //             </TouchableOpacity>
+
+    //             <Slider
+    //                 style={{ width: 110, height: 20, marginLeft: 0, marginTop: -2 }}
+    //                 minimumValue={0}
+    //                 maximumValue={100}
+    //                 step={5}
+    //                 value={volume}
+    //                 onValueChange={(value) => {
+    //                     setVolume(value)
+    //                 }}
+    //                 minimumTrackTintColor="#FFFFFF"
+    //                 maximumTrackTintColor="rgba(255, 255, 255, 1)"
+    //                 thumbTintColor="#FFFFFF"
+    //             />
+    //         </View>
+    //         // {/* <View style={{ width: 90, height: 3, marginLeft: 5, backgroundColor: '#FFFFFF', borderRadius: 3 }}> */}
+    //         // {/* </View> */}
+    //     )
+    // );
 };
 
 export default VolumeSlider2;
