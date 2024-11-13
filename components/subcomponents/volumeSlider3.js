@@ -5,7 +5,7 @@ import Slider from '@react-native-community/slider'
 import { constants } from '../../constants';
 import Svg, { G, Mask, Path, Rect } from 'react-native-svg';
 
-const VolumeSlider2 = ({ isShowRunning }) => {
+const volumeSlider3 = ({ isShowRunning }) => {
 
     const muteVolume = (
         <Svg className="-mt-2 " xmlns="http://www.w3.org/2000/svg" height="38px" viewBox="0 -960 960 960" width="35px" fill="#5f6368"><Path d="M625.67-308.67 566.33-368l112-111.33-112-111.34L625.67-650 737-538l111.33-112 59.34 59.33-112 111.34 112 111.33-59.34 59.33-111.33-112-111.33 112ZM93-346.67v-266.66h169.33l218.67-220v706.66l-218.67-220H93ZM397-626l-98.67 96.67H177v98.66h121.33L397-333.33V-626ZM294-480.67Z" fill="white" /></Svg>
@@ -68,7 +68,7 @@ const VolumeSlider2 = ({ isShowRunning }) => {
                 borderColor: 'rgba(256,256,256,0.7)',
                 borderWidth: 2
             }}
-            className="flex flex-row items-center  w-11/12 pl-2 ml-2 pr-0 py-1 rounded-full mt-2 mb-4">
+            className="flex flex-row items-center  w-2/4 pl-2 ml-2 pr-0 py-2 rounded-full mt-2 mb-4">
             <TouchableOpacity onPress={() => setSliderEnable(prev => !prev)}>
                 <View style={{ width: 28, height: 28 }}>
                     {volume < volumeChanger ?
@@ -78,7 +78,7 @@ const VolumeSlider2 = ({ isShowRunning }) => {
             </TouchableOpacity>
 
             <Slider
-                style={{ width: "90%", height: 20, marginLeft: 0, marginTop: -2 }}
+                style={{ width: "90%", height: 20, marginLeft: 2, marginTop: -2 }}
                 minimumValue={0}
                 maximumValue={100}
                 step={5}
@@ -140,4 +140,4 @@ const VolumeSlider2 = ({ isShowRunning }) => {
     // );
 };
 
-export default VolumeSlider2;
+export default volumeSlider3;

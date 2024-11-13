@@ -10,8 +10,8 @@ const ArtShowCard = memo(function ArtShowCard(props) {
     const isSelected = artifact?.displayName === currentFileName;    
 
     return (
-        <View className={`rounded-lg shadow-md p-2 mb-2 w-56 bg-black ${isSelected ? "border-white border-2" : "border-transparent border-2"}`}>
-            <View className="h-56 rounded-lg mb-0">
+        <View className={`rounded-lg shadow-md p-3 mb-2 w-52 bg-black ${isSelected ? "border-white border-2" : "border-transparent border-2"}`}>
+            <View className="h-48 rounded-lg mb-0">
                 <Image
                     source={{ uri: `${constants.backendUrl}/artThumbnail/${artifact?.displayName}.png?timestamp=${new Date().getMinutes()}` }}
                     alt={artifact?.displayName}

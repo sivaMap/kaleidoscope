@@ -39,8 +39,8 @@ const ArtWork = () => {
                 view.push(
                     <View className="relative h-[530] mb-4 px-0" key={"ArtDefault"}>
                         <View className="flex-row justify-between px-1 pr-2 mb-1">
-                            <View className="flex-row items-center space-x-4">
-                                <TouchableOpacity className="bg-black py-2.5 px-3.5 rounded-full" onPress={navigateHomeScreen}>
+                            <View className="flex-row items-center space-x-0">
+                                <TouchableOpacity className="py-2.5 px-3.5 rounded-full" onPress={navigateHomeScreen}>
                                     {/* SVG Back Arrow */}
                                     <SvgXml
                                         xml={`<svg xmlns="http://www.w3.org/2000/svg" width="11" height="18" viewBox="0 0 15 24" fill="none">
